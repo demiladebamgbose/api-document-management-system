@@ -4,7 +4,6 @@
   "description": "document management system api",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
     "test": "mocha test/server"
   },
   "repository": {
