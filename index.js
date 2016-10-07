@@ -1,10 +1,15 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var models = require('./server/models/index');
+var models = require('./app/models/index');
+var router = express.Router();
+var routes = require('./app/routes/role-route');
+
+routes(router);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use('/api', router);
 
 app.get('/', function(req, res){
   res.json({
