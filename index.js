@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use('/api', router);
 
+
 app.get('/', function(req, res){
   res.json({
     message: 'rooot route'
