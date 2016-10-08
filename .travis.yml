@@ -2,12 +2,12 @@ language: node_js
 
 node_js:
   - "6"
-  
+
 services:
   - postgresql
 
 env:
-  - DIALECT=postgres DBNAME=test DBHOST=127.0.0.1 DBPORT=5432
+  - DIALECT=postgres DBNAME=travis_ci_test DBHOST=127.0.0.1 DBPORT=5432
 
 cache:
   directories:
