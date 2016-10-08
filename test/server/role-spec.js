@@ -1,7 +1,7 @@
 var should = require('chai').should(),
   expect = require('chai').expect,
   supertest = require('supertest');
-  api = supertest('http://localhost:8080');
+  api = supertest('http://127.0.0.1:8080');
   var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbGFkZHJlc3MiOiJ0ZXN0QHRlc3RzLmNvbSIsInBhc3N3b3JkIjoiMTIzNCIsImlhdCI6MTQ3NTg4OTM1OSwiZXhwIjoxNDc1OTc1NzU5fQ.recq-HO2eACHGMkJm2rWvFswof2A337wNDnQZllNLTE';
 
 
