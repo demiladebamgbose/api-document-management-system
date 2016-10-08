@@ -10,31 +10,33 @@ Role.createRole = function (req, res) {
     if (!role) {
       models.Role.create({
         title: req.body.title
-      }).then(function (role) {
+      }).then (function (role) {
         res.json(role);
+      }).catch (function (error) {
+        res.json(error);
       });
     } else {
       res.json({
         message: 'role title already created'
       });
     }
-  }).catch(function (error) {
+  }).catch (function (error) {
     res.json(error);
   });
 };
 
 Role.getRoles = function (req, res) {
   models.Role.findAll({})
-  .then(function (roles) {
+  .then (function (roles) {
     res.json(roles);
-  }).catch(function (error) {
+  }).catch (function (error) {
     res.json(error);
   });
 };
 
 Role.deleteRole = function (req, res) {
   models.Role.destroy({ truncate: true })
-  .then(function(deleted){
+  .then (function(deleted){
     res.json(deleted);
   });
 };
