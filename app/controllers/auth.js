@@ -9,4 +9,16 @@ Auth.generateToken = function (payload) {
   });
 };
 
+Auth.verifyToken = function (req, res, next, token) {
+  jwt.verify(token, secret, function(err, decoded) {
+    if(err) {
+      return res.json({success: false, message: 'Failed to authenticate'});
+    }
+    else {
+      req.decoded = decoded;
+      next();
+    }
+  });
+};
+
 module.exports = Auth;

@@ -75,4 +75,17 @@ var authenticate = function (req, res, user) {
   }
 };
 
+User.verifyToken = function (req, res, next) {
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  if (!token) {
+    res.status('403').json({
+      success:false,
+      message: 'No token found. Token needed for Authentication'
+    });
+  }
+  else{
+    Auth.verifyToken(req,res, next, token);
+  }
+};
+
 module.exports = User;

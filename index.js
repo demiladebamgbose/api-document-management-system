@@ -4,9 +4,7 @@ var bodyParser = require('body-parser');
 var models = require('./app/models/index');
 var morgan = require('morgan');
 var config = require('./config');
-var jwt = require('jsonwebtoken');
 
-app.set('superSecret', config.secret);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
@@ -16,7 +14,7 @@ require('./app/routes/role-route')(app);
 
 app.get('/', function(req, res){
   res.json({
-    message: 'rooot route'
+    message: 'root route'
   });
 });
 
