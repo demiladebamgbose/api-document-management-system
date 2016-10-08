@@ -8,4 +8,4 @@ before_install:
   - npm install -g mocha
   - psql -c 'create database travis_ci_test;' -U postgres
 before_script:
-  - cp config.test
+  - cp config
