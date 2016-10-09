@@ -3,7 +3,6 @@ var app = express();
 var bodyParser = require('body-parser');
 var models = require('./app/models/index');
 var morgan = require('morgan');
-var config = require('./config');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
