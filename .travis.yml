@@ -6,13 +6,6 @@ node_js:
 services:
   - postgresql
 
-env:
-  - DIALECT=postgres DBNAME=travis_ci_test DBHOST=127.0.0.1 DBPORT=5432
-
-cache:
-  directories:
-    - node_module
-
 before_install:
   - npm install -g mocha
   - psql -c 'create database travis_ci_test;' -U postgres

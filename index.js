@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var models = require('./app/models/index');
 var morgan = require('morgan');
+var port = process.env.PORT || 8080;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -17,8 +18,8 @@ app.get('/', function(req, res){
   });
 });
 
-app.listen('8080' || 3000, function () {
-  console.log ('app started on port 8080');
+app.listen(port, function () {
+  console.log ('app started on port'+ port);
 });
 
 module.exports = app;

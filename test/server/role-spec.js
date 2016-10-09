@@ -3,7 +3,7 @@ var should = require('chai').should(),
   express = require('../../index'),
   supertest = require('supertest');
   api = supertest(express);
-  var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbGFkZHJlc3MiOiJ0ZXN0QHRlc3RzLmNvbSIsInBhc3N3b3JkIjoiMTIzNCIsImlhdCI6MTQ3NTk5OTgyOSwiZXhwIjoxNDc2MDg2MjI5fQ.YBnA-whsgIVv2ArpprCThS6q3Bbo34dzAAEyDDz-jX4';
+  var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbGFkZHJlc3MiOiJ0ZXN0QHRlc3RzLmNvbSIsInBhc3N3b3JkIjoiMTIzNCIsImlhdCI6MTQ3NjAyMzIxMiwiZXhwIjoxNDc2MTA5NjEyfQ.b9T5j5dCI0jO1PPAY1X475E5XZSUdZ2LoAEl4juQ75E';
 
 
 describe('Role', function () {
