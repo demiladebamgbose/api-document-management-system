@@ -8,8 +8,8 @@ module.exports = function (app) {
   router.route('/create/role')
     .post(Role.createRole);
   router.route('/roles')
-    .get(User.verifyToken, Role.getRoles);
-  router.route('/role/delete')
+    .get(User.verifyToken, Role.all);
+  router.route('/role/:title/delete')
     .delete(Role.deleteRole);
 
     app.use('/api/', router);

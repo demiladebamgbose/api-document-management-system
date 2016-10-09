@@ -17,7 +17,7 @@ Role.createRole = function (req, res) {
       });
     } else {
       res.json({
-        message: 'role title already created'
+        message: 'role title already exists'
       });
     }
   }).catch (function (error) {
@@ -25,7 +25,7 @@ Role.createRole = function (req, res) {
   });
 };
 
-Role.getRoles = function (req, res) {
+Role.all = function (req, res) {
   models.Role.findAll({})
   .then (function (roles) {
     res.json(roles);
@@ -35,10 +35,13 @@ Role.getRoles = function (req, res) {
 };
 
 Role.deleteRole = function (req, res) {
-  models.Role.destroy({ truncate: true })
-  .then (function(deleted){
-    res.json(deleted);
-  });
+  models.Role.destroy({
+   where: {
+     title: req.params.title
+   }
+ }).then(function(role) {
+   res.json(role);
+ });
 };
 
 module.exports = Role;
