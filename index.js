@@ -17,6 +17,8 @@ app.get('/', function(req, res){
   });
 });
 
-app.listen('8080', function () {
+app.listen('8080' || 3000, function () {
   console.log ('app started on port 8080');
 });
+
+module.exports = app;

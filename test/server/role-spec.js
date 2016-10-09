@@ -1,7 +1,8 @@
 var should = require('chai').should(),
   expect = require('chai').expect,
+  express = require('../../index'),
   supertest = require('supertest');
-  api = supertest('http://127.0.0.1:8080');
+  api = supertest(express);
   var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbGFkZHJlc3MiOiJ0ZXN0QHRlc3RzLmNvbSIsInBhc3N3b3JkIjoiMTIzNCIsImlhdCI6MTQ3NTk5OTgyOSwiZXhwIjoxNDc2MDg2MjI5fQ.YBnA-whsgIVv2ArpprCThS6q3Bbo34dzAAEyDDz-jX4';
 
 
@@ -39,7 +40,6 @@ describe('Role', function () {
     .set('Accept', 'application/json')
     .set('x-access-token',token)
     .end(function (err, res) {
-      console.log(res.body);
       expect(Array.isArray(res.body)).to.be.equal(true);
       checkProperty(res.body, 'id');
       checkProperty(res.body, 'title');
