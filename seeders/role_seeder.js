@@ -5,13 +5,19 @@
     up: function (queryInterface) {
       return queryInterface.bulkInsert('Roles', [{
         id: '1',
-        name: 'Admin'
+        title: 'Admin',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
       }, {
         id: '2',
-        name: 'User'
+        title: 'User',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
       }, {
         id: '3',
-        name: 'Guest'
+        title: 'Guest',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
       }], {});
     },
 
