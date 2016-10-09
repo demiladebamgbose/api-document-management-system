@@ -17,6 +17,8 @@ describe('Role', function () {
     done();
   });
 
+  afterEach();
+
   it('should return 200', function (done) {
     api.get('/api/roles')
     .set('Accept', 'application/json')
