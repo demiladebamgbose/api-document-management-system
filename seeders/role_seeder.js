@@ -1,23 +1,23 @@
 (function () {
   'use strict';
-
+  var moment = require('moment');
   module.exports = {
     up: function (queryInterface) {
       return queryInterface.bulkInsert('Roles', [{
         id: '1',
         title: 'Admin',
-        createdAt: Date.now(),
-        updatedAt: Date.now()
+        createdAt: moment().utc().format(),
+        updatedAt: moment().utc().format()
       }, {
         id: '2',
         title: 'User',
-        createdAt: Date.now(),
-        updatedAt: Date.now()
+        createdAt: moment().utc().format(),
+        updatedAt: moment().utc().format()
       }, {
         id: '3',
         title: 'Guest',
-        createdAt: Date.now(),
-        updatedAt: Date.now()
+        createdAt: moment().utc().format(),
+        updatedAt: moment().utc().format()
       }], {});
     },
 
