@@ -12,11 +12,16 @@ describe('Role', function () {
     api.post('/api/create/role')
     .set('Accept', 'application/json')
     .send({
-      title: 'Test Role'
+      title: 'TestRole'
     });
     done();
   });
 
+  afterEach(function (done) {
+    api.delete('/api/role/TestRole/delete')
+    .set('Accept', 'application/json');
+    done();
+  });
 
   it('should return 200', function (done) {
     api.get('/api/roles')
@@ -49,16 +54,21 @@ describe('Role', function () {
   });
 
   it('should have unique titles for each role', function (done) {
-    // api.post('/api/create/role')
-    // .set('Accept', 'application/json')
-    // .send({
-    //   title: 'Test Role'
-    // }).end(function (err, res) {
-    //   if (err){
-    //     console.log('error occour');
-    //   }
-    //   expect(res.body.message).to.be.equal('role title already exists');
+
+    function checkUniqueTitle (rolesArray) {
+      for (var i = 0; i < rolesArray.length; i++) {
+        var titles = [];
+        expect(titles.indexOf(rolesArray[i].title)).to.equal(-1);
+        titles.push(rolesArray[i].title);
+      }
+    }
+
+    api.get('/api/roles')
+    .set('Accept', 'application/json')
+    .set('x-access-token',token)
+    .end(function (err, res) {
+      checkUniqueTitle(res.body);
       done();
     });
-  //});
+  });
 });

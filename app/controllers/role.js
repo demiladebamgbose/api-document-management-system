@@ -35,10 +35,13 @@ Role.all = function (req, res) {
 };
 
 Role.deleteRole = function (req, res) {
-  models.Role.destroy({ truncate: true })
-  .then (function(deleted){
-    res.json(deleted);
-  });
+  models.Role.destroy({
+   where: {
+     title: req.params.title
+   }
+ }).then(function(role) {
+   res.json(role);
+ });
 };
 
 module.exports = Role;
