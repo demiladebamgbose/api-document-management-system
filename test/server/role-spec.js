@@ -54,6 +54,9 @@ describe('Role', function () {
     .send({
       title: 'Test Role'
     }).end(function (err, res) {
+      if (err){
+        console.log('error occoured');
+      }
       expect(res.body.message).to.be.equal('role title already exists');
       done();
     });
