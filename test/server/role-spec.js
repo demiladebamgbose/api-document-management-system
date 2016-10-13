@@ -3,8 +3,15 @@ var should = require('chai').should(),
   express = require('../../index'),
   supertest = require('supertest');
   api = supertest(express);
-  var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbGFkZHJlc3MiOiJ0ZXN0QHRlc3RzLmNvbSIsInBhc3N3b3JkIjoiMTIzNCIsImlhdCI6MTQ3NjAyMzIxMiwiZXhwIjoxNDc2MTA5NjEyfQ.b9T5j5dCI0jO1PPAY1X475E5XZSUdZ2LoAEl4juQ75E';
 
+  var jwt = require('jsonwebtoken');
+  var secret = require('./../../config/config').secret;
+  var token = jwt.sign({
+    emailaddress: '123@abc.com',
+    password:'12345'
+  }, secret, {
+    expiresIn: 60*60*24
+  });
 
 describe('Role', function () {
 
