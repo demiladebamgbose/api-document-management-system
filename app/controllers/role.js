@@ -2,13 +2,13 @@ var models = require('./../models/index');
 var Role = {};
 
 Role.createRole = function (req, res) {
-  models.Role.findOne({
+  models.Roles.findOne({
     where: {
       title: req.body.title
     }
   }).then(function (role) {
     if (!role) {
-      models.Role.create({
+      models.Roles.create({
         title: req.body.title
       }).then (function (role) {
         res.json(role);
@@ -26,7 +26,7 @@ Role.createRole = function (req, res) {
 };
 
 Role.all = function (req, res) {
-  models.Role.findAll({})
+  models.Roles.findAll({})
   .then (function (roles) {
     res.json(roles);
   }).catch (function (error) {
@@ -35,13 +35,15 @@ Role.all = function (req, res) {
 };
 
 Role.deleteRole = function (req, res) {
-  models.Role.destroy({
-   where: {
-     title: req.params.title
-   }
- }).then(function(role) {
-   res.json(role);
- });
+  models.Roles.destroy({
+    where: {
+      title: req.params.title
+    }
+  }).then(function(role) {
+    res.json(role);
+  }).catch(function (error) {
+    res.json(error);
+  });
 };
 
 module.exports = Role;
