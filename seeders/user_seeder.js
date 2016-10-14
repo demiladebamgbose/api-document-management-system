@@ -3,24 +3,34 @@
   var moment = require('moment');
   module.exports = {
     up: function (queryInterface) {
-      return queryInterface.bulkInsert('Roles', [{
+      return queryInterface.bulkInsert('Users', [{
         id: 1,
-        title: 'Admin',
+        emailaddress: 'demilade@gmail.com',
+        firstname: 'demilade',
+        lastname: 'bamgbose',
+        username: 'dem',
+        password: '12345678',
+        RoleId: 1,
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }, {
         id: 2,
-        title: 'User',
+        emailaddress: 'winner@gmail.com',
+        firstname: 'winner',
+        lastname: 'bolorunduro',
+        username: 'winner',
+        password: '12345678',
+        RoleId: 2,
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }, {
         id: 3,
-        title: 'Guest',
-        createdAt: moment().utc().format(),
-        updatedAt: moment().utc().format()
-      }, {
-        id: 19,
-        title: 'Test',
+        emailaddress: 'ralph@gmail.com',
+        firstname: 'ralph',
+        lastname: 'olutola',
+        username: 'ralph',
+        password: '12345678',
+        RoleId: 1,
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }], {});

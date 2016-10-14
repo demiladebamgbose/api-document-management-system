@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Document = sequelize.define('Document', {
+  var Documents = sequelize.define('Documents', {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     RoleId: DataTypes.INTEGER,
@@ -9,12 +9,12 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
-        Document.belongsTo(models.Role,{
+        Documents.belongsTo(models.Roles,{
           foreignKey: {
             allowNull: false
           }
         });
-        Document.belongsTo(models.User,{
+        Documents.belongsTo(models.Users,{
           foreignKey: {
             allowNull: false
           }
@@ -22,5 +22,5 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-  return Document;
+  return Documents;
 };

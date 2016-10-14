@@ -1,17 +1,17 @@
 var should = require('chai').should(),
   expect = require('chai').expect,
   express = require('../../index'),
-  supertest = require('supertest');
+  supertest = require('supertest'),
   api = supertest(express);
 
-  var jwt = require('jsonwebtoken');
-  var secret = require('./../../config/config').secret;
-  var token = jwt.sign({
-    emailaddress: '123@abc.com',
-    password:'12345'
-  }, secret, {
-    expiresIn: 60*60*24
-  });
+var jwt = require('jsonwebtoken');
+var secret = require('./../../config/config').secret;
+var token = jwt.sign({
+  emailaddress: '123@abc.com',
+  password:'12345'
+}, secret, {
+  expiresIn: 60*60*24
+});
 
 describe('Role', function () {
 

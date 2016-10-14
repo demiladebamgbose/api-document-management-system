@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/demiladebamgbose/api-document-management-system#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
     "express": "^4.14.0",
