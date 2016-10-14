@@ -5,7 +5,7 @@
     up: function (queryInterface) {
       return queryInterface.bulkInsert('Users', [{
         id: 1,
-        email: 'demilade@gmail.com',
+        emailaddress: 'demilade@gmail.com',
         firstname: 'demilade',
         lastname: 'bamgbose',
         username: 'dem',
@@ -15,7 +15,7 @@
         updatedAt: moment().utc().format()
       }, {
         id: 2,
-        email: 'winner@gmail.com',
+        emailaddress: 'winner@gmail.com',
         firstname: 'winner',
         lastname: 'bolorunduro',
         username: 'winner',
@@ -25,7 +25,7 @@
         updatedAt: moment().utc().format()
       }, {
         id: 3,
-        email: 'ralph@gmail.com',
+        emailaddress: 'ralph@gmail.com',
         firstname: 'ralph',
         lastname: 'olutola',
         username: 'ralph',
