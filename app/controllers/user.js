@@ -115,7 +115,7 @@ User.allUsers = function (req, res) {
 
 User.deleteUser = function (req, res) {
   models.Users.destroy({
-    where: {emailaddress: req.params.emailaddress}
+    where: {id: req.params.id}
   }).then(function (user) {
     res.json(user);
   }).catch(function (error) {
@@ -125,11 +125,18 @@ User.deleteUser = function (req, res) {
 
 User.findAUser = function (req, res) {
   models.Users.findOne({
-    where: {emailaddress: req.params.emailaddress}
+    where: {id: req.params.id}
   }).then(function (user) {
     res.json(user);
   }).catch(function (error) {
     res.json(error);
+  });
+};
+
+User.logout = function (req, res) {
+  res.json({
+    success: 'true',
+    message: 'User logged out successfully'
   });
 };
 
