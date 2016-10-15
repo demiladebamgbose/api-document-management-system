@@ -26,7 +26,7 @@ describe('Role', function () {
   });
 
   afterEach(function (done) {
-    api.delete('/api/role/TestRole/delete')
+    api.delete('/api/role/4/delete')
     .set('Accept', 'application/json');
     done();
   });
@@ -52,7 +52,7 @@ describe('Role', function () {
 
     api.get('/api/roles')
     .set('Accept', 'application/json')
-    .set('x-access-token',token)
+    .set('x-access-token', token)
     .end(function (err, res) {
       expect(Array.isArray(res.body)).to.be.equal(true);
       checkProperty(res.body, 'id');
@@ -73,7 +73,7 @@ describe('Role', function () {
 
     api.get('/api/roles')
     .set('Accept', 'application/json')
-    .set('x-access-token',token)
+    .set('x-access-token', token)
     .end(function (err, res) {
       checkUniqueTitle(res.body);
       done();

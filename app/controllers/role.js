@@ -37,7 +37,7 @@ Role.all = function (req, res) {
 Role.deleteRole = function (req, res) {
   models.Roles.destroy({
     where: {
-      title: req.params.title
+      id: req.params.id
     }
   }).then(function(role) {
     res.json(role);
