@@ -8,7 +8,8 @@ var jwt = require('jsonwebtoken');
 var secret = require('./../../config/config').secret;
 var token = jwt.sign({
   emailaddress: '123@abc.com',
-  password:'12345'
+  password:'12345',
+  RoleId: 1
 }, secret, {
   expiresIn: 60*60*24
 });
@@ -63,8 +64,8 @@ describe('Role', function () {
   it('should have unique titles for each role', function (done) {
 
     function checkUniqueTitle (rolesArray) {
+      var titles = [];
       for (var i = 0; i < rolesArray.length; i++) {
-        var titles = [];
         expect(titles.indexOf(rolesArray[i].title)).to.equal(-1);
         titles.push(rolesArray[i].title);
       }

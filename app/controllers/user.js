@@ -123,6 +123,16 @@ User.deleteUser = function (req, res) {
   });
 };
 
+User.findAUser = function (req, res) {
+  models.Users.findOne({
+    where: {emailaddress: req.params.emailaddress}
+  }).then(function (user) {
+    res.json(user);
+  }).catch(function (error) {
+    res.json(error);
+  });
+};
+
 User.verifyToken = function (req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
   if (!token) {
