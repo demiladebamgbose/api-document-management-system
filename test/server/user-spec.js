@@ -15,18 +15,9 @@ var token = jwt.sign({
 });
 
 describe('User', function () {
-  // after(function (done) {
-  //   api.get('/api/users/4')
-  //     .set('x-access-token', token)
-  //     .set('Accept', 'application/json')
-  //     .end(function (err, res) {
-  //
-  //     });
-  //   done();
-  // });
 
   it('should create a new user', function (done) {
-    api.get('/api/users')
+    api.post('/api/users')
       .set('Accept', 'application/json')
       .send({
         username: 'lade',
@@ -43,10 +34,24 @@ describe('User', function () {
   });
 
   it('should login a user', function (done) {
-    
+    api.post('/api/users/login')
+      .set('Accept', 'application/json')
+      .send({
+        emailaddress: 'lade@gmail.com',
+        password: '12345678'
+      })
+      .end(function (err, res) {
+        expect(res.body).to.have.property('token');
+      });
     done();
   });
 
+  after(function (done) {
+    api.delete('/api/users/4')
+      .set('x-access-token', token)
+      .set('Accept', 'application/json');
+    done();
+  });
 
   it('each user should be unique', function (done) {
 
@@ -101,7 +106,7 @@ describe('User', function () {
       .set('Accept', 'application/json')
       .end(function (err, res) {
         expect(Array.isArray(res.body)).to.be.equal(true);
-        expect(Array.lenght(res.body)).to.not.equal(0);
+        expect(res.body.length).to.not.equal(0);
       });
     done();
   });
