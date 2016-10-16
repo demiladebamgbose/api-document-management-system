@@ -27,7 +27,8 @@
     },
 
     down: function(queryInterface) {
-      return queryInterface.bulkDelete('Categories', null, {});
+      return queryInterface.bulkDelete('Roles',
+       {title: ['Admin', 'User', 'Guest', 'Test']});
     }
   };
 

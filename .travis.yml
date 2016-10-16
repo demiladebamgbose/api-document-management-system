@@ -9,7 +9,6 @@ services:
 before_install:
   - npm install -g mocha
   - npm install -g sequelize-cli
-  - psql -c 'create database travis_ci_test;' -U postgres
 
 before_script:
   - sequelize db:migrate && sequelize db:seed:all

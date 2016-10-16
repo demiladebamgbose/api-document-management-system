@@ -15,6 +15,38 @@ var token = jwt.sign({
 });
 
 describe('User', function () {
+  // after(function (done) {
+  //   api.get('/api/users/4')
+  //     .set('x-access-token', token)
+  //     .set('Accept', 'application/json')
+  //     .end(function (err, res) {
+  //
+  //     });
+  //   done();
+  // });
+
+  it('should create a new user', function (done) {
+    api.get('/api/users')
+      .set('Accept', 'application/json')
+      .send({
+        username: 'lade',
+        emailaddress: 'lade@gmail.com',
+        password: '12345678',
+        firstname: 'demilade',
+        lastname: 'bamgbose',
+        RoleId: 2
+      })
+      .end(function (err, res) {
+        expect(res.body).to.have.property('token');
+      });
+    done();
+  });
+
+  it('should login a user', function (done) {
+    
+    done();
+  });
+
 
   it('each user should be unique', function (done) {
 

@@ -37,7 +37,8 @@
     },
 
     down: function(queryInterface) {
-      return queryInterface.bulkDelete('Categories', null, {});
+      return queryInterface.bulkDelete('Users', {emailaddress:
+        ['demilade@gmail.com', 'winner@gmail.com', 'ralph@gmail.com']});
     }
   };
 

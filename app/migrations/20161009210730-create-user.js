@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      email: {
+      emailaddress: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -16,11 +16,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      firstName: {
+      firstname: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      lastName: {
+      lastname: {
         allowNull: false,
         type: Sequelize.STRING
       },
