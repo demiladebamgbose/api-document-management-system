@@ -7,7 +7,9 @@
     "start": "node index.js",
     "pretest": "sequelize db:migrate && sequelize db:seed:all",
     "test": "mocha test/server",
-    "posttest": "sequelize db:seed:undo:all && sequelize db:migrate:undo:all"
+    "posttest": "sequelize db:seed:undo:all && sequelize db:migrate:undo:all",
+    "cover": "istanbul cover sequelize db:migrate && sequelize db:seed:all && _mocha test/server && sequelize db:seed:undo:all && sequelize db:migrate:undo:all",
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -32,5 +34,11 @@
     "sequelize": "^3.12.2",
     "sequelize-cli": "^2.1.0",
     "supertest": "^2.0.0"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.14",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.1.2",
+    "mocha-lcov-reporter": "^1.2.0"
   }
 }
