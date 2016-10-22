@@ -13,15 +13,16 @@ Role.createRole = function (req, res) {
       }).then (function (role) {
         res.json(role);
       }).catch (function (error) {
-        res.json(error);
+        res.status(500).json(error);
       });
     } else {
-      res.json({
+      res.status(422).json({
+        success:false,
         message: 'role title already exists'
       });
     }
   }).catch (function (error) {
-    res.json(error);
+    res.status(500).json(error);
   });
 };
 
@@ -30,7 +31,7 @@ Role.all = function (req, res) {
   .then (function (roles) {
     res.json(roles);
   }).catch (function (error) {
-    res.json(error);
+    res.status(500).json(error);
   });
 };
 
@@ -42,7 +43,7 @@ Role.deleteRole = function (req, res) {
   }).then(function(role) {
     res.json(role);
   }).catch(function (error) {
-    res.json(error);
+    res.status(500).json(error);
   });
 };
 

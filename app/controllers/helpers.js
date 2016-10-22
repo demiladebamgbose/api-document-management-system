@@ -18,7 +18,7 @@ Helper.validateEmail = function (email) {
 };
 
 Helper.checkRole = function (roleId) {
-  return models.Role.findOne({
+  return models.Roles.findOne({
     where:
     {id: roleId}
   }).then(function (role) {
@@ -30,7 +30,7 @@ Helper.checkRole = function (roleId) {
 };
 
 Helper.checkUser = function (ownerId) {
-  return models.User.findOne({
+  return models.Users.findOne({
     where:
     {id: ownerId}
   }).then(function (user) {

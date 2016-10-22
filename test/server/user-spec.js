@@ -1,5 +1,4 @@
-var should = require('chai').should(),
-  expect = require('chai').expect,
+var expect = require('chai').expect,
   express = require('../../index'),
   supertest = require('supertest'),
   api = supertest(express);
@@ -25,7 +24,8 @@ describe('User', function () {
         password: '12345678',
         firstname: 'demilade',
         lastname: 'bamgbose',
-        RoleId: 2
+        RoleId: 2,
+        OwnerId:2
       })
       .end(function (err, res) {
         expect(res.body).to.have.property('token');
@@ -47,7 +47,7 @@ describe('User', function () {
   });
 
   after(function (done) {
-    api.delete('/api/users/4')
+    api.delete('/api/users/1')
       .set('x-access-token', token)
       .set('Accept', 'application/json');
     done();
