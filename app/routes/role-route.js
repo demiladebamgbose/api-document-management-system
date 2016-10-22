@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 module.exports = function (app) {
-  var Role = require('./../controllers/role.js');
-  var User = require('./../controllers/user.js');
+  var Role = require('./../controllers/role');
+  var User = require('./../controllers/users');
 
   router.route('/create/role')
     .post(Role.createRole);
@@ -12,5 +12,5 @@ module.exports = function (app) {
   router.route('/role/:id/delete')
     .delete(Role.deleteRole);
 
-    app.use('/api/', router);
+  app.use('/api/', router);
 };

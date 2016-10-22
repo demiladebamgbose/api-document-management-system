@@ -147,8 +147,7 @@ User.verifyToken = function (req, res, next) {
       success:false,
       message: 'No token found. Token needed for authentication'
     });
-  }
-  else{
+  } else{
     auth.verifyToken(req,res, next, token);
   }
 };
