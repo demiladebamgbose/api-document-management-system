@@ -1,9 +1,8 @@
 var models = require('./../models/index');
-var auth = require('./auth');
-var helper = require('helpers');
+var helper = require('./helpers');
 
 var Document = {};
-//call validatetoken 4 this guy
+
 Document.createDocument = function (req, res) {
   if (helper.validateInput(req.body.title) &&
    helper.validateInput(req.body.content)) {
@@ -11,7 +10,7 @@ Document.createDocument = function (req, res) {
       title: req.body.title,
       content: req.body.content,
       RoleId: req.decoded.RoleId,
-      OwnerId: req.decoded.UserId
+      OwnerId: req.decoded.OwnerId
     }).then(function (document) {
       res.json(document);
     }).catch(function (error) {
@@ -25,6 +24,13 @@ Document.createDocument = function (req, res) {
   }
 };
 
+Document.all = function (req, res) {
+  models.Documents.findAll({})
+   .then(function (documents) {
+     res.json(documents);
+   }).catch(function (error) {
+     res.status(500).json(error);
+   });
+};
 
-
-module.exports = document;
+module.exports = Document;

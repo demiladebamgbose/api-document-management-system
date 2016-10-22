@@ -16,7 +16,8 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
           }
         });
-        Users.hasMany(models.Documents);
+
+        Users.hasMany(models.Documents,{ foreignKey: 'OwnerId'});
       }
     }
   });

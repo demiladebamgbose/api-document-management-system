@@ -9,10 +9,12 @@ var token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
   RoleId: 3,
-  OwnerId:2
+  OwnerId: 2
 }, secret, {
   expiresIn: 60*60*24
 });
+
+console.log(token);
 
 describe('Role', function () {
 

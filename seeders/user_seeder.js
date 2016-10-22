@@ -6,11 +6,11 @@
       return queryInterface.bulkInsert('Users', [{
         id: 2,
         emailaddress: 'demilade@gmail.com',
-        firstname: 'demilade',
+        firstname: 'demi',
         lastname: 'bamgbose',
-        username: 'dem',
+        username: 'demi',
         password: '12345678',
-        RoleId: 1,
+        RoleId: 2,
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }, {
@@ -20,7 +20,7 @@
         lastname: 'bolorunduro',
         username: 'winner',
         password: '12345678',
-        RoleId: 2,
+        RoleId: 3,
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }, {
@@ -30,7 +30,7 @@
         lastname: 'olutola',
         username: 'ralph',
         password: '12345678',
-        RoleId: 1,
+        RoleId: 4,
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }], {});

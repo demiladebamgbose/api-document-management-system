@@ -90,7 +90,7 @@ var authenticate = function (req, res, user) {
       emailaddress: user.emailaddress,
       password: user.password,
       RoleId: user.RoleId,
-      ownerId: user.id
+      OwnerId: user.id
     });
     res.json({
       success: true,

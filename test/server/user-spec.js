@@ -8,7 +8,8 @@ var secret = require('./../../config/config').secret;
 var token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
-  RoleId: 1
+  RoleId: 1,
+  OwnerId: 3
 }, secret, {
   expiresIn: 60*60*24
 });

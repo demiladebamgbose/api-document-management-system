@@ -3,7 +3,7 @@ var router = express.Router();
 
 module.exports = function (app) {
   var Role = require('./../controllers/role');
-  var User = require('./../controllers/users');
+  var User = require('./../controllers/user');
 
   router.route('/create/role')
     .post(Role.createRole);

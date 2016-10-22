@@ -10,6 +10,7 @@ app.use(morgan('dev'));
 
 require('./app/routes/user-route')(app);
 require('./app/routes/role-route')(app);
+require('./app/routes/document-route')(app)
 
 app.get('/', function(req, res){
   res.json({
