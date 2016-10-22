@@ -1,19 +1,21 @@
-var Auth = require('./auth.js');
+var auth = require('./auth.js');
 var models = require('./../models/index');
 var helper = require('./helpers');
 var User = {};
 
 User.signup = function (req, res) {
   models.Users.findOne({
-    where: {emailaddress: req.body.emailaddress}
+    where: { emailaddress: req.body.emailaddress }
   }).then (function (user) {
     if (!user) {
       validateDetails(req, res);
     } else {
-      res.json({message: 'user already exists'});
+      res.status(422).json({
+        success: false,
+        message: 'user already exists'});
     }
   }).catch (function (error) {
-    res.json(error);
+    res.status(500).json(error);
   });
 };
 
@@ -22,28 +24,28 @@ var validateDetails = function (req, res) {
     if (role) {
       if ((helper.validateEmail(req.body.emailaddress)) &&
        (helper.validatePassWord(req.body.password))) {
-        createUser(req, res);
+        createUser(req).then(function (json) {
+          res.json(json);
+        });
       } else {
-        res.json({
+        res.status(400).json({
           success: false,
           message: 'Invalid Email Address or Password'
         });
         return;
       }
     } else {
-      res.json({
+      res.status(422).json({
         success: false,
         message: 'Invalid Role for user'
       });
       return;
     }
   });
-
-
 };
 
-var createUser = function (req, res) {
-  models.Users.create({
+var createUser = function (req) {
+  return models.Users.create({
     emailaddress: req.body.emailaddress,
     password: helper.hashPassword(req.body.password),
     firstname: req.body.firstname,
@@ -51,18 +53,15 @@ var createUser = function (req, res) {
     username: req.body.username,
     RoleId: req.body.RoleId
   }).then (function (user) {
-    var token = Auth.generateToken({
+    var token = auth.generateToken({
       emailaddress: user.emailaddress,
       password: user.password,
-      RoleId: user.RoleId
+      RoleId: user.RoleId,
+      OwnerId: user.id
     });
-    res.json({
-      success: true,
-      token: token,
-      user:user
-    });
+    return { success: true, token: token, user:user };
   }).catch (function (error) {
-    res.json(error);
+    return error;
   });
 };
 
@@ -74,32 +73,33 @@ User.login = function (req, res) {
     if(!user){
       res.json({
         success: false,
-        message: 'Authentication failed. User not found'
+        message: 'authentication failed. User not found'
       });
     } else {
       authenticate(req, res, user);
     }
   }).catch (function (error) {
-    res.json(error);
+    res.status(500).json(error);
   });
 };
 
 var authenticate = function (req, res, user) {
   var response = helper.comparePasswords(req.body.password, user.password);
   if (response) {
-    var token = Auth.generateToken({
+    var token = auth.generateToken({
       emailaddress: user.emailaddress,
       password: user.password,
-      RoleId: user.RoleId
+      RoleId: user.RoleId,
+      ownerId: user.id
     });
     res.json({
       success: true,
       token: token
     });
   } else{
-    res.json({
+    res.status(403).json({
       success: false,
-      message: 'Authentication failed. Wrong password'
+      message: 'authentication failed. Wrong password'
     });
   }
 };
@@ -109,7 +109,7 @@ User.allUsers = function (req, res) {
   .then (function (roles) {
     res.json(roles);
   }).catch (function (error) {
-    res.json(error);
+    res.status(500).json(error);
   });
 };
 
@@ -119,7 +119,7 @@ User.deleteUser = function (req, res) {
   }).then(function (user) {
     res.json(user);
   }).catch(function (error) {
-    res.json(error);
+    res.status(500).json(error);
   });
 };
 
@@ -129,7 +129,7 @@ User.findAUser = function (req, res) {
   }).then(function (user) {
     res.json(user);
   }).catch(function (error) {
-    res.json(error);
+    res.status(500).json(error);
   });
 };
 
@@ -143,13 +143,13 @@ User.logout = function (req, res) {
 User.verifyToken = function (req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
   if (!token) {
-    res.status('403').json({
+    res.status(403).json({
       success:false,
-      message: 'No token found. Token needed for Authentication'
+      message: 'No token found. Token needed for authentication'
     });
   }
   else{
-    Auth.verifyToken(req,res, next, token);
+    auth.verifyToken(req,res, next, token);
   }
 };
 

@@ -4,7 +4,7 @@
   module.exports = {
     up: function (queryInterface) {
       return queryInterface.bulkInsert('Users', [{
-        id: 1,
+        id: 2,
         emailaddress: 'demilade@gmail.com',
         firstname: 'demilade',
         lastname: 'bamgbose',
@@ -14,7 +14,7 @@
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }, {
-        id: 2,
+        id: 3,
         emailaddress: 'winner@gmail.com',
         firstname: 'winner',
         lastname: 'bolorunduro',
@@ -24,7 +24,7 @@
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }, {
-        id: 3,
+        id: 4,
         emailaddress: 'ralph@gmail.com',
         firstname: 'ralph',
         lastname: 'olutola',
@@ -38,7 +38,7 @@
 
     down: function(queryInterface) {
       return queryInterface.bulkDelete('Users', {emailaddress:
-        ['demilade@gmail.com', 'winner@gmail.com', 'ralph@gmail.com']});
+        ['demilade@gmail.com', 'winner@gmail.com', 'ralph@gmail.com', 'lade@gmail.com']});
     }
   };
 

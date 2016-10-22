@@ -1,5 +1,4 @@
-var should = require('chai').should(),
-  expect = require('chai').expect,
+var expect = require('chai').expect,
   express = require('../../index'),
   supertest = require('supertest'),
   api = supertest(express);
@@ -9,25 +8,33 @@ var secret = require('./../../config/config').secret;
 var token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
-  RoleId: 1
+  RoleId: 3,
+  OwnerId:2
 }, secret, {
   expiresIn: 60*60*24
 });
 
 describe('Role', function () {
 
-  beforeEach(function (done) {
+  it ('creates a new role',function (done) {
     api.post('/api/create/role')
     .set('Accept', 'application/json')
     .send({
       title: 'TestRole'
+    }).end(function (err, res) {
+      api.get('/api/roles')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end( function (error, response) {
+        expect(response.body.length).to.be.equal(4);
+      });
     });
     done();
   });
 
   afterEach(function (done) {
-    api.delete('/api/role/4/delete')
-    .set('Accept', 'application/json');
+    api.delete('/api/role/1/delete')
+     .set('Accept', 'application/json');
     done();
   });
 
