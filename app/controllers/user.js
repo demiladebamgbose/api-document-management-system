@@ -133,6 +133,40 @@ User.findAUser = function (req, res) {
   });
 };
 
+User.updateUser = function (req, res) {
+  models.Users.findOne({
+    where: { id: req.params.id }
+  }).then(function (user) {
+    if (user) {
+      user.updateAttributes({
+        emailaddress: req.body.emailaddress,
+        password: helper.hashPassword(req.body.password),
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        username: req.body.username,
+        RoleId: req.body.RoleId
+      }).then(function (user) {
+        var token = auth.generateToken({
+          emailaddress: user.emailaddress,
+          password: user.password,
+          RoleId: user.RoleId,
+          OwnerId: user.id
+        });
+        res.json({ success: true, token: token, user: user});
+      }). catch(function (error) {
+        res.status(500).json(error);
+      });
+    } else {
+      res.json({
+        success: false,
+        message: 'Failed to update user. User does not exist'
+      });
+    }
+  }).catch(function (error) {
+    res.status(500).json(error);
+  });
+};
+
 User.logout = function (req, res) {
   res.json({
     success: 'true',

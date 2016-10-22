@@ -35,6 +35,29 @@ Role.all = function (req, res) {
   });
 };
 
+Role.updateRole = function (req, res) {
+  models.Role.find({
+    where: { id: req.params.id }
+  }).then(function (role) {
+    if (role) {
+      role.updateAttributes({
+        title: req.body.title
+      }).then(function (role) {
+        res.json(role);
+      }).catch(function (error) {
+        res.status(500).json(error);
+      });
+    } else {
+      res.status(422).json({
+        success: false,
+        message: 'Unable to udate role. Role does not exist'
+      });
+    }
+  }).catch(function (error) {
+    res.status(500).json(error);
+  });
+};
+
 Role.deleteRole = function (req, res) {
   models.Roles.destroy({
     where: {

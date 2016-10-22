@@ -14,8 +14,6 @@ var token = jwt.sign({
   expiresIn: 60*60*24
 });
 
-console.log(token);
-
 describe('Role', function () {
 
   it ('creates a new role',function (done) {
