@@ -43,6 +43,14 @@ Document.findDocument = function (req, res) {
   });
 };
 
-
+Document.deleteDocument = function (req, res) {
+  models.Documents.destroy({
+    where: { id: req.params.id }
+  }).then(function (document) {
+    res.json(document);
+  }).catch(function (error) {
+    res.status(500).json(error);
+  });
+};
 
 module.exports = Document;
