@@ -9,7 +9,7 @@ Document.createDocument = function (req, res) {
     models.Documents.create({
       title: req.body.title,
       content: req.body.content,
-      RoleId: req.decoded.RoleId,
+      RoleId: req.body.RoleId,
       OwnerId: req.decoded.OwnerId
     }).then(function (document) {
       res.json(document);
@@ -32,5 +32,17 @@ Document.all = function (req, res) {
      res.status(500).json(error);
    });
 };
+
+Document.findDocument = function (req, res) {
+  models.Documents.findOne({
+    where: { id: req.params.id}
+  }).then(function (document) {
+    res.json(document);
+  }).catch(function (error) {
+    res.staus(500).json(error);
+  });
+};
+
+
 
 module.exports = Document;
