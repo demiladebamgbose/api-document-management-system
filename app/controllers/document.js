@@ -53,4 +53,29 @@ Document.deleteDocument = function (req, res) {
   });
 };
 
+Document.updateDocument = function (req, res) {
+  models.Documents.findOne({
+    where: { id: req.params.id }
+  }).then(function (document) {
+    if (document) {
+      document.updateAttributes({
+        title: req.body.title,
+        content: req.body.content,
+        RoleId: req.body.RoleId
+      }).then(function () {
+        res.json(document);
+      }).catch(function (error) {
+        res.status(500).json(error);
+      });
+    } else {
+      res.status(422).json({
+        success: false,
+        message: 'Failed to update document. Document does not exist'
+      });
+    }
+  }).catch(function (error) {
+    res.status(500).json(error);
+  });
+};
+
 module.exports = Document;
