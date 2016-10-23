@@ -22,15 +22,23 @@ User.signup = function (req, res) {
 var validateDetails = function (req, res) {
   helper.checkRole(req.body.RoleId).then(function (role) {
     if (role) {
-      if ((helper.validateEmail(req.body.emailaddress)) &&
-       (helper.validatePassWord(req.body.password))) {
-        createUser(req).then(function (json) {
-          res.json(json);
-        });
+      if (helper.validateRequestBody(req.body)) {
+        if ( (helper.validateEmail(req.body.emailaddress)) &&
+         (helper.validatePassWord(req.body.password))) {
+          createUser(req).then(function (json) {
+            res.json(json);
+          });
+        } else {
+          res.status(400).json({
+            success: false,
+            message: 'Invalid Email Address or Password'
+          });
+          return;
+        }
       } else {
-        res.status(400).json({
+        res.status(422).json({
           success: false,
-          message: 'Invalid Email Address or Password'
+          message: 'Missing fields. Feilds cannot be empty'
         });
         return;
       }
@@ -127,7 +135,14 @@ User.findAUser = function (req, res) {
   models.Users.findOne({
     where: {id: req.params.id}
   }).then(function (user) {
-    res.json(user);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(400).json({
+        success: false,
+        message: 'User does not exit'
+      });
+    }
   }).catch(function (error) {
     res.status(500).json(error);
   });

@@ -58,6 +58,23 @@ Role.updateRole = function (req, res) {
   });
 };
 
+Role.findRole = function (req, res) {
+  models.Roles.findOne({
+    where: { id: req.params.id }
+  }).then(function (role) {
+    if (role) {
+      res.json(role);
+    } else {
+      res.status(400).json({
+        success: false,
+        message: 'Role does not exist'
+      });
+    }
+  }).catch(function (error) {
+    res.status(500).json(error);
+  });
+};
+
 Role.deleteRole = function (req, res) {
   models.Roles.destroy({
     where: {

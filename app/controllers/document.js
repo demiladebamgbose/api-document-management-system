@@ -39,7 +39,7 @@ var addDocument = function (req, res) {
 };
 
 Document.all = function (req, res) {
-  models.Documents.findAll({})
+  models.Documents.findAll({ limit: 3, offset: 3 })
    .then(function (documents) {
      res.json(documents);
    }).catch(function (error) {

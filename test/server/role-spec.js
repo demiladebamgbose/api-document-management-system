@@ -17,7 +17,7 @@ var token = jwt.sign({
 describe('Role', function () {
 
   it ('creates a new role',function (done) {
-    api.post('/api/create/role')
+    api.post('/api/roles')
     .set('Accept', 'application/json')
     .send({
       title: 'TestRole'
@@ -34,7 +34,7 @@ describe('Role', function () {
   });
 
   afterEach(function (done) {
-    api.delete('/api/role/1')
+    api.delete('/api/roles/1')
      .set('Accept', 'application/json')
      .set('x-access-token', token);
     done();
