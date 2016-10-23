@@ -9,7 +9,7 @@ var token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
   RoleId: 3,
-  OwnerId:2
+  OwnerId: 2
 }, secret, {
   expiresIn: 60*60*24
 });
@@ -17,11 +17,12 @@ var token = jwt.sign({
 describe('Role', function () {
 
   it ('creates a new role',function (done) {
-    api.post('/api/create/role')
+    api.post('/api/roles')
     .set('Accept', 'application/json')
     .send({
       title: 'TestRole'
     }).end(function (err, res) {
+      expect(res.body.title).to.be.equal('TestRole');
       api.get('/api/roles')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
@@ -33,8 +34,9 @@ describe('Role', function () {
   });
 
   afterEach(function (done) {
-    api.delete('/api/role/1/delete')
-     .set('Accept', 'application/json');
+    api.delete('/api/roles/1')
+     .set('Accept', 'application/json')
+     .set('x-access-token', token);
     done();
   });
 

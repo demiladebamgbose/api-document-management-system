@@ -3,8 +3,7 @@ module.exports = function(sequelize, DataTypes) {
   var Documents = sequelize.define('Documents', {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    RoleId: DataTypes.INTEGER,
-    OwnwerId: DataTypes.INTEGER
+    RoleId: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: function(models) {
@@ -15,6 +14,7 @@ module.exports = function(sequelize, DataTypes) {
           }
         });
         Documents.belongsTo(models.Users,{
+          as: 'Owner',
           foreignKey: {
             allowNull: false
           }

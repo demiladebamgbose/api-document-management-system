@@ -2,15 +2,16 @@ var express = require('express');
 var router = express.Router();
 
 module.exports = function (app) {
-  var Role = require('./../controllers/role.js');
-  var User = require('./../controllers/user.js');
+  var Role = require('./../controllers/role');
+  var User = require('./../controllers/user');
 
-  router.route('/create/role')
-    .post(Role.createRole);
   router.route('/roles')
+    .post(Role.createRole)
     .get(User.verifyToken, Role.all);
-  router.route('/role/:id/delete')
-    .delete(Role.deleteRole);
+  router.route('/roles/:id')
+    .delete(User.verifyToken, Role.deleteRole)
+    .put(User.verifyToken, Role.updateRole)
+    .get(Role.findRole);
 
-    app.use('/api/', router);
+  app.use('/api/', router);
 };

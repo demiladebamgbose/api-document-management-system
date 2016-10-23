@@ -22,15 +22,23 @@ User.signup = function (req, res) {
 var validateDetails = function (req, res) {
   helper.checkRole(req.body.RoleId).then(function (role) {
     if (role) {
-      if ((helper.validateEmail(req.body.emailaddress)) &&
-       (helper.validatePassWord(req.body.password))) {
-        createUser(req).then(function (json) {
-          res.json(json);
-        });
+      if (helper.validateRequestBody(req.body)) {
+        if ( (helper.validateEmail(req.body.emailaddress)) &&
+         (helper.validatePassWord(req.body.password))) {
+          createUser(req).then(function (json) {
+            res.json(json);
+          });
+        } else {
+          res.status(400).json({
+            success: false,
+            message: 'Invalid Email Address or Password'
+          });
+          return;
+        }
       } else {
-        res.status(400).json({
+        res.status(422).json({
           success: false,
-          message: 'Invalid Email Address or Password'
+          message: 'Missing fields. Feilds cannot be empty'
         });
         return;
       }
@@ -90,7 +98,7 @@ var authenticate = function (req, res, user) {
       emailaddress: user.emailaddress,
       password: user.password,
       RoleId: user.RoleId,
-      ownerId: user.id
+      OwnerId: user.id
     });
     res.json({
       success: true,
@@ -127,10 +135,69 @@ User.findAUser = function (req, res) {
   models.Users.findOne({
     where: {id: req.params.id}
   }).then(function (user) {
-    res.json(user);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(400).json({
+        success: false,
+        message: 'User does not exit'
+      });
+    }
   }).catch(function (error) {
     res.status(500).json(error);
   });
+};
+
+var checkAccess = function (req) {
+  if (req.decoded.OwnerId == req.params.id) {
+    return true;
+  }
+  return false;
+};
+
+User.updateUser = function (req, res) {
+  if (checkAccess(req)) {
+    models.Users.findOne({
+      where: { id: req.params.id }
+    }).then(function (user) {
+      theUpdater(req, res, user);
+    }).catch(function (error) {
+      res.status(500).json(error);
+    });
+  } else {
+    res.status(401).json({
+      success: false,
+      message: 'Oops! user details are not yours to edit'
+    });
+  }
+};
+
+var theUpdater = function (req, res, user) {
+  if (user) {
+    user.updateAttributes({
+      emailaddress: req.body.emailaddress,
+      password: helper.hashPassword(req.body.password),
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      username: req.body.username,
+      RoleId: req.body.RoleId
+    }, { fields: Object.keys(req.body) }).then(function (user) {
+      var token = auth.generateToken({
+        emailaddress: user.emailaddress,
+        password: user.password,
+        RoleId: user.RoleId,
+        OwnerId: user.id
+      });
+      res.json({ success: true, token: token, user: user});
+    }). catch(function (error) {
+      res.status(500).json(error);
+    });
+  } else {
+    res.json({
+      success: false,
+      message: 'Failed to update user. User does not exist'
+    });
+  }
 };
 
 User.logout = function (req, res) {
@@ -147,8 +214,7 @@ User.verifyToken = function (req, res, next) {
       success:false,
       message: 'No token found. Token needed for authentication'
     });
-  }
-  else{
+  } else{
     auth.verifyToken(req,res, next, token);
   }
 };
