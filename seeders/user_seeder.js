@@ -11,8 +11,8 @@
         username: 'demi',
         password: '12345678',
         RoleId: 2,
-        createdAt: moment().utc().format(),
-        updatedAt: moment().utc().format()
+        createdAt: moment().add(-1, 'days').utc().format(),
+        updatedAt: moment().add(-1, 'days').utc().format()
       }, {
         id: 3,
         emailaddress: 'winner@gmail.com',
@@ -21,7 +21,7 @@
         username: 'winner',
         password: '12345678',
         RoleId: 3,
-        createdAt: moment().utc().format(),
+        createdAt: moment().add(-1, 'days').utc().format(),
         updatedAt: moment().utc().format()
       }, {
         id: 4,

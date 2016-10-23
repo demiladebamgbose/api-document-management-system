@@ -9,7 +9,7 @@
          content: 'This right here is a serious document. owned by ralph admin role',
          RoleId: 2,
          OwnerId:4,
-         createdAt: moment().utc().format(),
+         createdAt: moment().add(-1, 'days').utc().format(),
          updatedAt: moment().utc().format()
        }, {
          id: 3,
@@ -25,7 +25,7 @@
          content: 'Purple is owned by demi with role guest',
          RoleId: 4,
          OwnerId:2,
-         createdAt: moment().utc().format(),
+         createdAt: moment().add(-1, 'days').utc().format(),
          updatedAt: moment().utc().format()
        }, {
          id: 5,
