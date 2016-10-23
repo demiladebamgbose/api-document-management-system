@@ -4,24 +4,38 @@ var helper = require('./helpers');
 var Document = {};
 
 Document.createDocument = function (req, res) {
-  if (helper.validateInput(req.body.title) &&
-   helper.validateInput(req.body.content)) {
-    models.Documents.create({
-      title: req.body.title,
-      content: req.body.content,
-      RoleId: req.body.RoleId,
-      OwnerId: req.decoded.OwnerId
-    }).then(function (document) {
-      res.json(document);
-    }).catch(function (error) {
-      res.status(500).json(error);
-    });
-  } else {
-    res.status(422).json({
-      success: false,
-      message: 'title or content cannot be empty'
-    });
-  }
+  helper.checkRole(req.body.RoleId).then(function (role) {
+    if (role) {
+      if (helper.validateInput(req.body.title) &&
+       helper.validateInput(req.body.content)) {
+        addDocument(req, res);
+      } else {
+        res.status(422).json({
+          success: false,
+          message: 'title or content cannot be empty'
+        });
+      }
+    } else {
+      res.status(422).json({
+        success: false,
+        message: 'role does not exist'
+      });
+    }
+  });
+
+};
+
+var addDocument = function (req, res) {
+  models.Documents.create({
+    title: req.body.title,
+    content: req.body.content,
+    RoleId: req.body.RoleId,
+    OwnerId: req.decoded.OwnerId
+  }).then(function (document) {
+    res.json(document);
+  }).catch(function (error) {
+    res.status(500).json(error);
+  });
 };
 
 Document.all = function (req, res) {
@@ -54,15 +68,16 @@ Document.deleteDocument = function (req, res) {
 };
 
 Document.updateDocument = function (req, res) {
-  models.Documents.findOne({
+  models.Documents.find({
     where: { id: req.params.id }
   }).then(function (document) {
     if (document) {
+      console.log(Object.keys(req.body));
       document.updateAttributes({
         title: req.body.title,
         content: req.body.content,
         RoleId: req.body.RoleId
-      }).then(function () {
+      }, { fields: Object.keys(req.body) }).then(function () {
         res.json(document);
       }).catch(function (error) {
         res.status(500).json(error);

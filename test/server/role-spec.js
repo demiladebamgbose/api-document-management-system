@@ -22,6 +22,7 @@ describe('Role', function () {
     .send({
       title: 'TestRole'
     }).end(function (err, res) {
+      expect(res.body.title).to.be.equal('TestRole');
       api.get('/api/roles')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
@@ -33,8 +34,9 @@ describe('Role', function () {
   });
 
   afterEach(function (done) {
-    api.delete('/api/role/1/delete')
-     .set('Accept', 'application/json');
+    api.delete('/api/role/1')
+     .set('Accept', 'application/json')
+     .set('x-access-token', token);
     done();
   });
 

@@ -9,8 +9,9 @@ module.exports = function (app) {
     .post(Role.createRole);
   router.route('/roles')
     .get(User.verifyToken, Role.all);
-  router.route('/role/:id/delete')
-    .delete(Role.deleteRole);
+  router.route('/role/:id')
+    .delete(User.verifyToken, Role.deleteRole)
+    .put(User.verifyToken, Role.updateRole);
 
   app.use('/api/', router);
 };

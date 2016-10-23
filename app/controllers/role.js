@@ -1,6 +1,6 @@
 var models = require('./../models/index');
 var Role = {};
-
+// get one role
 Role.createRole = function (req, res) {
   models.Roles.findOne({
     where: {
@@ -36,7 +36,7 @@ Role.all = function (req, res) {
 };
 
 Role.updateRole = function (req, res) {
-  models.Role.find({
+  models.Roles.find({
     where: { id: req.params.id }
   }).then(function (role) {
     if (role) {
