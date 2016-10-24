@@ -64,8 +64,8 @@ Document.all = function (req, res) {
     queryDocuments(req, res);
     return;
   }
-  var size = req.query.size;
-  var page = req.query.page;
+  var size = req.query.limit;
+  var page = req.query.page || 1;
   var offset = size * (page - 1);
   models.Documents.findAll({ order: '"createdAt" DESC', limit: size, offset: offset })
    .then(function (documents) {
@@ -76,8 +76,8 @@ Document.all = function (req, res) {
 };
 
 var queryDocuments = function (req, res) {
-  var size = req.query.size;
-  var page = req.query.page;
+  var size = req.query.limit;
+  var page = req.query.page || 1;
   var offset = size * (page - 1);
   if (req.query.RoleId) {
     models.Documents.findAll({
@@ -151,8 +151,8 @@ Document.updateDocument = function (req, res) {
 };
 
 Document.getUserDocument = function (req, res) {
-  var size = req.query.size;
-  var page = req.query.page;
+  var size = req.query.limit;
+  var page = req.query.page || 1;
   var offset = size * (page - 1);
   models.Documents.findAll({
     order: '"createdAt" DESC',
