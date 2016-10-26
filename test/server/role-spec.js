@@ -1,10 +1,11 @@
-var expect = require('chai').expect,
+var should = require('chai').should(),
+  expect = require('chai').expect,
   express = require('../../index'),
   supertest = require('supertest'),
-  api = supertest(express);
+  api = supertest(express),
+  jwt = require('jsonwebtoken'),
+  secret = require('./../../config/config').secret;
 
-var jwt = require('jsonwebtoken');
-var secret = require('./../../config/config').secret;
 var token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
@@ -28,9 +29,9 @@ describe('Role', function () {
       .set('x-access-token', token)
       .end( function (error, response) {
         expect(response.body.length).to.be.equal(4);
+        done();
       });
     });
-    done();
   });
 
   afterEach(function (done) {
@@ -63,7 +64,7 @@ describe('Role', function () {
     .set('Accept', 'application/json')
     .set('x-access-token', token)
     .end(function (err, res) {
-      expect(Array.isArray(res.body)).to.be.equal(true);
+      expect(Array.isArray(res.body)).to.equal(true);
       checkProperty(res.body, 'id');
       checkProperty(res.body, 'title');
       done();
