@@ -31,13 +31,18 @@ describe('Document', function () {
       expect(res.body).have.property('createdAt');
       done();
     });
+  });
+
+
+  it('the length of all documents sould be 11', function (done) {
     api.get('api/documents?limit=20')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     .end(function (err, res) {
-      expect(res.body.lenght).to.be.equal(11);
+      console.log(res.body);
+      expect(res.body.length).to.be.equal(11);
     });
-
+    done();
   });
 
   it('Every Document should have a unique title', function (done) {
@@ -53,11 +58,19 @@ describe('Document', function () {
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     .end(function (err, res) {
-      console.log(res.body)
       checkUniqueTitle(res.body);
     });
     done();
   });
 
-  //it('should return all documents');
+  it('should return limited documents with a set query limit', function (done) {
+    api.get('/api/documents?limit=4')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .end(function (err, res) {
+      console.log(res.status);
+      expect(res.status).to.be.equal(200);
+    });
+    done();
+  });
 });

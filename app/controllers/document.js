@@ -67,7 +67,8 @@ Document.all = function (req, res) {
   var size = req.query.limit;
   var page = req.query.page || 1;
   var offset = size * (page - 1);
-  models.Documents.findAll({ order: '"createdAt" DESC', limit: size, offset: offset })
+  models.Documents.findAll({ order: '"createdAt" DESC',
+   limit: size, offset: offset })
    .then(function (documents) {
      res.json(documents);
    }).catch(function (error) {
