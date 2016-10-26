@@ -30,8 +30,8 @@ describe('User', function () {
       })
       .end(function (err, res) {
         expect(res.body).to.have.property('token');
+        done();
       });
-    done();
   });
 
   it('should login a user', function (done) {
@@ -43,8 +43,9 @@ describe('User', function () {
       })
       .end(function (err, res) {
         expect(res.body).to.have.property('token');
+        done();
       });
-    done();
+
   });
 
   after(function (done) {
@@ -69,8 +70,8 @@ describe('User', function () {
       .set('Accept', 'application/json')
       .end(function (err, res) {
         uniqueUser(res.body);
+        done();
       });
-    done();
   });
 
   function checkProperty (array, property) {
@@ -86,8 +87,8 @@ describe('User', function () {
       .set('Accept', 'application/json')
       .end(function (err, res) {
         checkProperty(res.body, 'RoleId');
+        done();
       });
-    done();
   });
 
   it('should have both first name and last name', function (done) {
@@ -97,8 +98,8 @@ describe('User', function () {
       .end(function (err, res) {
         checkProperty(res.body, 'firstname');
         checkProperty(res.body, 'lastname');
+        done();
       });
-    done();
   });
 
   it('should return all users', function (done) {
@@ -108,7 +109,7 @@ describe('User', function () {
       .end(function (err, res) {
         expect(Array.isArray(res.body)).to.be.equal(true);
         expect(res.body.length).to.not.equal(0);
+        done();
       });
-    done();
   });
 });

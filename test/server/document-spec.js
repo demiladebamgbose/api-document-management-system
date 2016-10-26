@@ -1,4 +1,5 @@
-var expect = require('chai').expect,
+var should = require('chai').should(),
+  expect = require('chai').expect,
   express = require('../../index'),
   supertest = require('supertest'),
   api = supertest(express);
@@ -25,8 +26,8 @@ describe('Document', function () {
       content: 'Test Content for testing sake',
       RoleId: 3
     })
-
     .end(function (err, res) {
+      expect(res.status).to.be.equal(200);
       expect(res.body.title).to.be.equal('Test Document');
       expect(res.body).have.property('createdAt');
       done();
@@ -35,14 +36,15 @@ describe('Document', function () {
 
 
   it('the length of all documents sould be 11', function (done) {
-    api.get('api/documents?limit=20')
+    api.get('/api/documents?limit=20')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     .end(function (err, res) {
-      console.log(res.body);
+      expect(res.status).to.be.equal(200);
       expect(res.body.length).to.be.equal(11);
+      expect(res.body.length).to.be.at.most(20);
+      done();
     });
-    done();
   });
 
   it('Every Document should have a unique title', function (done) {
@@ -58,9 +60,11 @@ describe('Document', function () {
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     .end(function (err, res) {
+      expect(res.status).to.be.equal(200);
+      expect(res.body.length).to.be.at.most(20);
       checkUniqueTitle(res.body);
+      done();
     });
-    done();
   });
 
   it('should return limited documents with a set query limit', function (done) {
@@ -68,9 +72,35 @@ describe('Document', function () {
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     .end(function (err, res) {
-      console.log(res.status);
       expect(res.status).to.be.equal(200);
+      expect(res.body.length).to.be.equal(4);
+      expect(res.body.length).to.be.at.most(4);
+      done();
     });
-    done();
+  });
+
+  it('should return limited documents with a set query limit and offset',
+  function (done) {
+    api.get('/api/documents?limit=4&page=2')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .end(function (err, res) {
+      expect(res.status).to.be.equal(200);
+      expect(res.body.length).to.be.equal(4);
+      done();
+    });
+  });
+
+  it('should return documents starting with the most recently created',
+  function (done) {
+    api.get('/api/documents?limit=4&page=1')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .end(function (err, res) {
+      expect(res.status).to.be.equal(200);
+      expect(res.body.length).to.be.equal(4);
+      expect(res.body[0].title).to.be.equal('Test Document');
+      done();
+    });
   });
 });
