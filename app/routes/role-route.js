@@ -5,6 +5,7 @@ module.exports = function (app) {
   var Role = require('./../controllers/role');
   var User = require('./../controllers/user');
 
+// Roles Routes.
   router.route('/roles')
     .post(Role.createRole)
     .get(User.verifyToken, Role.all);

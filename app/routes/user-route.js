@@ -3,6 +3,8 @@ var router = express.Router();
 
 module.exports = function (app) {
   var User = require('./../controllers/user');
+
+  // Users Routes.
   router.route('/users')
     .post(User.signup)
     .get(User.verifyToken, User.allUsers);
@@ -14,6 +16,6 @@ module.exports = function (app) {
     .put(User.verifyToken, User.updateUser);
   router.route('/users/logout')
     .post(User.logout);
-    
+
   app.use('/api/', router);
 };

@@ -5,6 +5,7 @@ module.exports = function (app) {
   var User = require('./../controllers/user');
   var Document = require('./../controllers/document');
 
+  // Documents Routes.
   router.route('/documents')
    .post(User.verifyToken, Document.createDocument)
    .get(User.verifyToken, Document.all);

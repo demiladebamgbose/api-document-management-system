@@ -1,6 +1,4 @@
-var should = require('chai').should(),
-  expect = require('chai').expect,
-  supertest = require('supertest');
+var  expect = require('chai').expect;
 
 describe('base-test', function () {
   it('should pass', function (done) {
