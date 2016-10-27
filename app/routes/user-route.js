@@ -1,6 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
+/**
+* Creates routes to access Users resource.
+*
+* @param {Object} app An instance of express.
+* @return {Void}
+*/
 module.exports = function (app) {
   var User = require('./../controllers/user');
 
