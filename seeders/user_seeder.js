@@ -2,6 +2,15 @@
   'use strict';
   var moment = require('moment');
   module.exports = {
+    
+    /**
+    * @method up
+    *
+    * Seeds the Users table before running tests.
+    *
+    * @param {Object} queryInterface
+    * @return {Void}
+    */
     up: function (queryInterface) {
       return queryInterface.bulkInsert('Users', [{
         id: 2,
@@ -36,6 +45,14 @@
       }], {});
     },
 
+    /**
+    * @method down
+    *
+    * Unseed the Users table after running tests.
+    *
+    * @param {Object} queryInterface
+    * @return {Void}
+    */
     down: function(queryInterface) {
       return queryInterface.bulkDelete('Users', {emailaddress:
         ['demilade@gmail.com', 'winner@gmail.com', 'ralph@gmail.com', 'lade@gmail.com']});

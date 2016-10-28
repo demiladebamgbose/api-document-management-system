@@ -1,5 +1,4 @@
-var should = require('chai').should(),
-  expect = require('chai').expect,
+var expect = require('chai').expect,
   express = require('../../index'),
   supertest = require('supertest'),
   api = supertest(express),
