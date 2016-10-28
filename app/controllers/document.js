@@ -258,7 +258,8 @@
   * @return {Void}
   */
   function validateDocument (req, res) {
-    if (helper.validateRequestBody(req.body)) {
+    if (helper.validateRequestBody(req.body) &&
+     helper.checkRole(req.body.RoleId) ) {
       if (helper.validateInput(req.body.title) &&
        helper.validateInput(req.body.content)) {
         addDocument(req, res);
@@ -275,8 +276,6 @@
       });
     }
   }
-
-
 
   module.exports = Document;
 })();
