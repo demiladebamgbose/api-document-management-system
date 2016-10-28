@@ -101,7 +101,7 @@
     /**
     * @method updateDocument
     *
-    * Retrieves all document from the database
+    * Updates all or some of the attributes of the document
     *
     * @param {Object} req An instance of request
     * @param {Object} res An instance of response
