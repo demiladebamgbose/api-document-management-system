@@ -47,7 +47,7 @@
         where: {emailaddress: req.body.emailaddress}
       }).then (function (user) {
         if(!user){
-          res.json({
+          res.status(404).json({
             success: false,
             message: 'authentication failed. User not found'
           });
@@ -197,31 +197,24 @@
   * @return {Void}
   */
   function theUpdater (req, res, user) {
-    if (user) {
-      user.updateAttributes({
-        emailaddress: req.body.emailaddress,
-        password: helper.hashPassword(req.body.password),
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        username: req.body.username,
-        RoleId: req.body.RoleId
-      }, { fields: Object.keys(req.body) }).then(function (user) {
-        var token = auth.generateToken({
-          emailaddress: user.emailaddress,
-          password: user.password,
-          RoleId: user.RoleId,
-          OwnerId: user.id
-        });
-        res.json({ success: true, token: token, user: user});
-      }). catch(function (error) {
-        res.status(500).json(error);
+    user.updateAttributes({
+      emailaddress: req.body.emailaddress,
+      password: helper.hashPassword(req.body.password),
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      username: req.body.username,
+      RoleId: req.body.RoleId
+    }, { fields: Object.keys(req.body) }).then(function (user) {
+      var token = auth.generateToken({
+        emailaddress: user.emailaddress,
+        password: user.password,
+        RoleId: user.RoleId,
+        OwnerId: user.id
       });
-    } else {
-      res.json({
-        success: false,
-        message: 'Failed to update user. User does not exist'
-      });
-    }
+      res.json({ success: true, token: token, user: user});
+    }). catch(function (error) {
+      res.status(500).json(error);
+    });
   }
 
   /**
@@ -261,7 +254,8 @@
       });
       res.json({
         success: true,
-        token: token
+        token: token,
+        user: user
       });
     } else{
       res.status(403).json({
@@ -319,7 +313,7 @@
               res.json(json);
             });
           } else {
-            res.status(400).json({
+            res.status(422).json({
               success: false,
               message: 'Invalid Email Address or Password'
             });

@@ -2,7 +2,7 @@
   'use strict';
   var moment = require('moment');
   module.exports = {
-    
+
     /**
     * @method up
     *
@@ -13,27 +13,27 @@
     */
     up: function (queryInterface) {
       return queryInterface.bulkInsert('Users', [{
-        id: 2,
+        id: 3,
         emailaddress: 'demilade@gmail.com',
         firstname: 'demi',
         lastname: 'bamgbose',
         username: 'demi',
         password: '12345678',
-        RoleId: 2,
+        RoleId: 3,
         createdAt: moment().add(-1, 'days').utc().format(),
         updatedAt: moment().add(-1, 'days').utc().format()
       }, {
-        id: 3,
+        id: 4,
         emailaddress: 'winner@gmail.com',
         firstname: 'winner',
         lastname: 'bolorunduro',
         username: 'winner',
         password: '12345678',
-        RoleId: 3,
+        RoleId: 5,
         createdAt: moment().add(-1, 'days').utc().format(),
         updatedAt: moment().utc().format()
       }, {
-        id: 4,
+        id: 5,
         emailaddress: 'ralph@gmail.com',
         firstname: 'ralph',
         lastname: 'olutola',
