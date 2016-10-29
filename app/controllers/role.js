@@ -22,7 +22,7 @@
       } else {
         res.status(422).json({
           success:false,
-          message: 'Fields cannot be empty'
+          message: 'Title feild cannot be empty'
         });
       }
     },

@@ -16,7 +16,7 @@ var token = jwt.sign({
 
 describe('Role', function () {
 
-  it ('creates a new role',function (done) {
+  it('creates a new role',function (done) {
     api.post('/api/roles')
     .set('Accept', 'application/json')
     .send({
@@ -33,24 +33,54 @@ describe('Role', function () {
     });
   });
 
-  afterEach(function (done) {
-    api.delete('/api/roles/1')
-     .set('Accept', 'application/json')
-     .set('x-access-token', token);
-    done();
+  it('should not create a role without a title ', function () {
+    api.post('/api/roles')
+    .set('Accept', 'application/json')
+    .send({
+      title: ''
+    }).end(function (err, res) {
+      expect(res.status).to.be.equal(422);
+      expect(res.body.success).to.be.equal(false);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be.equal('Title feild cannot be empty');
+    });
   });
 
-  it('should return 200', function (done) {
+  it('should not create another role with the same', function () {
+    api.post('/api/roles')
+    .set('Accept', 'application/json')
+    .send({
+      title: 'TestRole'
+    }).end(function (err, res) {
+      expect(res.status).to.be.equal(422);
+      expect(res.body.success).to.be.equal(false);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be.equal('role title already exists');
+    });
+  });
+
+  it('should delete a role from the database', function (done) {
+    api.delete('/api/roles/1')
+     .set('Accept', 'application/json')
+     .set('x-access-token', token)
+     .end(function (err, res) {
+       expect(res.body).to.be.equal(1);
+       done();
+     });
+  });
+
+  it('get all roles from the database', function (done) {
     api.get('/api/roles')
     .set('Accept', 'application/json')
     .set('x-access-token', token)
     .end(function (err, res) {
       expect(Array.isArray(res.body)).to.be.equal(true);
+      expect(res.body.length).to.be.equal(3);
       done();
     });
   });
 
-  it('should return an array of roles', function (done) {
+  it('should have titles for all roles', function (done) {
 
     function checkProperty(array, propertyName) {
       for (var i = 0; i < array.length; i++){
@@ -64,13 +94,12 @@ describe('Role', function () {
     .set('x-access-token', token)
     .end(function (err, res) {
       expect(Array.isArray(res.body)).to.equal(true);
-      checkProperty(res.body, 'id');
       checkProperty(res.body, 'title');
       done();
     });
   });
 
-  it('should have unique titles for each role', function (done) {
+  it('should have unique titles for all roles', function (done) {
 
     function checkUniqueTitle (rolesArray) {
       var titles = [];
@@ -85,6 +114,18 @@ describe('Role', function () {
     .set('x-access-token', token)
     .end(function (err, res) {
       checkUniqueTitle(res.body);
+      done();
+    });
+  });
+
+  it('should retrieve a role based on params.id', function (done) {
+    api.get('/api/roles/3')
+    .set('Accept', 'application/json')
+    .set('x-access-token', token)
+    .end(function (err, res) {
+      expect(typeof(res.body)).to.equal('object');
+      expect(res.body).to.have.property('title');
+      expect(res.body.title).to.be.equal('Admin');
       done();
     });
   });

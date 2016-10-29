@@ -144,11 +144,14 @@ describe('User', function () {
       });
   });
 
-  after(function (done) {
+  it('should delete a user from the database', function (done) {
     api.delete('/api/users/1')
-      .set('x-access-token', token)
-      .set('Accept', 'application/json');
-    done();
+     .set('Accept', 'application/json')
+     .set('x-access-token', token)
+     .end(function (err, res) {
+       expect(res.body).to.be.equal(1);
+       done();
+     });
   });
 
   it('should update your user details', function (done) {
