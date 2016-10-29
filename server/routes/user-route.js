@@ -21,12 +21,12 @@
       .post(User.login);
     router.route('/users/:id')
       .delete(User.verifyToken, User.deleteUser)
-      .get(User.verifyToken, User.findAUser)
+      .get(User.verifyToken, User.findUser)
       .put(User.verifyToken, User.updateUser);
     router.route('/users/logout')
       .post(User.logout);
 
     app.use('/api/', router);
   };
-  
+
 })();

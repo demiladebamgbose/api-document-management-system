@@ -105,7 +105,7 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    findAUser: function (req, res) {
+    findUser: function (req, res) {
       models.Users.findOne({
         where: {id: req.params.id}
       }).then(function (user) {
@@ -337,5 +337,5 @@
   }
 
   module.exports = User;
-  
+
 })();
