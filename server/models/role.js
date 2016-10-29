@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+
   // Models definition for Roles
   module.exports = function(sequelize, DataTypes) {
     var Roles = sequelize.define('Roles', {
@@ -13,6 +14,8 @@
         }
       }
     });
+
     return Roles;
   };
+  
 })();

@@ -8,9 +8,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-require('./app/routes/user-route')(app);
-require('./app/routes/role-route')(app);
-require('./app/routes/document-route')(app);
+require('./server/routes/user-route')(app);
+require('./server/routes/role-route')(app);
+require('./server/routes/document-route')(app);
 
 app.get('/', function(req, res){
   res.json({
@@ -19,7 +19,7 @@ app.get('/', function(req, res){
 });
 
 app.listen(port, function () {
-  console.log ('app started on port'+ port);
+  console.log ('app started on port' + port);
 });
 
 module.exports = app;

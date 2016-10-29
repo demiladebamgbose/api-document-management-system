@@ -2,9 +2,9 @@
   "name": "api-document-management-system",
   "version": "1.0.0",
   "description": "document management system api",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node main.js",
     "pretest": "sequelize db:migrate && sequelize db:seed:all",
     "test": "mocha test/server",
     "posttest": "sequelize db:seed:undo:all && sequelize db:migrate:undo:all",

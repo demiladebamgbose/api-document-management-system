@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+
   module.exports = {
 
     /**
@@ -68,4 +69,5 @@
       return queryInterface.dropTable('Users');
     }
   };
+  
 })();

@@ -61,7 +61,7 @@
     * @return {Boolean} true or false
     */
     validateEmail: function (email) {
-      return /(.+@.+\..+)/.test(email);
+      return /(.*@.*\..*)/.test(email);
     },
 
     /**
@@ -133,6 +133,6 @@
     }
   };
 
-
   module.exports = Helper;
+  
 })();
