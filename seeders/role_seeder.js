@@ -13,17 +13,17 @@
     */
     up: function (queryInterface) {
       return queryInterface.bulkInsert('Roles', [{
-        id: 2,
+        id: 3,
         title: 'Admin',
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }, {
-        id: 3,
+        id: 4,
         title: 'User',
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()
       }, {
-        id: 4,
+        id: 5,
         title: 'Guest',
         createdAt: moment().utc().format(),
         updatedAt: moment().utc().format()

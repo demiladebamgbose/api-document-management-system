@@ -2,7 +2,7 @@
    'use strict';
    var moment = require('moment');
    module.exports = {
-     
+
     /**
     * @method up
     *
@@ -17,7 +17,7 @@
          id: 3,
          title: 'Serious document',
          content: 'This right here is a serious document. owned by ralph admin role',
-         RoleId: 2,
+         RoleId: 3,
          OwnerId:4,
          createdAt: moment().add(-1, 'days').utc().format(),
          updatedAt: moment().utc().format()
@@ -41,7 +41,7 @@
          id: 6,
          title: 'Grey document',
          content: 'Grey is a document owned by winner with role admin',
-         RoleId: 2,
+         RoleId: 5,
          OwnerId:3,
          createdAt: moment().utc().format(),
          updatedAt: moment().utc().format()
@@ -50,7 +50,7 @@
          title: 'Indigo document',
          content: 'Indigo is pretty. owned by demi with role user',
          RoleId: 3,
-         OwnerId:2,
+         OwnerId:5,
          createdAt: moment().utc().format(),
          updatedAt: moment().utc().format()
        },{
@@ -65,7 +65,7 @@
          id: 9,
          title: 'Gold document',
          content: 'Gold is a sample document owned by winner with role admin',
-         RoleId: 2,
+         RoleId: 4,
          OwnerId:3,
          createdAt: moment().utc().format(),
          updatedAt: moment().utc().format()
@@ -89,7 +89,7 @@
          id: 12,
          title: 'Crystal document',
          content: 'This crystal doc is owned by ralph with role Admin',
-         RoleId: 2,
+         RoleId: 3,
          OwnerId:4,
          createdAt: moment().utc().format(),
          updatedAt: moment().utc().format()
