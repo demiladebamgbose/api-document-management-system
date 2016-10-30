@@ -2,7 +2,6 @@
   'use strict';
 
   var jwt = require('jsonwebtoken');
-  //var dev_secret = require('./../../config/config').secret ;
   var secret = process.env.secret ;
 
   var Auth = {
