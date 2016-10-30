@@ -2,7 +2,7 @@
   'use strict';
 
   var jwt = require('jsonwebtoken');
-  var secret = require('./../../config/config').secret;
+  var secret = require('./../../config/config').secret || process.env.secret;
 
   var Auth = {
 
@@ -47,5 +47,5 @@
   };
 
   module.exports = Auth;
-  
+
 })();

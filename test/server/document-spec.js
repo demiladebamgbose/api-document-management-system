@@ -3,7 +3,7 @@ var expect = require('chai').expect,
   supertest = require('supertest'),
   api = supertest(express),
   jwt = require('jsonwebtoken'),
-  secret = require('./../../config/config').secret;
+  secret = require('./../../config/config').secret || process.env.secret;
 
 var token = jwt.sign({
   emailaddress: '123@abc.com',
