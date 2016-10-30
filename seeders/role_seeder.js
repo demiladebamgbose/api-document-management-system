@@ -2,7 +2,7 @@
   'use strict';
 
   var moment = require('moment');
-  
+
   module.exports = {
 
     /**
@@ -33,7 +33,7 @@
     },
 
     /**
-    * @method up
+    * @method down
     *
     * Unseeds the Roles table after running tests.
     *
