@@ -1,15 +1,15 @@
 var expect = require('chai').expect,
-  express = require('../../index'),
+  express = require('../../main'),
   supertest = require('supertest'),
-  api = supertest(express);
+  api = supertest(express),
+  jwt = require('jsonwebtoken'),
+  secret = require('./../../config/config').secret;
 
-var jwt = require('jsonwebtoken');
-var secret = require('./../../config/config').secret;
 var token = jwt.sign({
-  emailaddress: 'testuser@abc.com',
-  password:'12345678',
-  RoleId: 2,
-  OwnerId: 4
+  emailaddress: '123@abc.com',
+  password:'12345',
+  RoleId: 1,
+  OwnerId: 3
 }, secret, {
   expiresIn: 60*60*24
 });
@@ -33,15 +33,53 @@ describe('Document', function () {
     });
   });
 
-
-  it('the length of all documents sould be 11', function (done) {
-    api.get('/api/documents?limit=20')
+  it('should not create a document with incomplete details', function (done) {
+    api.post('/api/documents')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
+    .send({
+      title: 'Test Document',
+      content: '',
+      RoleId: 3
+    })
     .end(function (err, res) {
-      expect(res.status).to.be.equal(200);
-      expect(res.body.length).to.be.equal(11);
-      expect(res.body.length).to.be.at.most(20);
+      expect(res.status).to.be.equal(401);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be.equal('Feilds cannot be empty');
+      done();
+    });
+  });
+
+  it('should only create a document with a unique title', function (done) {
+    api.post('/api/documents')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .send({
+      title: 'Test Document',
+      content: 'Test Content for testing sake',
+      RoleId: 3
+    })
+    .end(function (err, res) {
+      expect(res.status).to.be.equal(422);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be.equal('Title already exists');
+      done();
+    });
+  });
+
+  it('should only create a document with a valid role', function (done) {
+    api.post('/api/documents')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .send({
+      title: 'New Document',
+      content: 'Test Content for testing sake',
+      RoleId: 7
+    })
+    .end(function (err, res) {
+      expect(res.status).to.be.equal(422);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be.equal('Role does not exist');
       done();
     });
   });
@@ -62,6 +100,18 @@ describe('Document', function () {
       expect(res.status).to.be.equal(200);
       expect(res.body.length).to.be.at.most(20);
       checkUniqueTitle(res.body);
+      done();
+    });
+  });
+
+  it('should retrieve a document from the database', function (done) {
+    api.get('/api/documents/4')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .end(function (err, res) {
+      expect(res.status).to.be.equal(200);
+      expect(typeof(res.body)).to.be.equal('object');
+      expect(res.body.title).to.be.equal('Yellow document');
       done();
     });
   });
@@ -99,6 +149,32 @@ describe('Document', function () {
       expect(res.status).to.be.equal(200);
       expect(res.body.length).to.be.equal(4);
       expect(res.body[0].title).to.be.equal('Test Document');
+      done();
+    });
+  });
+
+  it('should update attributes of a document', function (done) {
+    api.put('/api/documents/1')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .send({
+      title: 'A new title'
+    })
+    .end(function (err, res) {
+      expect(res.status).to.be.equal(200);
+      expect(typeof(res.body)).to.be.equal('object');
+      expect(res.body.title).to.be.equal('A new title');
+      done();
+    });
+  });
+
+  it('should delete a document from the database', function (done) {
+    api.delete('/api/documents/1')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .end(function (err, res) {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.equal(1);
       done();
     });
   });

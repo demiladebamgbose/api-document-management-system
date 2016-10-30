@@ -2,7 +2,7 @@
   'use strict';
 
   var models = require('./../models/index');
-  var helper = require('./helpers');
+  var helper = require('./../../services/helpers');
 
   // Controller methods to be called on document resource
   var Document = {
@@ -24,7 +24,7 @@
         } else {
           res.status(422).json({
             success: false,
-            message: 'title or content cannot be empty'
+            message: 'Role does not exist'
           });
         }
       });
@@ -62,7 +62,7 @@
     /**
     * @method findDocument
     *
-    * Retrieves one document from the database
+    * Retrieves a document from the database
     *
     * @param {Object} req An instance of request
     * @param {Object} res An instance of response
@@ -82,7 +82,7 @@
     /**
     * @method deleteDocument
     *
-    * Deletes one document from the database based on params.Id
+    * Deletes a document from the database based on params.Id
     *
     * @param {Object} req An instance of request
     * @param {Object} res An instance of response
@@ -118,7 +118,7 @@
             title: req.body.title,
             content: req.body.content,
             RoleId: req.body.RoleId
-          }, { fields: Object.keys(req.body) }).then(function () {
+          }, {fields: Object.keys(req.body)}).then(function () {
             res.json(document);
           }).catch(function (error) {
             res.status(500).json(error);
@@ -201,7 +201,7 @@
       } else {
         res.status(422).json({
           success: false,
-          message: 'title already exists'
+          message: 'Title already exists'
         });
       }
     });
@@ -258,17 +258,8 @@
   * @return {Void}
   */
   function validateDocument (req, res) {
-    if (helper.validateRequestBody(req.body) &&
-     helper.checkRole(req.body.RoleId) ) {
-      if (helper.validateInput(req.body.title) &&
-       helper.validateInput(req.body.content)) {
-        addDocument(req, res);
-      }else {
-        res.status(422).json({
-          success: false,
-          message: 'role does not exist'
-        });
-      }
+    if (helper.validateRequestBody(req.body)) {
+      addDocument(req, res);
     } else {
       res.status(401).json({
         success: false,
@@ -278,4 +269,5 @@
   }
 
   module.exports = Document;
+
 })();

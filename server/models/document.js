@@ -1,5 +1,6 @@
 (function(){
   'use strict';
+
   // Models definition for Users
   module.exports = function(sequelize, DataTypes) {
     var Documents = sequelize.define('Documents', {
@@ -24,6 +25,8 @@
         }
       }
     });
+
     return Documents;
   };
+  
 })();

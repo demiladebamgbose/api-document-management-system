@@ -1,27 +1,40 @@
 (function () {
   'use strict';
+
   module.exports = {
 
     /**
     * @method up
     *
-    * Creates table Roles in the database
+    * Creates table Documents in the database
     *
     * @param {Object} queryInterface
     * @param {Object} Sequelize
     * @return {method} queryInterface.createTable
     */
     up: function(queryInterface, Sequelize) {
-      return queryInterface.createTable('Roles', {
+      return queryInterface.createTable('Documents', {
         id: {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.INTEGER
         },
+        content: {
+          allowNull: false,
+          type: Sequelize.STRING
+        },
         title: {
           allowNull: false,
           type: Sequelize.STRING
+        },
+        RoleId: {
+          allowNull: false,
+          type: Sequelize.INTEGER
+        },
+        OwnerId: {
+          allowNull: false,
+          type: Sequelize.INTEGER
         },
         createdAt: {
           allowNull: false,
@@ -35,17 +48,18 @@
     },
 
     /**
-    * @method dowm
+    * @method down
     *
-    * Deletes table Roles from the database
+    * Deletes table Documents from the database
     *
     * @param {Object} queryInterface
     * @param {Object} Sequelize
     * @return {method} queryInterface.dropTable
     */
-    //eslint-disable-next-line
+    // eslint-disable-next-line
     down: function(queryInterface, Sequelize) {
-      return queryInterface.dropTable('Roles');
+      return queryInterface.dropTable('Documents');
     }
   };
+  
 })();
