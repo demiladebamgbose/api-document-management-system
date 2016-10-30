@@ -2,7 +2,7 @@
   'use strict';
 
   var models = require('./../models/index');
-  var helper = require('./helpers');
+  var helper = require('./../../services/helpers');
 
   // Controller methods to be called on document resource
   var Document = {

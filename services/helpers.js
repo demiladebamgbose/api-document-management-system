@@ -2,7 +2,7 @@
   'use strict';
 
   var bcrypt = require('bcrypt-nodejs');
-  var models = require('./../models/index');
+  var models = require('./../server/models/index');
 
 
   var Helper = {
@@ -130,9 +130,29 @@
     */
     hashPassword: function (password) {
       return bcrypt.hashSync(password);
+    },
+
+    /**
+    * @method sendResponse
+    *
+    * Sends response to requests
+    *
+    * @param {Object} res An instance of response
+    * @param {Integer} status Http status code
+    * @param {error} error Possible error
+    * @param {Boolean} success true or false
+    * @param {Object} status Http status code
+
+    */
+    sendResponse: function (res, status, error, success, data, message) {
+      res.status(status).json({
+        success: success,
+        data: data,
+        message: message
+      });
     }
   };
 
   module.exports = Helper;
-  
+
 })();

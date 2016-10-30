@@ -8,7 +8,7 @@ var expect = require('chai').expect,
 var token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
-  RoleId: 1,
+  RoleId: 4,
   OwnerId: 3
 }, secret, {
   expiresIn: 60*60*24
@@ -54,6 +54,17 @@ describe('Search', function () {
     .end(function (err, res) {
       expect(res.body.length).to.be.equal(2);
       expect(res.body.length).to.be.at.most(5);
+      done();
+    });
+  });
+
+  it('should return all documets accessible to a user ', function (done) {
+    api.get('/api/users/3/documents?limit=20&page=1')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .end(function (err, res) {
+      expect(res.body.length).to.be.equal(7);
+      expect(res.body.length).to.be.at.most(20);
       done();
     });
   });

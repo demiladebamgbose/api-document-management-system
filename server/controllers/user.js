@@ -3,7 +3,7 @@
 
   var auth = require('./auth.js');
   var models = require('./../models/index');
-  var helper = require('./helpers');
+  var helper = require('./../../services/helpers');
 
   //User controller methods
   var User = {
