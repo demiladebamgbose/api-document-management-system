@@ -1,8 +1,8 @@
-(function () {
+(() => {
   'use strict';
 
-  var express = require('express');
-  var router = express.Router();
+  const express = require('express');
+  const router = express.Router();
 
   /**
   * Creates routes to access Roles resource.
@@ -10,20 +10,20 @@
   * @param {Object} app An instance of express.
   * @return {Void}
   */
-  module.exports = function (app) {
-    var Role = require('./../controllers/role');
-    var User = require('./../controllers/user');
+  module.exports = (app) => {
+    const Role = require('./../controllers/role');
+    const Auth = require('./../controllers/auth');
 
     // Roles Routes.
     router.route('/roles')
       .post(Role.createRole)
-      .get(User.verifyToken, Role.all);
+      .get(Auth.validateToken, Role.all);
     router.route('/roles/:id')
-      .delete(User.verifyToken, Role.deleteRole)
-      .put(User.verifyToken, Role.updateRole)
+      .delete(Auth.validateToken, Role.deleteRole)
+      .put(Auth.validateToken, Role.updateRole)
       .get(Role.findRole);
 
     app.use('/api/', router);
   };
-  
+
 })();

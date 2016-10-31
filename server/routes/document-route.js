@@ -1,8 +1,8 @@
-(function () {
+(() => {
   'use strict';
 
-  var express = require('express');
-  var router = express.Router();
+  const express = require('express');
+  const router = express.Router();
 
   /**
   * Creates routes to access Documents resource.
@@ -10,23 +10,23 @@
   * @param {Object} app An instance of express.
   * @return {Void}
   */
-  module.exports = function (app) {
-    var User = require('./../controllers/user');
-    var Document = require('./../controllers/document');
+  module.exports = (app) => {
+    const Auth = require('./../controllers/auth');
+    const Document = require('./../controllers/document');
 
     // Documents Routes.
     router.route('/documents')
-     .post(User.verifyToken, Document.createDocument)
-     .get(User.verifyToken, Document.all);
+     .post(Auth.validateToken, Document.createDocument)
+     .get(Auth.validateToken, Document.all);
     router.route('/documents/:id')
-     .delete(User.verifyToken, Document.deleteDocument)
-     .put(User.verifyToken, Document.updateDocument)
-     .get(User.verifyToken, Document.findDocument);
+     .delete(Auth.validateToken, Document.deleteDocument)
+     .put(Auth.validateToken, Document.updateDocument)
+     .get(Auth.validateToken, Document.findDocument);
     router.route('/users/:id/documents')
-      .get(User.verifyToken, Document.getUserDocument);
+      .get(Auth.validateToken, Document.getUserDocument);
 
 
     app.use('/api/', router);
   };
-  
+
 })();

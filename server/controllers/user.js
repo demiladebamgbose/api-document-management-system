@@ -162,27 +162,6 @@
         success: 'true',
         message: 'User logged out successfully'
       });
-    },
-
-    /**
-    * @method verifyToken
-    *
-    * Checks for the existence of token and decodes it.
-    *
-    * @param {Object} req An instance of request
-    * @param {Object} res An instance of response
-    * @return {Void}
-    */
-    verifyToken: function (req, res, next) {
-      var token = req.body.token || req.query.token || req.headers['x-access-token'];
-      if (!token) {
-        res.status(403).json({
-          success:false,
-          message: 'No token found. Token needed for authentication'
-        });
-      } else{
-        auth.verifyToken(req,res, next, token);
-      }
     }
   };
 
