@@ -1,11 +1,13 @@
-(function () {
+(() => {
   'use strict';
 
-  var models = require('./../models/index');
-  var helper = require('./../../services/helpers');
+  const models = require('./../models/index');
+  const helper = require('./../../services/helpers');
+  const roleServ = require('./../../services/role_service');
+
 
   // Controller methods for Roles Resource
-  var Role = {
+  const Role = {
 
     /**
     * @method createRole
@@ -16,14 +18,12 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    createRole:function (req, res) {
+    createRole: (req, res) => {
       if (helper.validateRequestBody(req.body)) {
-        addRole(req, res);
+        // Saves role in the database
+        roleServ.addRole(req, res);
       } else {
-        res.status(422).json({
-          success:false,
-          message: 'Title feild cannot be empty'
-        });
+        helper.sendMessage(res, 422, 'Title feild cannot be empty');
       }
     },
 
@@ -36,12 +36,12 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    all: function (req, res) {
+    all: (req, res) => {
       models.Roles.findAll({})
-      .then (function (roles) {
-        res.json(roles);
-      }).catch (function (error) {
-        res.status(500).json(error);
+      .then ((roles) => {
+        helper.sendResponse(res, 200, roles);
+      }).catch ((error) => {
+        helper.sendResponse(res, 500, error);
       });
     },
 
@@ -54,28 +54,20 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    updateRole: function (req, res) {
+    updateRole: (req, res) => {
       // Finds one role based on the params.id
       models.Roles.find({
         where: { id: req.params.id }
-      }).then(function (role) {
+      }).then((role) => {
         if (role) {
           //Updates all or some of the attributes of the Role
-          role.updateAttributes({
-            title: req.body.title
-          }).then(function (role) {
-            res.json(role);
-          }).catch(function (error) {
-            res.status(500).json(error);
-          });
+          roleServ.updateRole(req, res, role);
         } else {
-          res.status(422).json({
-            success: false,
-            message: 'Unable to udate role. Role does not exist'
-          });
+          helper.sendMessage(res, 422,
+           'Unable to udate role. Role does not exist');
         }
-      }).catch(function (error) {
-        res.status(500).json(error);
+      }).catch((error) => {
+        helper.sendResponse(res, 500, error);
       });
     },
 
@@ -88,20 +80,17 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    findRole: function (req, res) {
+    findRole: (req, res) => {
       models.Roles.findOne({
         where: { id: req.params.id }
-      }).then(function (role) {
+      }).then((role) => {
         if (role) {
-          res.json(role);
+          helper.sendResponse(res, 200, role);
         } else {
-          res.status(400).json({
-            success: false,
-            message: 'Role does not exist'
-          });
+          helper.sendMessage(res, 400, 'Role does not exist');
         }
-      }).catch(function (error) {
-        res.status(500).json(error);
+      }).catch((error) => {
+        helper.sendResponse(res, 500, error);
       });
     },
 
@@ -114,52 +103,18 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    deleteRole: function (req, res) {
+    deleteRole: (req, res) => {
       models.Roles.destroy({
         where: {
           id: req.params.id
         }
-      }).then(function(role) {
-        res.json(role);
-      }).catch(function (error) {
-        res.status(500).json(error);
+      }).then((role) => {
+        helper.sendResponse(res, 200, role);
+      }).catch((error) => {
+        helper.sendResponse(res, 500, error);
       });
     }
   };
-
-  /**
-  * @method addRole
-  *
-  * Saves a new role to the database
-  *
-  * @param {Object} req An instance of request
-  * @param {Object} res An instance of response
-  * @return {Void}
-  */
-  function addRole (req, res) {
-    models.Roles.findOne({
-      where: {
-        title: req.body.title
-      }
-    }).then(function (role) {
-      if (!role) {
-        models.Roles.create({
-          title: req.body.title
-        }).then (function (role) {
-          res.json(role);
-        }).catch (function (error) {
-          res.status(500).json(error);
-        });
-      } else {
-        res.status(422).json({
-          success:false,
-          message: 'role title already exists'
-        });
-      }
-    }).catch (function (error) {
-      res.status(500).json(error);
-    });
-  }
 
   module.exports = Role;
 

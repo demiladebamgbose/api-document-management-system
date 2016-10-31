@@ -20,6 +20,7 @@
         return true;
       }
       return false;
+
     },
 
     /**
@@ -77,7 +78,7 @@
       return models.Roles.findOne({
         where:
         {id: roleId}
-      }).then(function (role) {
+      }).then((role) =>{
         if (role) {
           return true;
         }
@@ -98,7 +99,7 @@
       return models.Users.findOne({
         where:
         {id: ownerId}
-      }).then(function (user) {
+      }).then((user) => {
         if (user) {
           return true;
         }

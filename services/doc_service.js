@@ -58,7 +58,7 @@
       // Checks if document alredy exist
       models.Documents.findOne({
         where: {title: req.body.title}
-      }).then(function (document) {
+      }).then((document) => {
         if (!document) {
           // Creates a unique document
           models.Documents.create({
@@ -66,9 +66,9 @@
             content: req.body.content,
             RoleId: req.body.RoleId,
             OwnerId: req.decoded.OwnerId
-          }).then(function (document) {
+          }).then((document) => {
             helper.sendResponse(res, 200, document);
-          }).catch(function (error) {
+          }).catch((error) => {
             helper.sendResponse(res, 500, error);
           });
         } else {
@@ -103,9 +103,9 @@
         limit: size,
         offset: offset,
         where: queryObj
-      }).then(function (documents) {
+      }).then((documents) => {
         helper.sendResponse(res, 200, documents);
-      }).catch(function (error) {
+      }).catch((error) => {
         helper.sendResponse(res, 500, error);
       });
     },
@@ -125,9 +125,9 @@
         title: req.body.title,
         content: req.body.content,
         RoleId: req.body.RoleId
-      }, {fields: Object.keys(req.body)}).then(function (document) {
+      }, {fields: Object.keys(req.body)}).then((document) => {
         helper.sendResponse(res, 200, document);
-      }).catch(function (error) {
+      }).catch((error) => {
         helper.sendResponse(res, 500, error);
       });
     }
