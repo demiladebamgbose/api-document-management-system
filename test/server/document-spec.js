@@ -14,6 +14,8 @@ var token = jwt.sign({
   expiresIn: 60*60*24
 });
 
+console.log(token);
+
 describe('Document', function () {
 
   it('should create a new document with a defined published date', function (done) {

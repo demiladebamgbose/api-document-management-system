@@ -1,11 +1,11 @@
-(function () {
+(() => {
   'use strict';
 
-  var bcrypt = require('bcrypt-nodejs');
-  var models = require('./../server/models/index');
+  const bcrypt = require('bcrypt-nodejs');
+  const models = require('./../server/models/index');
 
 
-  var Helper = {
+  const Helper = {
 
     /**
     * @method validateInput
@@ -15,7 +15,7 @@
     * @param {String} input
     * @return {Boolean} true or false
     */
-    validateInput: function (input) {
+    validateInput: (input) => {
       if (input) {
         return true;
       }
@@ -30,9 +30,9 @@
     * @param {Object} body
     * @return {Boolean} true or false
     */
-    validateRequestBody: function (body) {
-      var keys = Object.keys(body);
-      for (var i = 0; i < keys.length; i++) {
+    validateRequestBody: (body) => {
+      const keys = Object.keys(body);
+      for (let i = 0; i < keys.length; i++) {
         if (!Helper.validateInput(body[keys[i]])) {
           return false;
         }
@@ -48,7 +48,7 @@
     * @param {String} password
     * @return {Boolean} true or false
     */
-    validatePassWord: function (password) {
+    validatePassWord: (password) => {
       return /^[\w]{8,}$/.test(password);
     },
 
@@ -60,7 +60,7 @@
     * @param {String} email
     * @return {Boolean} true or false
     */
-    validateEmail: function (email) {
+    validateEmail: (email) => {
       return /(.*@.*\..*)/.test(email);
     },
 
@@ -73,7 +73,7 @@
     * @return {Promise}
     * @return {Boolean} true or false
     */
-    checkRole: function (roleId) {
+    checkRole: (roleId) => {
       return models.Roles.findOne({
         where:
         {id: roleId}
@@ -94,7 +94,7 @@
     * @return {Promise}
     * @return {Boolean} true or false
     */
-    checkUser: function (ownerId) {
+    checkUser: (ownerId) => {
       return models.Users.findOne({
         where:
         {id: ownerId}
@@ -115,8 +115,8 @@
     * @param {String} hashed Hased password
     * @return {Boolean} true or false
     */
-    comparePasswords: function (string, hashed) {
-      var result = bcrypt.compareSync(string, hashed); // true
+    comparePasswords: (string, hashed) => {
+      const result = bcrypt.compareSync(string, hashed);
       return result;
     },
 
@@ -128,7 +128,7 @@
     * @param {String} password
     * @return {String} Hashed password
     */
-    hashPassword: function (password) {
+    hashPassword: (password) => {
       return bcrypt.hashSync(password);
     },
 
@@ -144,12 +144,26 @@
     * @param {Object} status Http status code
 
     */
-    sendResponse: function (res, status, error, success, data, message) {
+    sendMessage: (res, status, message) => {
       res.status(status).json({
-        success: success,
-        data: data,
+        success: false,
         message: message
       });
+    },
+
+
+    /**
+    * @method sendResponse
+    *
+    * Sends response to requests
+    *
+    * @param {Object} res An instance of response
+    * @param {Integer} status Http status code of response
+    * @param {Object} obj object response
+
+    */
+    sendResponse: (res, status, obj) => {
+      res.status(status).json(obj);
     }
   };
 
