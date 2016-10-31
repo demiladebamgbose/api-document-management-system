@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var moment = require('moment');
+  const moment = require('moment');
 
   module.exports = {
 

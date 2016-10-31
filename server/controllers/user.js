@@ -1,12 +1,12 @@
-(function () {
+(() => {
   'use strict';
 
-  var auth = require('./auth.js');
-  var models = require('./../models/index');
-  var helper = require('./../../services/helpers');
+  const models = require('./../models/index');
+  const helper = require('./../../services/helpers');
+  const userServ = require('./../../services/user_service');
 
   //User controller methods
-  var User = {
+  const User = {
 
     /**
     * @method signup
@@ -17,19 +17,17 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    signup: function (req, res) {
+    signup: (req, res) => {
       models.Users.findOne({
         where: { emailaddress: req.body.emailaddress }
-      }).then (function (user) {
+      }).then ((user) => {
         if (!user) {
-          validateDetails(req, res);
+          userServ.validateDetails(req, res);
         } else {
-          res.status(422).json({
-            success: false,
-            message: 'user already exists'});
+          helper.sendMessage(res, 422, 'user already exists');
         }
-      }).catch (function (error) {
-        res.status(500).json(error);
+      }).catch ((error) => {
+        helper.sendResponse(res, 500, error);
       });
     },
 
@@ -42,20 +40,17 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    login: function (req, res) {
+    login: (req, res) => {
       models.Users.findOne({
         where: {emailaddress: req.body.emailaddress}
-      }).then (function (user) {
+      }).then ((user) => {
         if(!user){
-          res.status(404).json({
-            success: false,
-            message: 'authentication failed. User not found'
-          });
+          helper.sendMessage(res, 404, 'authentication failed. User not found');
         } else {
-          authenticate(req, res, user);
+          userServ.authenticate(req, res, user);
         }
-      }).catch (function (error) {
-        res.status(500).json(error);
+      }).catch ((error) => {
+        helper.sendResponse(req, 500, error);
       });
     },
 
@@ -68,12 +63,12 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    allUsers: function (req, res) {
+    allUsers: (req, res) => {
       models.Users.findAll({})
-      .then (function (roles) {
-        res.json(roles);
-      }).catch (function (error) {
-        res.status(500).json(error);
+      .then ((users) => {
+        helper.sendResponse(res, 200, users);
+      }).catch ((error) => {
+        helper.sendResponse(res, 500, error);
       });
     },
 
@@ -86,13 +81,13 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    deleteUser: function (req, res) {
+    deleteUser: (req, res) => {
       models.Users.destroy({
         where: {id: req.params.id}
-      }).then(function (user) {
-        res.json(user);
-      }).catch(function (error) {
-        res.status(500).json(error);
+      }).then((user) => {
+        helper.sendResponse(res, 200, user);
+      }).catch((error) => {
+        helper.sendResponse(res, 500, error);
       });
     },
 
@@ -105,20 +100,17 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    findUser: function (req, res) {
+    findUser: (req, res) => {
       models.Users.findOne({
         where: {id: req.params.id}
-      }).then(function (user) {
+      }).then((user) => {
         if (user) {
-          res.json(user);
+          helper.sendResponse(res, 200, user);
         } else {
-          res.status(400).json({
-            success: false,
-            message: 'User does not exit'
-          });
+          helper.sendMessage(res, 400, 'User does not exit');
         }
-      }).catch(function (error) {
-        res.status(500).json(error);
+      }).catch((error) => {
+        helper.sendResponse(res, 500, error);
       });
     },
 
@@ -131,20 +123,17 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    updateUser: function (req, res) {
-      if (checkAccess(req)) {
+    updateUser: (req, res) => {
+      if (userServ.checkAccess(req)) {
         models.Users.findOne({
           where: { id: req.params.id }
-        }).then(function (user) {
-          theUpdater(req, res, user);
-        }).catch(function (error) {
-          res.status(500).json(error);
+        }).then((user) => {
+          userServ.theUpdater(req, res, user);
+        }).catch((error) => {
+          helper.sendResponse(res, 500, error);
         });
       } else {
-        res.status(401).json({
-          success: false,
-          message: 'Oops! user details are not yours to edit'
-        });
+        helper.sendMessage(res, 401, 'Oops! user details are not yours to edit');
       }
     },
 
@@ -157,163 +146,10 @@
     * @param {Object} res An instance of response
     * @return {Void}
     */
-    logout: function (req, res) {
-      res.json({
-        success: 'true',
-        message: 'User logged out successfully'
-      });
+    logout: (req, res) => {
+      helper.sendMessage(res, 400, 'User logged out successfully');
     }
   };
-
-  /**
-  * @method theUpdater
-  *
-  * Updates all or some of the attributes of the document
-  *
-  * @param {Object} req An instance of request
-  * @param {Object} res An instance of response
-  * @param {Object} user user to be upated
-  * @return {Void}
-  */
-  function theUpdater (req, res, user) {
-    user.updateAttributes({
-      emailaddress: req.body.emailaddress,
-      password: helper.hashPassword(req.body.password),
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      username: req.body.username,
-      RoleId: req.body.RoleId
-    }, { fields: Object.keys(req.body) }).then(function (user) {
-      var token = auth.generateToken({
-        emailaddress: user.emailaddress,
-        password: user.password,
-        RoleId: user.RoleId,
-        OwnerId: user.id
-      });
-      res.json({ success: true, token: token, user: user});
-    }). catch(function (error) {
-      res.status(500).json(error);
-    });
-  }
-
-  /**
-  * @method checkAccess
-  *
-  * Checks if a user has access to update user details
-  *
-  * @param {Object} req An instance of request
-  * @return {Void}
-  */
-  function checkAccess (req) {
-    //eslint-disable-next-line
-    if (req.decoded.OwnerId == req.params.id) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-  * @method authenticate
-  *
-  * Conpares password on login.
-  *
-  * @param {Object} req An instance of request
-  * @param {Object} res An instance of response
-  * @param {Object} user
-  * @return {Void}
-  */
-  function authenticate (req, res, user) {
-    var response = helper.comparePasswords(req.body.password, user.password);
-    if (response) {
-      var token = auth.generateToken({
-        emailaddress: user.emailaddress,
-        password: user.password,
-        RoleId: user.RoleId,
-        OwnerId: user.id
-      });
-      res.json({
-        success: true,
-        token: token,
-        user: user
-      });
-    } else{
-      res.status(403).json({
-        success: false,
-        message: 'authentication failed. Wrong password'
-      });
-    }
-  }
-
-  /**
-  * @method createUser
-  *
-  * Creates a new user and new user and saves it to the database on signup
-  *
-  * @param {Object} req An instance of request
-  * @return {Void}
-  */
-  function createUser (req) {
-    return models.Users.create({
-      emailaddress: req.body.emailaddress,
-      password: helper.hashPassword(req.body.password),
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      username: req.body.username,
-      RoleId: req.body.RoleId
-    }).then (function (user) {
-      var token = auth.generateToken({
-        emailaddress: user.emailaddress,
-        password: user.password,
-        RoleId: user.RoleId,
-        OwnerId: user.id
-      });
-      return { success: true, token: token, user:user };
-    }).catch (function (error) {
-      return error;
-    });
-  }
-
-  /**
-  * @method validateDetails
-  *
-  * Ensures input fields are not empty before creating a user
-  *
-  * @param {Object} req An instance of request
-  * @param {Object} res An instance of response
-  * @return {Void}
-  */
-  function validateDetails (req, res) {
-    helper.checkRole(req.body.RoleId).then(function (role) {
-      if (role) {
-        if (helper.validateRequestBody(req.body)) {
-          if ( (helper.validateEmail(req.body.emailaddress)) &&
-           (helper.validatePassWord(req.body.password))) {
-            createUser(req).then(function (json) {
-              res.json(json);
-            });
-          } else {
-            res.status(422).json({
-              success: false,
-              message: 'Invalid Email Address or Password'
-            });
-            return;
-          }
-        } else {
-          res.status(422).json({
-            success: false,
-            message: 'Missing fields. Feilds cannot be empty'
-          });
-          return;
-        }
-      } else {
-        res.status(422).json({
-          success: false,
-          message: 'Invalid Role for user'
-        });
-        return;
-      }
-    });
-  }
 
   module.exports = User;
 

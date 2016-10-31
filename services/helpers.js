@@ -164,6 +164,23 @@
     */
     sendResponse: (res, status, obj) => {
       res.status(status).json(obj);
+    },
+
+    /**
+    * @method sendUser
+    *
+    * Sends user and token as response to requests
+    *
+    * @param {Object} res An instance of response
+    * @param {String} token Jwt token generated
+    * @param {Object} user user object as response
+    */
+    sendUser: (res, token, user) => {
+      res.status(200).json({
+        token: token,
+        success: true,
+        user: user
+      });
     }
   };
 
