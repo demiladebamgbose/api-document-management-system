@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "password",
+    "password": "",
     "database": "dmsys",
     "host": "127.0.0.1",
     "port": "5432",
@@ -10,7 +10,7 @@
   "test": {
     "adapter": "postgresql",
     "username": "postgres",
-    "password": "password",
+    "password": "",
     "database": "travis_ci_test",
     "host": "127.0.0.1",
     "port":"5432",

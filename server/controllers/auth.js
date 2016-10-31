@@ -1,10 +1,11 @@
-(function () {
+(() => {
   'use strict';
 
-  var jwt = require('jsonwebtoken');
-  var secret = require('./../../config/config').secret;
+  const jwt = require('jsonwebtoken');
+  const helper = require('./../../services/helpers');
+  const secret = process.env.secret ;
 
-  var Auth = {
+  const Auth = {
 
     /**
     * @method generateToken
@@ -14,7 +15,7 @@
     * @param {Object} payload
     * @return {String}
     */
-    generateToken: function (payload) {
+    generateToken: (payload) => {
       return jwt.sign(payload, secret, {
         expiresIn: 60*60*24
       });
@@ -31,11 +32,11 @@
     * @param {String} token
     * @return {Void}
     */
-    verifyToken: function (req, res, next, token) {
-      jwt.verify(token, secret, function(err, decoded) {
+    verifyToken: (req, res, next, token) => {
+      jwt.verify(token, secret, (err, decoded) => {
         if(err) {
           // Send this response if token is not found or invalid
-          return res.json({success: false, message: 'Failed to authenticate'});
+          helper.sendMessage(res, 401, 'Failed to authenticate');
         }
         else {
           // Attach decoded payload to request
@@ -43,9 +44,27 @@
           next();
         }
       });
+    },
+
+    /**
+    * @method verifyToken
+    *
+    * Checks for the existence of token and decodes it.
+    *
+    * @param {Object} req An instance of request
+    * @param {Object} res An instance of response
+    * @return {Void}
+    */
+    validateToken: (req, res, next) => {
+      let token = req.body.token || req.query.token || req.headers['x-access-token'];
+      if (!token) {
+        helper.sendMessage(res, 403, 'No token found. Token needed for authentication');
+      } else{
+        Auth.verifyToken(req,res, next, token);
+      }
     }
   };
 
   module.exports = Auth;
-  
+
 })();

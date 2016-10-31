@@ -1,8 +1,8 @@
-(function () {
+(() => {
   'use strict';
 
-  var moment = require('moment');
-  
+  const moment = require('moment');
+
   module.exports = {
 
     /**
@@ -13,7 +13,7 @@
     * @param {Object} queryInterface
     * @return {Void}
     */
-    up: function (queryInterface) {
+    up: (queryInterface) => {
       return queryInterface.bulkInsert('Roles', [{
         id: 3,
         title: 'Admin',
@@ -33,14 +33,14 @@
     },
 
     /**
-    * @method up
+    * @method down
     *
     * Unseeds the Roles table after running tests.
     *
     * @param {Object} queryInterface
     * @return {Void}
     */
-    down: function(queryInterface) {
+    down: (queryInterface) => {
       return queryInterface.bulkDelete('Roles',
        {title: ['Admin', 'User', 'Guest']});
     }

@@ -1,8 +1,8 @@
- (function () {
+ (() => {
    'use strict';
 
-   var moment = require('moment');
-   
+   const moment = require('moment');
+
    module.exports = {
 
     /**
@@ -14,7 +14,7 @@
     * @return {Void}
     */
 
-     up: function (queryInterface) {
+     up: (queryInterface) => {
        return queryInterface.bulkInsert('Documents', [{
          id: 3,
          title: 'Serious document',
@@ -106,7 +106,7 @@
      * @param {Object} queryInterface
      * @return {Void}
      */
-     down: function(queryInterface) {
+     down: (queryInterface) => {
        return queryInterface.bulkDelete('Documents',
         {id:  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]});
      }

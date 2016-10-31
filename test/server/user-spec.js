@@ -1,11 +1,11 @@
-var expect = require('chai').expect,
+const expect = require('chai').expect,
   express = require('../../main'),
   supertest = require('supertest'),
   api = supertest(express),
   jwt = require('jsonwebtoken'),
-  secret = require('./../../config/config').secret;
+  secret =  process.env.secret;
 
-var token = jwt.sign({
+const token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
   RoleId: 1,
@@ -14,9 +14,10 @@ var token = jwt.sign({
   expiresIn: 60*60*24
 });
 
-describe('User', function () {
+describe('User', () => {
+  'use strict';
 
-  it('should create a new user', function (done) {
+  it('should create a new user', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
       .send({
@@ -27,7 +28,7 @@ describe('User', function () {
         lastname: 'bamgbose',
         RoleId: 3
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.ok;
         expect(res.body).to.have.property('user');
@@ -36,7 +37,7 @@ describe('User', function () {
       });
   });
 
-  it('should not create the same user twice', function (done) {
+  it('should not create the same user twice', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
       .send({
@@ -47,7 +48,7 @@ describe('User', function () {
         lastname: 'bamgbose',
         RoleId: 3
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(422);
         expect(res.body.success).to.be.equal(false);
         expect(res.body).to.have.property('message');
@@ -56,7 +57,7 @@ describe('User', function () {
       });
   });
 
-  it('should not create a user with incomplete data fields', function (done) {
+  it('should not create a user with incomplete data fields', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
       .send({
@@ -67,7 +68,7 @@ describe('User', function () {
         lastname: '',
         RoleId: 3
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(422);
         expect(res.body.success).to.be.equal(false);
         expect(res.body).to.have.property('message');
@@ -76,7 +77,7 @@ describe('User', function () {
       });
   });
 
-  it('should not create a user assigned to a non existent role', function (done) {
+  it('should not create a user assigned to a non existent role', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
       .send({
@@ -87,7 +88,7 @@ describe('User', function () {
         lastname: 'bamgbs',
         RoleId: 7
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(422);
         expect(res.body.success).to.be.equal(false);
         expect(res.body).to.have.property('message');
@@ -96,14 +97,14 @@ describe('User', function () {
       });
   });
 
-  it('should login a user', function (done) {
+  it('should login a user', (done) => {
     api.post('/api/users/login')
       .set('Accept', 'application/json')
       .send({
         emailaddress: 'lade@gmail.com',
         password: '12345678'
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.ok;
         expect(res.body).to.have.property('user');
@@ -112,14 +113,14 @@ describe('User', function () {
       });
   });
 
-  it('should not login a user with wrong password', function (done) {
+  it('should not login a user with wrong password', (done) => {
     api.post('/api/users/login')
       .set('Accept', 'application/json')
       .send({
         emailaddress: 'lade@gmail.com',
         password: 'abcdefgh'
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(403);
         expect(res.body.success).to.not.be.ok;
         expect(res.body).to.have.property('message');
@@ -128,14 +129,14 @@ describe('User', function () {
       });
   });
 
-  it('should not login a user with wrong password', function (done) {
+  it('should not login a user with wrong password', (done) => {
     api.post('/api/users/login')
       .set('Accept', 'application/json')
       .send({
         emailaddress: 'lade22@gmail.com',
         password: 'abcdefgh'
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(404);
         expect(res.body.success).to.not.be.ok;
         expect(res.body).to.have.property('message');
@@ -144,24 +145,24 @@ describe('User', function () {
       });
   });
 
-  it('should delete a user from the database', function (done) {
+  it('should delete a user from the database', (done) => {
     api.delete('/api/users/1')
      .set('Accept', 'application/json')
      .set('x-access-token', token)
-     .end(function (err, res) {
+     .end((err, res) => {
        expect(res.body).to.be.equal(1);
        done();
      });
   });
 
-  it('should update your user details', function (done) {
+  it('should update your user details', (done) => {
     api.put('/api/users/3')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .send({
         emailaddress: 'somethingnew@gmail.com'
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.ok;
         expect(res.body).to.have.property('user');
@@ -170,14 +171,14 @@ describe('User', function () {
       });
   });
 
-  it('should not update any other user details', function (done) {
+  it('should not update any other user details', (done) => {
     api.put('/api/users/4')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .send({
         emailaddress: 'somethingnew@gmail.com'
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(401);
         expect(res.body.success).to.not.be.ok;
         expect(res.body).to.have.property('message');
@@ -186,14 +187,14 @@ describe('User', function () {
       });
   });
 
-  it('should not update details for a non existent user', function (done) {
+  it('should not update details for a non existent user', (done) => {
     api.put('/api/users/8')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .send({
         emailaddress: 'somethingnew@gmail.com'
       })
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(res.status).to.be.equal(401);
         expect(res.body.success).to.not.be.ok;
         expect(res.body).to.have.property('message');
@@ -202,69 +203,68 @@ describe('User', function () {
       });
   });
 
-  it('each user should be unique', function (done) {
-
-    function uniqueUser (userArray) {
-      var emailaddress = [];
-      for (var i = 0; i < userArray.length; i++) {
-        expect(emailaddress.indexOf(userArray[i].emailaddress)).to.equal(-1);
-        emailaddress.push(userArray[i].emailaddress);
-      }
-    }
+  it('each user should be unique', (done) => {
+    const uniqueUser = (userArray) => {
+      let emailaddress = [];
+      userArray.forEach((user) => {
+        expect(emailaddress.indexOf(user.emailaddress)).to.equal(-1);
+        emailaddress.push(user.emailaddress);
+      });
+    };
 
     api.get('/api/users')
       .set('x-access-token', token)
       .set('Accept', 'application/json')
-      .end(function (err, res) {
+      .end((err, res) => {
         uniqueUser(res.body);
         done();
       });
   });
 
-  function checkProperty (array, property) {
-    for (var i = 0; i < array.length; i++) {
-      expect(array[i]).to.have.property(property);
-      expect(array[i][property]).to.not.equal('');
-    }
-  }
+  const checkProperty = (array, property) => {
+    array.forEach((item) => {
+      expect(item).to.have.property(property);
+      expect(item[property]).to.not.equal('');
+    });
+  };
 
-  it('should have a defined role for all users', function (done) {
+  it('should have a defined role for all users', (done) => {
     api.get('/api/users')
       .set('x-access-token', token)
       .set('Accept', 'application/json')
-      .end(function (err, res) {
+      .end((err, res) => {
         checkProperty(res.body, 'RoleId');
         done();
       });
   });
 
-  it('should have both first name and last name for all users', function (done) {
+  it('should have both first name and last name for all users', (done) => {
     api.get('/api/users')
       .set('x-access-token', token)
       .set('Accept', 'application/json')
-      .end(function (err, res) {
+      .end((err, res) => {
         checkProperty(res.body, 'firstname');
         checkProperty(res.body, 'lastname');
         done();
       });
   });
 
-  it('should return all users', function (done) {
+  it('should return all users', (done) => {
     api.get('/api/users')
       .set('x-access-token', token)
       .set('Accept', 'application/json')
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(Array.isArray(res.body)).to.be.equal(true);
         expect(res.body.length).to.not.equal(0);
         done();
       });
   });
 
-  it('should get a single user by params.id', function (done) {
+  it('should get a single user by params.id', (done) => {
     api.get('/api/users/4')
       .set('x-access-token', token)
       .set('Accept', 'application/json')
-      .end(function (err, res) {
+      .end((err, res) => {
         expect(typeof(res.body)).to.equal('object');
         expect(res.body).to.have.property('emailaddress');
         expect(res.body).to.have.property('firstname');
