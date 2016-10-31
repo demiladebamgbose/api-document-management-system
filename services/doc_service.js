@@ -87,35 +87,50 @@
     * @return {Void}
     */
     queryDocuments: (req, res) => {
+      let queryObj;
       let size = req.query.limit;
       let offset = DocService.paginate(res, size, req.query.page);
+
       if (req.query.RoleId) {
         // Gets a limited number documents belonging to the same role and
-        models.Documents.findAll({
-          order: '"createdAt" DESC',
-          limit: size,
-          offset: offset,
-          where: { RoleId: req.query.RoleId }
-        }).then(function (documents) {
-          helper.sendResponse(res, 200, documents);
-        }).catch(function (error) {
-          helper.sendResponse(res, 500, error);
-        });
+        queryObj = { RoleId: req.query.RoleId };
       } else {
         // Gets a limited number documents created on  the same date
-        models.Documents.findAll({
-          order: '"createdAt" DESC',
-          limit: size,
-          offset: offset,
-          where: { createdAt: req.query.date }
-        }).then(function (documents) {
-          helper.sendResponse(res, 200, documents);
-        }).catch(function (error) {
-          helper.sendResponse(res, 500, error);
-        });
+        queryObj = { createdAt: req.query.date };
       }
-    }
+      models.Documents.findAll({
+        order: '"createdAt" DESC',
+        limit: size,
+        offset: offset,
+        where: queryObj
+      }).then(function (documents) {
+        helper.sendResponse(res, 200, documents);
+      }).catch(function (error) {
+        helper.sendResponse(res, 500, error);
+      });
+    },
 
+    /**
+    * @method updateDocument
+    *
+    * Updates attributes of the document
+    *
+    * @param {Object} req An instance of request
+    * @param {Object} res An instance of response
+    * @param {Object} document document to be updated
+    * @return {Void}
+    */
+    updateDocument: (req, res, document) => {
+      document.updateAttributes({
+        title: req.body.title,
+        content: req.body.content,
+        RoleId: req.body.RoleId
+      }, {fields: Object.keys(req.body)}).then(function (document) {
+        helper.sendResponse(res, 200, document);
+      }).catch(function (error) {
+        helper.sendResponse(res, 500, error);
+      });
+    }
   };
 
   module.exports = DocService;

@@ -46,6 +46,7 @@
       // Pagination logic
       let size = req.query.limit;
       let offset = docServ.paginate(res, size, req.query.page);
+
       // Get a limited number of documents in decending order by createdAt
       models.Documents.findAll({ order: '"createdAt" DESC',
        limit: size, offset: offset })
@@ -111,15 +112,7 @@
       }).then(function (document) {
         if (document) {
           // Updates all or some of the attributes of the document
-          document.updateAttributes({
-            title: req.body.title,
-            content: req.body.content,
-            RoleId: req.body.RoleId
-          }, {fields: Object.keys(req.body)}).then(function (document) {
-            helper.sendResponse(res, 200, document);
-          }).catch(function (error) {
-            helper.sendResponse(res, 500, error);
-          });
+          docServ.updateDocument(req, res, document);
         } else {
           helper.sendMessage(res, 422,
             'Failed to update document. Document does not exist');
@@ -142,6 +135,7 @@
       // Pagination logic
       let size = req.query.limit;
       let offset = docServ.paginate(res, size, req.query.page);
+
       // Find all documents created by the user or belongs to same role as user
       models.Documents.findAll({
         order: '"createdAt" DESC',
