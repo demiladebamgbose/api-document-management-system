@@ -15,6 +15,7 @@ const token = jwt.sign({
 });
 
 describe('User', () => {
+  'use strict';
 
   it('should create a new user', (done) => {
     api.post('/api/users')
@@ -203,14 +204,13 @@ describe('User', () => {
   });
 
   it('each user should be unique', (done) => {
-
-    function uniqueUser (userArray) {
-      var emailaddress = [];
-      for (var i = 0; i < userArray.length; i++) {
-        expect(emailaddress.indexOf(userArray[i].emailaddress)).to.equal(-1);
-        emailaddress.push(userArray[i].emailaddress);
-      }
-    }
+    const uniqueUser = (userArray) => {
+      let emailaddress = [];
+      userArray.forEach((user) => {
+        expect(emailaddress.indexOf(user.emailaddress)).to.equal(-1);
+        emailaddress.push(user.emailaddress);
+      });
+    };
 
     api.get('/api/users')
       .set('x-access-token', token)
@@ -221,12 +221,12 @@ describe('User', () => {
       });
   });
 
-  function checkProperty (array, property) {
-    for (var i = 0; i < array.length; i++) {
-      expect(array[i]).to.have.property(property);
-      expect(array[i][property]).to.not.equal('');
-    }
-  }
+  const checkProperty = (array, property) => {
+    array.forEach((item) => {
+      expect(item).to.have.property(property);
+      expect(item[property]).to.not.equal('');
+    });
+  };
 
   it('should have a defined role for all users', (done) => {
     api.get('/api/users')

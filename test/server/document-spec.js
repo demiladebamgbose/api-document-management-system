@@ -86,13 +86,13 @@ describe('Document', () => {
   });
 
   it('Every Document should have a unique title', (done) => {
-    function checkUniqueTitle (rolesArray) {
+    const checkUniqueTitle = (docArray) => {
       let titles = [];
-      for (let i = 0; i < rolesArray.length; i++) {
-        expect(titles.indexOf(rolesArray[i].title)).to.equal(-1);
-        titles.push(rolesArray[i].title);
-      }
-    }
+      docArray.forEach((document) => {
+        expect(titles.indexOf(document.title)).to.equal(-1);
+        titles.push(document.title);
+      });
+    };
 
     api.get('/api/documents?limit=20')
     .set('x-access-token', token)
@@ -105,7 +105,7 @@ describe('Document', () => {
     });
   });
 
-  it('should retrieve a document from the database',(done) => {
+  it('should retrieve a document from the database', (done) => {
     api.get('/api/documents/4')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
@@ -117,7 +117,7 @@ describe('Document', () => {
     });
   });
 
-  it('should return limited documents with a set query limit',(done) => {
+  it('should return limited documents with a set query limit', (done) => {
     api.get('/api/documents?limit=4')
     .set('x-access-token', token)
     .set('Accept', 'application/json')

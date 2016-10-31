@@ -1,11 +1,11 @@
-var expect = require('chai').expect,
+const expect = require('chai').expect,
   express = require('../../main'),
   supertest = require('supertest'),
   api = supertest(express),
   jwt = require('jsonwebtoken'),
   secret =  process.env.secret;
 
-var token = jwt.sign({
+const token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
   RoleId: 1,
@@ -14,31 +14,32 @@ var token = jwt.sign({
   expiresIn: 60*60*24
 });
 
-describe('Role', function () {
+describe('Role', () => {
+  'use strict';
 
-  it('creates a new role',function (done) {
+  it('creates a new role', (done) => {
     api.post('/api/roles')
     .set('Accept', 'application/json')
     .send({
       title: 'TestRole'
-    }).end(function (err, res) {
+    }).end((err, res) => {
       expect(res.body.title).to.be.equal('TestRole');
       api.get('/api/roles')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
-      .end( function (error, response) {
+      .end((error, response) => {
         expect(response.body.length).to.be.equal(4);
         done();
       });
     });
   });
 
-  it('should not create a role without a title ', function () {
+  it('should not create a role without a title ', () => {
     api.post('/api/roles')
     .set('Accept', 'application/json')
     .send({
       title: ''
-    }).end(function (err, res) {
+    }).end((err, res) => {
       expect(res.status).to.be.equal(422);
       expect(res.body.success).to.be.equal(false);
       expect(res.body).to.have.property('message');
@@ -46,12 +47,12 @@ describe('Role', function () {
     });
   });
 
-  it('should not create another role with the same', function () {
+  it('should not create another role with the same', () => {
     api.post('/api/roles')
     .set('Accept', 'application/json')
     .send({
       title: 'TestRole'
-    }).end(function (err, res) {
+    }).end((err, res) => {
       expect(res.status).to.be.equal(422);
       expect(res.body.success).to.be.equal(false);
       expect(res.body).to.have.property('message');
@@ -59,70 +60,70 @@ describe('Role', function () {
     });
   });
 
-  it('should delete a role from the database', function (done) {
+  it('should delete a role from the database', (done) => {
     api.delete('/api/roles/1')
      .set('Accept', 'application/json')
      .set('x-access-token', token)
-     .end(function (err, res) {
+     .end((err, res) => {
        expect(res.body).to.be.equal(1);
        done();
      });
   });
 
-  it('get all roles from the database', function (done) {
+  it('get all roles from the database', (done) => {
     api.get('/api/roles')
     .set('Accept', 'application/json')
     .set('x-access-token', token)
-    .end(function (err, res) {
+    .end((err, res) => {
       expect(Array.isArray(res.body)).to.be.equal(true);
       expect(res.body.length).to.be.equal(3);
       done();
     });
   });
 
-  it('should have titles for all roles', function (done) {
+  it('should have titles for all roles', (done) => {
 
-    function checkProperty(array, propertyName) {
-      for (var i = 0; i < array.length; i++){
-        expect(array[i]).to.have.property(propertyName);
-        expect(array[i][propertyName]).to.not.equal('');
-      }
-    }
+    const checkProperty = (array, propertyName) => {
+      array.forEach((item) => {
+        expect(item).to.have.property(propertyName);
+        expect(item[propertyName]).to.not.equal('');
+      });
+    };
 
     api.get('/api/roles')
     .set('Accept', 'application/json')
     .set('x-access-token', token)
-    .end(function (err, res) {
+    .end((err, res) => {
       expect(Array.isArray(res.body)).to.equal(true);
       checkProperty(res.body, 'title');
       done();
     });
   });
 
-  it('should have unique titles for all roles', function (done) {
+  it('should have unique titles for all roles', (done) => {
 
-    function checkUniqueTitle (rolesArray) {
-      var titles = [];
-      for (var i = 0; i < rolesArray.length; i++) {
-        expect(titles.indexOf(rolesArray[i].title)).to.equal(-1);
-        titles.push(rolesArray[i].title);
-      }
-    }
+    const checkUniqueTitle = (rolesArray) => {
+      let titles = [];
+      rolesArray.forEach((role) => {
+        expect(titles.indexOf(role.title)).to.equal(-1);
+        titles.push(role.title);
+      });
+    };
 
     api.get('/api/roles')
     .set('Accept', 'application/json')
     .set('x-access-token', token)
-    .end(function (err, res) {
+    .end((err, res) => {
       checkUniqueTitle(res.body);
       done();
     });
   });
 
-  it('should retrieve a role based on params.id', function (done) {
+  it('should retrieve a role based on params.id', (done) => {
     api.get('/api/roles/3')
     .set('Accept', 'application/json')
     .set('x-access-token', token)
-    .end(function (err, res) {
+    .end((err, res) => {
       expect(typeof(res.body)).to.equal('object');
       expect(res.body).to.have.property('title');
       expect(res.body.title).to.be.equal('Admin');
