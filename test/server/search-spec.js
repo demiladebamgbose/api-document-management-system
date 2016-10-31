@@ -15,7 +15,8 @@ const token = jwt.sign({
 });
 
 describe('Search', () => {
-
+  'use strict';
+  
   let yesterday;
 
   it('should return all documents with a specified role', (done) => {
