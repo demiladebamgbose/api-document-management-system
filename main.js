@@ -10,7 +10,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-require('dotenv').config();
+if (!process.env.NODE_ENV) {
+  require('dotenv').config();
+}
 
 require('./server/routes/user-route')(app);
 require('./server/routes/role-route')(app);
