@@ -1,4 +1,4 @@
-(function () {
+(() => {
   'use strict';
 
   module.exports = {
@@ -12,7 +12,7 @@
     * @param {Object} Sequelize
     * @return {method} queryInterface.createTable
     */
-    up: function(queryInterface, Sequelize) {
+    up: (queryInterface, Sequelize) => {
       return queryInterface.createTable('Users', {
         id: {
           allowNull: false,
@@ -65,9 +65,9 @@
     * @return {method} queryInterface.dropTable
     */
     // eslint-disable-next-line
-    down: function(queryInterface, Sequelize) {
+    down: (queryInterface, Sequelize) => {
       return queryInterface.dropTable('Users');
     }
   };
-  
+
 })();

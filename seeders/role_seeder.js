@@ -1,4 +1,4 @@
-(function () {
+(() => {
   'use strict';
 
   const moment = require('moment');
@@ -13,7 +13,7 @@
     * @param {Object} queryInterface
     * @return {Void}
     */
-    up: function (queryInterface) {
+    up: (queryInterface) => {
       return queryInterface.bulkInsert('Roles', [{
         id: 3,
         title: 'Admin',
@@ -40,7 +40,7 @@
     * @param {Object} queryInterface
     * @return {Void}
     */
-    down: function(queryInterface) {
+    down: (queryInterface) => {
       return queryInterface.bulkDelete('Roles',
        {title: ['Admin', 'User', 'Guest']});
     }

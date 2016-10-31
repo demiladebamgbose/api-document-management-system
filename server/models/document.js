@@ -1,15 +1,15 @@
-(function(){
+(() => {
   'use strict';
 
   // Models definition for Users
-  module.exports = function(sequelize, DataTypes) {
-    var Documents = sequelize.define('Documents', {
+  module.exports = (sequelize, DataTypes) => {
+    const Documents = sequelize.define('Documents', {
       title: DataTypes.STRING,
       content: DataTypes.STRING,
       RoleId: DataTypes.INTEGER
     }, {
       classMethods: {
-        associate: function(models) {
+        associate: (models) => {
           // associations can be defined here
           Documents.belongsTo(models.Roles,{
             foreignKey: {
@@ -28,5 +28,5 @@
 
     return Documents;
   };
-  
+
 })();

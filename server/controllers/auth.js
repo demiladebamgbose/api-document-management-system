@@ -2,6 +2,7 @@
   'use strict';
 
   const jwt = require('jsonwebtoken');
+  const helper = require('./../../services/helpers');
   const secret = process.env.secret ;
 
   const Auth = {
@@ -32,10 +33,10 @@
     * @return {Void}
     */
     verifyToken: (req, res, next, token) => {
-      jwt.verify(token, secret, function(err, decoded) {
+      jwt.verify(token, secret, (err, decoded) => {
         if(err) {
           // Send this response if token is not found or invalid
-          return res.json({success: false, message: 'Failed to authenticate'});
+          helper.sendMessage(res, 401, 'Failed to authenticate');
         }
         else {
           // Attach decoded payload to request
@@ -55,12 +56,9 @@
     * @return {Void}
     */
     validateToken: (req, res, next) => {
-      var token = req.body.token || req.query.token || req.headers['x-access-token'];
+      let token = req.body.token || req.query.token || req.headers['x-access-token'];
       if (!token) {
-        res.status(403).json({
-          success:false,
-          message: 'No token found. Token needed for authentication'
-        });
+        helper.sendMessage(res, 403, 'No token found. Token needed for authentication');
       } else{
         Auth.verifyToken(req,res, next, token);
       }

@@ -1,4 +1,4 @@
-(function () {
+(() => {
   'use strict';
 
   const moment = require('moment');
@@ -13,7 +13,7 @@
     * @param {Object} queryInterface
     * @return {Void}
     */
-    up: function (queryInterface) {
+    up: (queryInterface) => {
       return queryInterface.bulkInsert('Users', [{
         id: 3,
         emailaddress: 'demilade@gmail.com',
@@ -55,7 +55,7 @@
     * @param {Object} queryInterface
     * @return {Void}
     */
-    down: function(queryInterface) {
+    down: (queryInterface) => {
       return queryInterface.bulkDelete('Users', {emailaddress:
         ['demilade@gmail.com', 'winner@gmail.com', 'ralph@gmail.com', 'lade@gmail.com']});
     }

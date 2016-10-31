@@ -19,7 +19,7 @@
     */
     createDocument: (req, res) => {
       // Ensures user belongs to an existing Role
-      helper.checkRole(req.body.RoleId).then(function (role) {
+      helper.checkRole(req.body.RoleId).then((role) => {
         if (role) {
           docServ.validateDocument(req, res);
         } else {
@@ -50,9 +50,9 @@
       // Get a limited number of documents in decending order by createdAt
       models.Documents.findAll({ order: '"createdAt" DESC',
        limit: size, offset: offset })
-       .then(function (documents) {
+       .then((documents) => {
          helper.sendResponse(res, 200, documents);
-       }).catch(function (error) {
+       }).catch((error) => {
          helper.sendResponse(res, 500, error);
        });
     },
@@ -70,9 +70,9 @@
       // Finds a unique document in the database by params.id
       models.Documents.findOne({
         where: { id: req.params.id}
-      }).then(function (document) {
+      }).then((document) => {
         helper.sendResponse(res, 200, document);
-      }).catch(function (error) {
+      }).catch((error) => {
         helper.sendResponse(res, 500, error);
       });
     },
@@ -89,9 +89,9 @@
     deleteDocument: (req, res) => {
       models.Documents.destroy({
         where: { id: req.params.id }
-      }).then(function (document) {
+      }).then((document) => {
         helper.sendResponse(res, 200, document);
-      }).catch(function (error) {
+      }).catch((error) => {
         helper.sendResponse(res, 500, error);
       });
     },
@@ -109,7 +109,7 @@
       // Finds a unique document in the database by params.id
       models.Documents.find({
         where: { id: req.params.id }
-      }).then(function (document) {
+      }).then((document) => {
         if (document) {
           // Updates all or some of the attributes of the document
           docServ.updateDocument(req, res, document);
@@ -117,7 +117,7 @@
           helper.sendMessage(res, 422,
             'Failed to update document. Document does not exist');
         }
-      }).catch(function (error) {
+      }).catch((error) => {
         helper.sendResponse(res, 500, error);
       });
     },
@@ -144,13 +144,13 @@
         where: {
           $or: [{OwnerId: req.params.id}, {RoleId: req.decoded.RoleId}]
         }
-      }).then(function (documents) {
+      }).then((documents) => {
         if (documents) {
           helper.sendResponse(res, 200, documents);
         } else {
           helper.sendMessage(res, 401, 'User has no documents');
         }
-      }).catch(function (error) {
+      }).catch((error) => {
         helper.sendResponse(res, 500, error);
       });
     }
