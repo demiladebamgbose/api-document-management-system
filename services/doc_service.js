@@ -56,7 +56,7 @@
     addDocument: (req, res) => {
       // Checks if document alredy exist
       models.Documents.findOne({
-        where: {title: req.body.title}
+        where: { title: req.body.title }
       }).then((document) => {
         if (!document) {
           // Creates a unique document

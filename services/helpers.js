@@ -87,24 +87,15 @@
     },
 
     /**
-    * @method checkUser
+    * @method isvalidName
     *
-    * Ensures ownerId is a reference to an existing user
+    * Ensures name contains only characters a-z
     *
-    * @param {Integer} ownerId
-    * @return {Promise}
+    * @param {String} name
     * @return {Boolean} true or false
     */
-    checkUser: (ownerId) => {
-      return models.Users.findOne({
-        where:
-        {id: ownerId}
-      }).then((user) => {
-        if (user) {
-          return true;
-        }
-        return false;
-      });
+    isvalidName: (name) => {
+      return /^[a-z]*$/i.test(name);
     },
 
     /**
