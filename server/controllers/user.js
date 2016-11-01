@@ -6,7 +6,7 @@
   const userServ = require('./../../services/user_service');
 
   //User controller methods
-  module.exports = {
+  const User = {
 
     /**
     * @method signup
@@ -150,5 +150,7 @@
       helper.sendMessage(res, 400, 'User logged out successfully');
     }
   };
+
+  module.exports = User;
 
 })();

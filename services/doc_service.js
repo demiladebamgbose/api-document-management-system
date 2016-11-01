@@ -4,7 +4,7 @@
   const helper = require('./helpers');
   const models = require('./../server/models/index');
 
-  module.exports = {
+  const DocService = {
 
     /**
     * @method paginate
@@ -131,5 +131,7 @@
       });
     }
   };
+
+  module.exports = DocService;
 
 })();

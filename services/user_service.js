@@ -5,7 +5,7 @@
   const models = require('./../server/models/index');
   const auth = require('./../server/controllers/auth');
 
-  module.exports = {
+  const UserService = {
 
     /**
     * @method validateDetails
@@ -137,5 +137,7 @@
       });
     }
   };
+
+  module.exports = UserService;
 
 })();

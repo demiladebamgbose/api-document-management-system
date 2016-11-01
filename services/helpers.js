@@ -5,7 +5,7 @@
   const models = require('./../server/models/index');
 
 
-  module.exports = {
+  const Helper = {
 
     /**
     * @method validateInput
@@ -184,5 +184,7 @@
       });
     }
   };
+
+  module.exports = Helper;
 
 })();

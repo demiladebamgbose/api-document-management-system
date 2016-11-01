@@ -5,7 +5,7 @@
   const helper = require('./../../services/helpers');
   const secret = process.env.secret ;
 
-  module.exports = {
+  const Auth = {
 
     /**
     * @method generateToken
@@ -64,5 +64,7 @@
       }
     }
   };
+
+  module.exports = Auth;
 
 })();
