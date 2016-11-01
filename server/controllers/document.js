@@ -6,7 +6,7 @@
   const docServ = require('./../../services/doc_service');
 
   // Controller methods to be called on document resource
-  const Document = {
+  module.exports = {
 
     /**
     * @method createDocument
@@ -155,7 +155,5 @@
       });
     }
   };
-
-  module.exports = Document;
 
 })();

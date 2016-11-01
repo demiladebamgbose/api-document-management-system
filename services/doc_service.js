@@ -4,7 +4,7 @@
   const helper = require('./helpers');
   const models = require('./../server/models/index');
 
-  const DocService = {
+  module.exports = {
 
     /**
     * @method paginate
@@ -24,7 +24,6 @@
         return size * (page - 1);
       }
       helper.sendMessage(res, 422, 'Invalid query limit');
-      return;
     },
 
     /**
@@ -132,7 +131,5 @@
       });
     }
   };
-
-  module.exports = DocService;
 
 })();

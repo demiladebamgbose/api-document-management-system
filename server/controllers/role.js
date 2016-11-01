@@ -7,7 +7,7 @@
 
 
   // Controller methods for Roles Resource
-  const Role = {
+  module.exports = {
 
     /**
     * @method createRole
@@ -115,7 +115,5 @@
       });
     }
   };
-
-  module.exports = Role;
 
 })();

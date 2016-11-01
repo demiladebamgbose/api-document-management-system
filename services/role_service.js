@@ -4,7 +4,7 @@
   const helper = require('./helpers');
   const models = require('./../server/models/index');
 
-  const RoleService = {
+  module.exports = {
 
     /**
     * @method addRole
@@ -55,7 +55,5 @@
       });
     }
   };
-
-  module.exports = RoleService;
 
 })();
