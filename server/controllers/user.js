@@ -83,7 +83,7 @@
     */
     deleteUser: (req, res) => {
       models.Users.destroy({
-        where: {id: req.params.id}
+        where: { id: req.params.id }
       }).then((user) => {
         helper.sendResponse(res, 200, user);
       }).catch((error) => {
@@ -102,7 +102,7 @@
     */
     findUser: (req, res) => {
       models.Users.findOne({
-        where: {id: req.params.id}
+        where: { id: req.params.id }
       }).then((user) => {
         if (user) {
           helper.sendResponse(res, 200, user);
