@@ -117,8 +117,8 @@
     * @return {Void}
     */
     checkAccess: (req) => {
-      //eslint-disable-next-line
-      if (req.decoded.OwnerId == req.params.id) {
+
+      if (req.decoded.OwnerId === parseInt(req.params.id)) {
         return true;
       }
       return false;
