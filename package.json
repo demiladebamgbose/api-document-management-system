@@ -6,10 +6,8 @@
   "scripts": {
     "start": "node main.js",
     "pretest": "sequelize db:migrate && sequelize db:seed:all",
-    "test": "mocha test/server",
-    "posttest": "sequelize db:seed:undo:all && sequelize db:migrate:undo:all",
-    "cover": "istanbul cover sequelize db:migrate && sequelize db:seed:all && _mocha test/server && sequelize db:seed:undo:all && sequelize db:migrate:undo:all",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "test": "mocha",
+    "posttest": "sequelize db:seed:undo:all && sequelize db:migrate:undo:all"
   },
   "repository": {
     "type": "git",
