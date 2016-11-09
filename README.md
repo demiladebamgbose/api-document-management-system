@@ -20,7 +20,7 @@ This is a REST API written in `JavaScript`, runs on `Node v6.7.0` and utilizes `
 
 ## Code Example
 
-### Create a new user
+#### Create a new user
 
 ```
 POST - /api/users
@@ -33,9 +33,10 @@ Post data
   firstname: 'firstname',
   password: 'password',
   RoleId: 'Administrator' // Role has to be created before assignment.
-}
-```
-### Login a user
+}```
+
+
+#### Login a user
 ```
 POST - /api/v1/users
 
@@ -45,7 +46,8 @@ Post data
   password: 'password'
 }```
 
-### Create a new document
+
+#### Create a new document
 
 Documnent can only be created by an existing and authenticated user.
 ```
@@ -59,7 +61,7 @@ Post data
 }```
 
 
-### API Reference
+## API Reference
 
 API endpoints currently supported.
 
