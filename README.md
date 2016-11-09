@@ -59,42 +59,45 @@ Post data
 }```
 
 
-API Reference
+### API Reference
 
 API endpoints currently supported.
 
-Users
+##### Users
 
-Request type	Endpoint	Action
-POST	/api/v1/users	Create a new user
-GET	/api/v1/users	Get all users
-GET	/api/v1/users:id	Get a user
-PUT	/api/v1/users/:id	Update user information
-DELETE	/api/v1/users/:id	Remove a user from database
-Documents
+|Request type	|Endpoint	|Action|
+|---------------|:-----------:|------|
+|POST	|/api/users	|Create a new user
+|GET	|/api/users	|Get all users
+|GET	|/api/users:id	|Get a user
+|PUT	|/api/users/:id	|Update user information
+|DELETE	|/api/users/:id	|Remove a user from database
 
 
-
+##### Documents
 
 | Request type|	Endpoint |	Action|
---------------|:--------|:-------
-|POST	|/api/v1/documents	|Create a new document
-|ET	|api/v1/documents	etrieve all documents
-GET	/api/v1/documents/:id	Retrieve a specific document
-GET	/api/v1/users/:id/documents	Retrieve all documents created by a user
-GET	/api/v1/documents/?role=Andela	Retrieve all documents that contains 'Andela'
-GET	/api/v1/documents/q=Andela&limit=10	Retrieve documents that contains 'Andela' in group of tens
-GET	/api/v1/documents/?q=Andela&role=Test	Retrieve documents that contains 'Andela' with Test access
-PUT	/api/v1/documents/:id	Update a specific document
-DELETE	/api/v1/documents/:id	Remove a specific document from storage
-Roles
+|--------------|:--------|-------
+|POST	|/api/documents		|Create a new document
+|GET	|/api/documents		|Retrieve all documents
+|GET	|/api/documents/:id		|Retrieve a specific document
+|GET	|/api/users/:id/documents	|Retrieve all documents accesible  by a user
+|GET	|/api/documents/?role=Admin	|Retrieve all documents that have role set as Admin
+|GET	|/api/documents/limit=10	|Retrieve documents 10 at a time
+|GET	|/api/documents/?limit=10&page=2 	|Retrieve all documents with an offset of two
+|PUT	|/api/documents/:id	|Update a specific document
+|DELETE	|/api/documents/:id	|Remove a specific document from storage
 
-Request type	Endpoint	Action
-POST	/api/v1/role	Create a new role
-GET	/api/v1/role	Retrieve all roles
-PUT	/api/v1/role/:id	Edit a role
-GET	/api/v1/role/:id	Retrieve a role
-DELETE	/api/v1/role/:id	Delete a role
+
+##### Roles
+
+|Request type	|Endpoint	|Action|
+|---------------|:-----------:|------|
+|POST	|/api/roles		|Create a new role|
+|GET	|/api/roles		|Retrieve all roles|
+|PUT	|/api/roles/:id		|Edit a role|
+|GET	|/api/roles/:id		|Retrieve a role
+|DELETE	|/api/roles/:id		|Delete a role
 
 
 
