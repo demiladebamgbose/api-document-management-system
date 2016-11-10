@@ -1,3 +1,5 @@
+'use strict';
+
 const expect = require('chai').expect,
   express = require('../../main'),
   supertest = require('supertest'),
@@ -15,7 +17,6 @@ const token = jwt.sign({
 });
 
 describe('Document', () => {
-  'use strict';
 
   it('should create a new document with a defined published date', (done) => {
     api.post('/api/documents')

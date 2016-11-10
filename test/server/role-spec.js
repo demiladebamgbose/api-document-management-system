@@ -1,3 +1,5 @@
+'use strict';
+
 const expect = require('chai').expect,
   express = require('../../main'),
   supertest = require('supertest'),
@@ -15,7 +17,7 @@ const token = jwt.sign({
 });
 
 describe('Role', () => {
-  'use strict';
+
 
   it('creates a new role', (done) => {
     api.post('/api/roles')

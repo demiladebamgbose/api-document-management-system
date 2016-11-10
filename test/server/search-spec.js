@@ -1,3 +1,5 @@
+'use strict';
+
 const expect = require('chai').expect,
   express = require('../../main'),
   supertest = require('supertest'),
@@ -15,8 +17,7 @@ const token = jwt.sign({
 });
 
 describe('Search', () => {
-  'use strict';
-  
+
   let yesterday;
 
   it('should return all documents with a specified role', (done) => {
