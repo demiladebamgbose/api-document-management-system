@@ -33,10 +33,12 @@ Post data
   firstname: 'firstname',
   password: 'password',
   RoleId: 'Administrator' // Role has to be created before assignment.
-}```
+}
+```
 
 
 #### Login a user
+
 ```
 POST - /api/v1/users
 
@@ -44,12 +46,14 @@ Post data
 {
   emailaddress: 'example@host.com',
   password: 'password'
-}```
+}
+```
 
 
 #### Create a new document
 
 Documnent can only be created by an existing and authenticated user.
+
 ```
 POST - /api/v1/users
 
@@ -58,7 +62,8 @@ Post data
   title: 'Documnent title',
   content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut  enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
-}```
+}
+```
 
 
 ## API Reference
