@@ -21,9 +21,9 @@ const Role = {
   createRole: (req, res) => {
     if (helper.validateRequestBody(req.body)) {
       // Saves role in the database
-      roleServ.addRole(req, res);
+      roleServ.checkAdminAccess(req, res);
     } else {
-      helper.sendMessage(res, 422, 'Title field cannot be empty');
+      helper.sendMessage(res, 400, 'Title field cannot be empty');
     }
   },
 

@@ -16,7 +16,7 @@ module.exports = (app) => {
 
   // Roles Routes.
   router.route('/roles')
-    .post(Role.createRole)
+    .post(Auth.validateToken, Role.createRole)
     .get(Auth.validateToken, Role.all);
   router.route('/roles/:id')
     .delete(Auth.validateToken, Role.deleteRole)
