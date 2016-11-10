@@ -16,19 +16,21 @@ const token = jwt.sign({
   expiresIn: 60*60*24
 });
 
+const testUser = {
+  username: 'lade',
+  emailaddress: 'lade@gmail.com',
+  password: '12345678',
+  firstname: 'demilade',
+  lastname: 'bamgbose',
+  RoleId: 3
+};
+
 describe('User', () => {
 
   it('should create a new user', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
-      .send({
-        username: 'lade',
-        emailaddress: 'lade@gmail.com',
-        password: '12345678',
-        firstname: 'demilade',
-        lastname: 'bamgbose',
-        RoleId: 3
-      })
+      .send(testUser)
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.ok;
@@ -41,16 +43,9 @@ describe('User', () => {
   it('should not create the same user twice', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
-      .send({
-        username: 'lade',
-        emailaddress: 'lade@gmail.com',
-        password: '12345678',
-        firstname: 'demilade',
-        lastname: 'bamgbose',
-        RoleId: 3
-      })
+      .send(testUser)
       .end((err, res) => {
-        expect(res.status).to.be.equal(422);
+        expect(res.status).to.be.equal(409);
         expect(res.body.success).to.be.equal(false);
         expect(res.body).to.have.property('message');
         expect(res.body.message).to.be.equal('user already exists');
@@ -70,10 +65,10 @@ describe('User', () => {
         RoleId: 3
       })
       .end((err, res) => {
-        expect(res.status).to.be.equal(422);
+        expect(res.status).to.be.equal(400);
         expect(res.body.success).to.be.equal(false);
         expect(res.body).to.have.property('message');
-        expect(res.body.message).to.be.equal('Missing fields. Feilds cannot be empty');
+        expect(res.body.message).to.be.equal('Missing fields. Fields cannot be empty');
         done();
       });
   });
@@ -90,7 +85,7 @@ describe('User', () => {
         RoleId: 7
       })
       .end((err, res) => {
-        expect(res.status).to.be.equal(422);
+        expect(res.status).to.be.equal(400);
         expect(res.body.success).to.be.equal(false);
         expect(res.body).to.have.property('message');
         expect(res.body.message).to.be.equal('Invalid Role for user');
@@ -122,7 +117,7 @@ describe('User', () => {
         password: 'abcdefgh'
       })
       .end((err, res) => {
-        expect(res.status).to.be.equal(403);
+        expect(res.status).to.be.equal(401);
         expect(res.body.success).to.not.be.ok;
         expect(res.body).to.have.property('message');
         expect(res.body.message).to.be.equal('authentication failed. Wrong password');
@@ -138,7 +133,7 @@ describe('User', () => {
         password: 'abcdefgh'
       })
       .end((err, res) => {
-        expect(res.status).to.be.equal(404);
+        expect(res.status).to.be.equal(401);
         expect(res.body.success).to.not.be.ok;
         expect(res.body).to.have.property('message');
         expect(res.body.message).to.be.equal('authentication failed. User not found');

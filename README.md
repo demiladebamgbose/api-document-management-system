@@ -1,7 +1,7 @@
 ## Api-document-management-system
 [![Code Climate](https://codeclimate.com/github/demiladebamgbose/api-document-management-system/badges/gpa.svg)](https://codeclimate.com/github/demiladebamgbose/api-document-management-system)
 ![travis](https://travis-ci.org/demiladebamgbose/api-document-management-system.svg?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/demiladebamgbose/api-document-management-system/badge.svg?branch=master)](https://coveralls.io/github/demiladebamgbose/api-document-management-system?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/demiladebamgbose/api-document-management-system/badge.svg?branch=develop)](https://coveralls.io/github/demiladebamgbose/api-document-management-system?branch=develop)
 
 Document Management System is an Application Program Interface that helps users manage their documents. A User can upload a document, edit and share with other users.The application permits users to work collaboratively on documents.
 

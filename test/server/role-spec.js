@@ -42,10 +42,10 @@ describe('Role', () => {
     .send({
       title: ''
     }).end((err, res) => {
-      expect(res.status).to.be.equal(422);
+      expect(res.status).to.be.equal(400);
       expect(res.body.success).to.be.equal(false);
       expect(res.body).to.have.property('message');
-      expect(res.body.message).to.be.equal('Title feild cannot be empty');
+      expect(res.body.message).to.be.equal('Title field cannot be empty');
     });
   });
 
@@ -55,7 +55,7 @@ describe('Role', () => {
     .send({
       title: 'TestRole'
     }).end((err, res) => {
-      expect(res.status).to.be.equal(422);
+      expect(res.status).to.be.equal(409);
       expect(res.body.success).to.be.equal(false);
       expect(res.body).to.have.property('message');
       expect(res.body.message).to.be.equal('role title already exists');

@@ -23,7 +23,7 @@ const Document = {
       if (role) {
         docServ.validateDocument(req, res);
       } else {
-        helper.sendMessage(res, 422, 'Role does not exist');
+        helper.sendMessage(res, 404, 'Role does not exist');
       }
     });
   },
@@ -114,7 +114,7 @@ const Document = {
         // Updates all or some of the attributes of the document
         docServ.updateDocument(req, res, document);
       } else {
-        helper.sendMessage(res, 422,
+        helper.sendMessage(res, 404,
           'Failed to update document. Document does not exist');
       }
     }).catch((error) => {
@@ -148,7 +148,7 @@ const Document = {
       if (documents) {
         helper.sendResponse(res, 200, documents);
       } else {
-        helper.sendMessage(res, 401, 'User has no documents');
+        helper.sendMessage(res, 404, 'User has no documents');
       }
     }).catch((error) => {
       helper.sendResponse(res, 500, error);

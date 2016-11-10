@@ -19,12 +19,12 @@ const UserService = {
   validateDetails: (req, res) => {
     helper.checkRole(req.body.RoleId).then((role) => {
       if (!role) {
-        return helper.sendMessage(res, 422, 'Invalid Role for user');
+        return helper.sendMessage(res, 400, 'Invalid Role for user');
       }
 
       if (!helper.validateRequestBody(req.body)) {
-        return helper.sendMessage(res, 422,
-         'Missing fields. Feilds cannot be empty');
+        return helper.sendMessage(res, 400,
+         'Missing fields. Fields cannot be empty');
       }
 
       UserService.validateInput(req, res);
@@ -43,14 +43,14 @@ const UserService = {
   validateInput: (req, res) => {
     if (!(helper.isvalidName(req.body.lastname)) &&
      (helper.isvalidName(req.body.lastname))) {
-      return helper.sendMessage(res, 422, 'Invalid First name or Last name');
+      return helper.sendMessage(res, 400, 'Invalid First name or Last name');
     }
 
     if ( (helper.validateEmail(req.body.emailaddress)) &&
     (helper.validatePassWord(req.body.password))) {
       UserService.createUser(req, res);
     } else {
-      return helper.sendMessage(res, 422, 'Invalid Email Address or Password');
+      return helper.sendMessage(res, 400, 'Invalid Email Address or Password');
     }
   },
 
@@ -104,7 +104,7 @@ const UserService = {
       });
       helper.sendUser(res, token, user);
     } else{
-      helper.sendMessage(res, 403, 'authentication failed. Wrong password');
+      helper.sendMessage(res, 401, 'authentication failed. Wrong password');
     }
   },
 

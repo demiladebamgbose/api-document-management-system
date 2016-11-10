@@ -58,7 +58,7 @@ const Auth = {
   validateToken: (req, res, next) => {
     let token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (!token) {
-      helper.sendMessage(res, 403, 'No token found. Token needed for authentication');
+      helper.sendMessage(res, 401, 'No token found. Token needed for authentication');
     } else{
       Auth.verifyToken(req,res, next, token);
     }
