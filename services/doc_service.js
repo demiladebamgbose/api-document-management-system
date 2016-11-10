@@ -23,7 +23,7 @@ const DocService = {
     if (size) {
       return size * (page - 1);
     }
-    helper.sendMessage(res, 422, 'Invalid query limit');
+    helper.sendMessage(res, 400, 'Invalid query limit');
   },
 
   /**
@@ -40,7 +40,7 @@ const DocService = {
     if (helper.validateRequestBody(req.body)) {
       DocService.addDocument(req, res);
     } else {
-      helper.sendMessage(res, 401, 'Feilds cannot be empty');
+      helper.sendMessage(res, 400, 'Fields cannot be empty');
     }
   },
 
@@ -71,7 +71,7 @@ const DocService = {
           helper.sendResponse(res, 500, error);
         });
       } else {
-        helper.sendMessage(res, 422, 'Title already exists');
+        helper.sendMessage(res, 409, 'Title already exists');
       }
     });
   },

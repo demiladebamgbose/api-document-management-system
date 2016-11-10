@@ -16,17 +16,19 @@ const token = jwt.sign({
   expiresIn: 60*60*24
 });
 
+const testDocument = {
+  title: 'Test Document',
+  content: 'Test Content for testing sake',
+  RoleId: 3
+};
+
 describe('Document', () => {
 
   it('should create a new document with a defined published date', (done) => {
     api.post('/api/documents')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
-    .send({
-      title: 'Test Document',
-      content: 'Test Content for testing sake',
-      RoleId: 3
-    })
+    .send(testDocument)
     .end((err, res) => {
       expect(res.status).to.be.equal(200);
       expect(res.body.title).to.be.equal('Test Document');
@@ -34,6 +36,7 @@ describe('Document', () => {
       done();
     });
   });
+
 
   it('should not create a document with incomplete details', (done) => {
     api.post('/api/documents')
@@ -45,9 +48,9 @@ describe('Document', () => {
       RoleId: 3
     })
     .end((err, res) => {
-      expect(res.status).to.be.equal(401);
+      expect(res.status).to.be.equal(400);
       expect(res.body).to.have.property('message');
-      expect(res.body.message).to.be.equal('Feilds cannot be empty');
+      expect(res.body.message).to.be.equal('Fields cannot be empty');
       done();
     });
   });
@@ -56,13 +59,9 @@ describe('Document', () => {
     api.post('/api/documents')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
-    .send({
-      title: 'Test Document',
-      content: 'Test Content for testing sake',
-      RoleId: 3
-    })
+    .send(testDocument)
     .end((err, res) => {
-      expect(res.status).to.be.equal(422);
+      expect(res.status).to.be.equal(409);
       expect(res.body).to.have.property('message');
       expect(res.body.message).to.be.equal('Title already exists');
       done();
@@ -79,7 +78,7 @@ describe('Document', () => {
       RoleId: 7
     })
     .end((err, res) => {
-      expect(res.status).to.be.equal(422);
+      expect(res.status).to.be.equal(404);
       expect(res.body).to.have.property('message');
       expect(res.body.message).to.be.equal('Role does not exist');
       done();
@@ -166,6 +165,22 @@ describe('Document', () => {
       expect(res.status).to.be.equal(200);
       expect(typeof(res.body)).to.be.equal('object');
       expect(res.body.title).to.be.equal('A new title');
+      done();
+    });
+  });
+
+  it('should not update attributes of a non-existent document', (done) => {
+    api.put('/api/documents/23')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .send({
+      title: 'A new title'
+    })
+    .end((err, res) => {
+      expect(res.status).to.be.equal(404);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be
+      .equal('Failed to update document. Document does not exist');
       done();
     });
   });

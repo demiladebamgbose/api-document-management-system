@@ -26,7 +26,7 @@ const Helper = {
   /**
   * @method validateRequestBody
   *
-  * Ensures the request body does not contain any null feild
+  * Ensures the request body does not contain any null field
   *
   * @param {Object} body
   * @return {Boolean} true or false

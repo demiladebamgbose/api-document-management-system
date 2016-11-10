@@ -28,7 +28,7 @@ const RoleService = {
           helper.sendResponse(res, 500, error);
         });
       } else {
-        helper.sendMessage(res, 422, 'role title already exists');
+        helper.sendMessage(res, 409, 'role title already exists');
       }
     }).catch((error) => {
       helper.sendResponse(res, 500, error);

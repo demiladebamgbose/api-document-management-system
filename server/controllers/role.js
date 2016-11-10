@@ -23,7 +23,7 @@ const Role = {
       // Saves role in the database
       roleServ.addRole(req, res);
     } else {
-      helper.sendMessage(res, 422, 'Title feild cannot be empty');
+      helper.sendMessage(res, 422, 'Title field cannot be empty');
     }
   },
 

@@ -23,7 +23,7 @@ const User = {
       if (!user) {
         userServ.validateDetails(req, res);
       } else {
-        helper.sendMessage(res, 422, 'user already exists');
+        helper.sendMessage(res, 409, 'user already exists');
       }
     }).catch ((error) => {
       helper.sendResponse(res, 500, error);
@@ -44,7 +44,7 @@ const User = {
       where: {emailaddress: req.body.emailaddress}
     }).then ((user) => {
       if(!user){
-        helper.sendMessage(res, 404, 'authentication failed. User not found');
+        helper.sendMessage(res, 401, 'authentication failed. User not found');
       } else {
         userServ.authenticate(req, res, user);
       }
@@ -106,7 +106,7 @@ const User = {
       if (user) {
         helper.sendResponse(res, 200, user);
       } else {
-        helper.sendMessage(res, 400, 'User does not exit');
+        helper.sendMessage(res, 404, 'User does not exit');
       }
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
@@ -146,7 +146,7 @@ const User = {
   * @return {Void}
   */
   logout: (req, res) => {
-    helper.sendMessage(res, 400, 'User logged out successfully');
+    helper.sendMessage(res, 200, 'User logged out successfully');
   }
 };
 
