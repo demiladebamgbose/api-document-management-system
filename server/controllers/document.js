@@ -19,7 +19,7 @@ const Document = {
   */
   createDocument: (req, res) => {
     // Ensures user belongs to an existing Role
-    helper.checkRole(req.body.RoleId).then((role) => {
+    helper.checkRole(req.decoded.RoleId).then((role) => {
       if (role) {
         docServ.validateDocument(req, res);
       } else {
@@ -142,7 +142,10 @@ const Document = {
       limit: size,
       offset: offset,
       where: {
-        $or: [{OwnerId: req.params.id}, {RoleId: req.decoded.RoleId}]
+        $or: [
+          {OwnerId: req.params.id},
+          {type: 'public'}
+        ]
       }
     }).then((documents) => {
       if (documents) {

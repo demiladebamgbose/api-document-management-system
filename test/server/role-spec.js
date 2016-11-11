@@ -27,14 +27,15 @@ const nonAdminToken = jwt.sign({
 
 describe('Role', () => {
 
-
   it('creates a new role', (done) => {
     api.post('/api/roles')
     .set('Accept', 'application/json')
     .set('x-access-token', adminToken)
     .send({
       title: 'TestRole'
-    }).end((err, res) => {
+    })
+    .end((err, res) => {
+      expect(res.status).to.be.equal(201);
       expect(res.body.title).to.be.equal('TestRole');
       api.get('/api/roles')
       .set('Accept', 'application/json')
@@ -52,7 +53,8 @@ describe('Role', () => {
     .set('x-access-token', adminToken)
     .send({
       title: ''
-    }).end((err, res) => {
+    })
+    .end((err, res) => {
       expect(res.status).to.be.equal(400);
       expect(res.body.success).to.be.equal(false);
       expect(res.body).to.have.property('message');
@@ -66,7 +68,8 @@ describe('Role', () => {
     .set('x-access-token', adminToken)
     .send({
       title: 'TestRole'
-    }).end((err, res) => {
+    })
+    .end((err, res) => {
       expect(res.status).to.be.equal(409);
       expect(res.body.success).to.be.equal(false);
       expect(res.body).to.have.property('message');
@@ -74,18 +77,35 @@ describe('Role', () => {
     });
   });
 
-  it('should not allow non admin users to create roles', () => {
+  it('should not allow non admin users to create roles', (done) => {
     api.post('/api/roles')
     .set('Accept', 'application/json')
     .set('x-access-token', nonAdminToken)
     .send({
       title: 'ANewRole'
-    }).end((err, res) => {
+    })
+    .end((err, res) => {
       expect(res.status).to.be.equal(403);
       expect(res.body.success).to.be.equal(false);
       expect(res.body).to.have.property('message');
-      expect(res.body.message).to.be.equal('Only admin can create roles');
+      expect(res.body.message).to.be
+      .equal('Admin role needed to access resource');
+      done();
     });
+  });
+
+  it('should update a role in the database', (done) => {
+    api.put('/api/roles/1')
+     .set('Accept', 'application/json')
+     .set('x-access-token', adminToken)
+     .send({
+       title: 'Role'
+     })
+     .end((err, res) => {
+       expect(res.status).to.be.equal(201);
+       expect(res.body.title).to.be.equal('Role');
+       done();
+     });
   });
 
   it('should delete a role from the database', (done) => {

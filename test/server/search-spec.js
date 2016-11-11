@@ -10,7 +10,7 @@ const expect = require('chai').expect,
 const token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
-  RoleId: 4,
+  RoleId: 3,
   OwnerId: 3
 }, secret, {
   expiresIn: 60*60*24
@@ -24,11 +24,11 @@ describe('Search', () => {
 
     const checkRoles = (array) => {
       array.forEach((item) => {
-        expect(item.RoleId).to.equal(2);
+        expect(item.RoleId).to.equal(4);
       });
     };
 
-    api.get('/api/documents?limit=5&page=1&RoleId=2')
+    api.get('/api/documents?limit=5&page=1&RoleId=4')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     .end((err, res) => {
@@ -40,7 +40,7 @@ describe('Search', () => {
   });
 
   it('should get a single document by id', (done) => {
-    api.get('/api/documents/3')
+    api.get('/api/documents/13')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     .end((err, res) => {
@@ -56,18 +56,16 @@ describe('Search', () => {
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.body.length).to.be.equal(2);
-      expect(res.body.length).to.be.at.most(5);
       done();
     });
   });
 
   it('should return all documets accessible to a user ', (done) => {
-    api.get('/api/users/3/documents?limit=20&page=1')
+    api.get('/api/users/4/documents?limit=20&page=1')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.body.length).to.be.equal(7);
-      expect(res.body.length).to.be.at.most(20);
       done();
     });
   });

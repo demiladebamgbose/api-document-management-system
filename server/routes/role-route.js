@@ -13,15 +13,16 @@ const router = express.Router();
 module.exports = (app) => {
   const Role = require('./../controllers/role');
   const Auth = require('./../controllers/auth');
+  const Helper = require('./../../services/helpers');
 
   // Roles Routes.
   router.route('/roles')
-    .post(Auth.validateToken, Role.createRole)
-    .get(Auth.validateToken, Role.all);
+    .post(Auth.validateToken, Helper.checkAdminAccess, Role.createRole)
+    .get(Auth.validateToken, Helper.checkAdminAccess, Role.all);
   router.route('/roles/:id')
-    .delete(Auth.validateToken, Role.deleteRole)
-    .put(Auth.validateToken, Role.updateRole)
-    .get(Role.findRole);
+    .delete(Auth.validateToken, Helper.checkAdminAccess, Role.deleteRole)
+    .put(Auth.validateToken, Helper.checkAdminAccess, Role.updateRole)
+    .get(Auth.validateToken, Helper.checkAdminAccess, Role.findRole);
 
   app.use('/api/', router);
 };

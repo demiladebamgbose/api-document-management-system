@@ -10,7 +10,7 @@ const expect = require('chai').expect,
 const token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
-  RoleId: 1,
+  RoleId: 4,
   OwnerId: 3
 }, secret, {
   expiresIn: 60*60*24
@@ -19,7 +19,6 @@ const token = jwt.sign({
 const testDocument = {
   title: 'Test Document',
   content: 'Test Content for testing sake',
-  RoleId: 3
 };
 
 describe('Document', () => {
@@ -30,9 +29,26 @@ describe('Document', () => {
     .set('Accept', 'application/json')
     .send(testDocument)
     .end((err, res) => {
-      expect(res.status).to.be.equal(200);
+      expect(res.status).to.be.equal(201);
       expect(res.body.title).to.be.equal('Test Document');
       expect(res.body).have.property('createdAt');
+      done();
+    });
+  });
+
+  it('should assign default type of public to documents', (done) => {
+    api.post('/api/documents')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .send({
+      title: 'Public Document',
+      content: 'Que sera sera'
+    })
+    .end((err, res) => {
+      expect(res.status).to.be.equal(201);
+      expect(res.body.title).to.be.equal('Public Document');
+      expect(res.body).have.property('type');
+      expect(res.body.type).to.equal('public');
       done();
     });
   });
@@ -44,8 +60,7 @@ describe('Document', () => {
     .set('Accept', 'application/json')
     .send({
       title: 'Test Document',
-      content: '',
-      RoleId: 3
+      content: ''
     })
     .end((err, res) => {
       expect(res.status).to.be.equal(400);
@@ -68,42 +83,23 @@ describe('Document', () => {
     });
   });
 
-  it('should only create a document with a valid role', (done) => {
+  it('should create a document with type private', (done) => {
     api.post('/api/documents')
     .set('x-access-token', token)
     .set('Accept', 'application/json')
     .send({
       title: 'New Document',
       content: 'Test Content for testing sake',
-      RoleId: 7
+      type: 'private'
     })
     .end((err, res) => {
-      expect(res.status).to.be.equal(404);
-      expect(res.body).to.have.property('message');
-      expect(res.body.message).to.be.equal('Role does not exist');
+      expect(res.status).to.be.equal(201);
+      expect(res.body).have.property('type');
+      expect(res.body.type).to.equal('private');
       done();
     });
   });
 
-  it('Every Document should have a unique title', (done) => {
-    const checkUniqueTitle = (docArray) => {
-      let titles = [];
-      docArray.forEach((document) => {
-        expect(titles.indexOf(document.title)).to.equal(-1);
-        titles.push(document.title);
-      });
-    };
-
-    api.get('/api/documents?limit=20')
-    .set('x-access-token', token)
-    .set('Accept', 'application/json')
-    .end((err, res) => {
-      expect(res.status).to.be.equal(200);
-      expect(res.body.length).to.be.at.most(20);
-      checkUniqueTitle(res.body);
-      done();
-    });
-  });
 
   it('should retrieve a document from the database', (done) => {
     api.get('/api/documents/4')
@@ -149,7 +145,7 @@ describe('Document', () => {
     .end((err, res) => {
       expect(res.status).to.be.equal(200);
       expect(res.body.length).to.be.equal(4);
-      expect(res.body[0].title).to.be.equal('Test Document');
+      expect(res.body[0].title).to.be.equal('New Document');
       done();
     });
   });
@@ -162,7 +158,7 @@ describe('Document', () => {
       title: 'A new title'
     })
     .end((err, res) => {
-      expect(res.status).to.be.equal(200);
+      expect(res.status).to.be.equal(201);
       expect(typeof(res.body)).to.be.equal('object');
       expect(res.body.title).to.be.equal('A new title');
       done();

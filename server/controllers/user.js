@@ -81,12 +81,21 @@ const User = {
   * @return {Void}
   */
   deleteUser: (req, res) => {
-    models.Users.destroy({
-      where: { id: req.params.id }
-    }).then((user) => {
-      helper.sendResponse(res, 200, user);
-    }).catch((error) => {
-      helper.sendResponse(res, 500, error);
+    userServ.checkAccess(req, res)
+    .then((response) => {
+      console.log(response)
+      if (response) {
+        models.Users.destroy({
+          where: { id: req.params.id }
+        }).then((user) => {
+          return helper.sendResponse(res, 200, user);
+        }).catch((error) => {
+          return helper.sendResponse(res, 500, error);
+        });
+      } else{
+        return helper.sendMessage(res, 403,
+         'You do not have access to delete user');
+      }
     });
   },
 
@@ -100,16 +109,24 @@ const User = {
   * @return {Void}
   */
   findUser: (req, res) => {
-    models.Users.findOne({
-      where: { id: req.params.id }
-    }).then((user) => {
-      if (user) {
-        helper.sendResponse(res, 200, user);
-      } else {
-        helper.sendMessage(res, 404, 'User does not exit');
+    userServ.checkAccess(req, res)
+    .then((response) => {
+      if (response) {
+        models.Users.findOne({
+          where: { id: req.params.id }
+        }).then((user) => {
+          if (user) {
+            helper.sendResponse(res, 200, user);
+          } else {
+            helper.sendMessage(res, 404, 'User does not exit');
+          }
+        }).catch((error) => {
+          helper.sendResponse(res, 500, error);
+        });
+      } else{
+        return helper.sendMessage(res, 403,
+         'User details are not yours to view');
       }
-    }).catch((error) => {
-      helper.sendResponse(res, 500, error);
     });
   },
 
@@ -123,17 +140,21 @@ const User = {
   * @return {Void}
   */
   updateUser: (req, res) => {
-    if (userServ.checkAccess(req)) {
-      models.Users.findOne({
-        where: { id: req.params.id }
-      }).then((user) => {
-        userServ.theUpdater(req, res, user);
-      }).catch((error) => {
-        helper.sendResponse(res, 500, error);
-      });
-    } else {
-      helper.sendMessage(res, 401, 'Oops! user details are not yours to edit');
-    }
+    userServ.checkAccess(req, res)
+    .then((response) => {
+      if (response) {
+        models.Users.findOne({
+          where: { id: req.params.id }
+        }).then((user) => {
+          userServ.theUpdater(req, res, user);
+        }).catch((error) => {
+          helper.sendResponse(res, 500, error);
+        });
+      } else{
+        helper.sendMessage(res, 401,
+         'Oops! user details are not yours to edit');
+      }
+    });
   },
 
   /**

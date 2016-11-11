@@ -6,22 +6,6 @@ const models = require('./../server/models/index');
 
 const RoleService = {
 
-  /**
-  * @method checkAdminAccess
-  *
-  * Ensures only admin can create roles
-  *
-  * @param {Object} req An instance of request
-  * @param {Object} res An instance of response
-  * @return {Void}
-  */
-  checkAdminAccess: (req, res) => {
-    if (req.decoded.RoleId === 3) {
-      RoleService.addRole(req, res);
-    } else {
-      helper.sendMessage(res, 403, 'Only admin can create roles');
-    }
-  },
 
   /**
   * @method addRole
@@ -40,7 +24,7 @@ const RoleService = {
         models.Roles.create({
           title: req.body.title,
         }).then ((role) => {
-          helper.sendResponse(res, 200, role);
+          helper.sendResponse(res, 201, role);
         }).catch((error) => {
           helper.sendResponse(res, 500, error);
         });
@@ -66,7 +50,7 @@ const RoleService = {
     role.updateAttributes({
       title: req.body.title,
     }).then((role) => {
-      helper.sendResponse(res, 200, role);
+      helper.sendResponse(res, 201, role);
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
