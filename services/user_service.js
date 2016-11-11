@@ -17,18 +17,12 @@ const UserService = {
   * @return {Void}
   */
   validateDetails: (req, res) => {
-    // helper.checkRole(req.body.RoleId).then((role) => {
-    //   if (!role) {
-    //     return helper.sendMessage(res, 400, 'Invalid Role for user');
-    //   }
-
     if (!helper.validateRequestBody(req.body)) {
       return helper.sendMessage(res, 400,
        'Missing fields. Fields cannot be empty');
     }
 
     UserService.validateInput(req, res);
-    // });
   },
 
   /**
