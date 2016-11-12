@@ -1,4 +1,3 @@
-
 'use strict';
 
 const bcrypt = require('bcrypt-nodejs');
@@ -6,6 +5,27 @@ const models = require('./../server/models/index');
 
 
 const Helper = {
+
+  /**
+  * @method checkAdminAccess
+  *
+  * Ensures only admin can create roles
+  *
+  * @param {Object} req An instance of request
+  * @param {Object} res An instance of response
+  * @return {Void}
+  */
+  checkAdminAccess: (req, res, next) => {
+    models.Roles.findOne({
+      where:{id: req.decoded.RoleId}
+    }).then((role) => {
+      if (role.title === 'Admin') {
+        next();
+      } else {
+        return Helper.sendMessage(res, 403, 'Admin role needed to access resource');
+      }
+    });
+  },
 
   /**
   * @method validateInput
@@ -167,8 +187,8 @@ const Helper = {
   * @param {String} token Jwt token generated
   * @param {Object} user user object as response
   */
-  sendUser: (res, token, user) => {
-    res.status(200).json({
+  sendUser: (res, status, token, user) => {
+    res.status(status).json({
       token: token,
       success: true,
       user: user

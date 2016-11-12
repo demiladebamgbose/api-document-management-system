@@ -23,7 +23,7 @@ const Role = {
       // Saves role in the database
       roleServ.addRole(req, res);
     } else {
-      helper.sendMessage(res, 422, 'Title field cannot be empty');
+      helper.sendMessage(res, 400, 'Title field cannot be empty');
     }
   },
 
@@ -63,7 +63,7 @@ const Role = {
         //Updates all or some of the attributes of the Role
         roleServ.updateRole(req, res, role);
       } else {
-        helper.sendMessage(res, 422,
+        helper.sendMessage(res, 400,
          'Unable to udate role. Role does not exist');
       }
     }).catch((error) => {

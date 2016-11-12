@@ -21,12 +21,12 @@ module.exports = {
       updatedAt: moment().utc().format()
     }, {
       id: 4,
-      title: 'User',
+      title: 'Guest',
       createdAt: moment().utc().format(),
       updatedAt: moment().utc().format()
     }, {
       id: 5,
-      title: 'Guest',
+      title: 'User',
       createdAt: moment().utc().format(),
       updatedAt: moment().utc().format()
     }], {});

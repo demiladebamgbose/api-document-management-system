@@ -63,10 +63,11 @@ const DocService = {
         models.Documents.create({
           title: req.body.title,
           content: req.body.content,
-          RoleId: req.body.RoleId,
+          type: DocService.getType(req),
+          RoleId: req.decoded.RoleId,
           OwnerId: req.decoded.OwnerId
         }).then((document) => {
-          helper.sendResponse(res, 200, document);
+          helper.sendResponse(res, 201, document);
         }).catch((error) => {
           helper.sendResponse(res, 500, error);
         });
@@ -74,6 +75,21 @@ const DocService = {
         helper.sendMessage(res, 409, 'Title already exists');
       }
     });
+  },
+
+  /**
+  * @method getType
+  *
+  * Determines if the type is public or private
+  *
+  * @param {Object} req An instance of request
+  * @return {String} public or private
+  */
+  getType: (req) => {
+    if (req.body.type !== 'private') {
+      return 'public';
+    }
+    return 'private';
   },
 
   /**
@@ -123,9 +139,9 @@ const DocService = {
     document.updateAttributes({
       title: req.body.title,
       content: req.body.content,
-      RoleId: req.body.RoleId
+      type: req.body.type
     }, {fields: Object.keys(req.body)}).then((document) => {
-      helper.sendResponse(res, 200, document);
+      helper.sendResponse(res, 201, document);
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });

@@ -13,11 +13,12 @@ const router = express.Router();
 module.exports = (app) => {
   const User = require('./../controllers/user');
   const Auth = require('./../controllers/auth');
+  const Helper = require('./../../services/helpers');
 
   // Users Routes.
   router.route('/users')
     .post(User.signup)
-    .get(Auth.validateToken, User.allUsers);
+    .get(Auth.validateToken, Helper.checkAdminAccess, User.allUsers);
   router.route('/users/login')
     .post(User.login);
   router.route('/users/:id')

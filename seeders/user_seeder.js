@@ -19,7 +19,7 @@ module.exports = {
       firstname: 'demi',
       lastname: 'bamgbose',
       username: 'demi',
-      password: '12345678',
+      password: '$2a$10$cKQgAO5t5b9n31Hp4k8F7OFR7rivwGUs1JpxE9zEpNd7PBYLLZ.tS',
       RoleId: 3,
       createdAt: moment().add(-1, 'days').utc().format(),
       updatedAt: moment().add(-1, 'days').utc().format()
@@ -29,8 +29,8 @@ module.exports = {
       firstname: 'winner',
       lastname: 'bolorunduro',
       username: 'winner',
-      password: '12345678',
-      RoleId: 5,
+      password: '$2a$10$cKQgAO5t5b9n31Hp4k8F7OFR7rivwGUs1JpxE9zEpNd7PBYLLZ.tS',
+      RoleId: 4,
       createdAt: moment().add(-1, 'days').utc().format(),
       updatedAt: moment().utc().format()
     }, {
@@ -39,7 +39,7 @@ module.exports = {
       firstname: 'ralph',
       lastname: 'olutola',
       username: 'ralph',
-      password: '12345678',
+      password: '$2a$10$cKQgAO5t5b9n31Hp4k8F7OFR7rivwGUs1JpxE9zEpNd7PBYLLZ.tS',
       RoleId: 4,
       createdAt: moment().utc().format(),
       updatedAt: moment().utc().format()

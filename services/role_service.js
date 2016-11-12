@@ -6,6 +6,7 @@ const models = require('./../server/models/index');
 
 const RoleService = {
 
+
   /**
   * @method addRole
   *
@@ -21,9 +22,9 @@ const RoleService = {
     }).then((role) => {
       if (!role) {
         models.Roles.create({
-          title: req.body.title
+          title: req.body.title,
         }).then ((role) => {
-          helper.sendResponse(res, 200, role);
+          helper.sendResponse(res, 201, role);
         }).catch((error) => {
           helper.sendResponse(res, 500, error);
         });
@@ -47,9 +48,9 @@ const RoleService = {
   */
   updateRole: (req, res, role) => {
     role.updateAttributes({
-      title: req.body.title
+      title: req.body.title,
     }).then((role) => {
-      helper.sendResponse(res, 200, role);
+      helper.sendResponse(res, 201, role);
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });

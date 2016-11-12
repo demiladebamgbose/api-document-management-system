@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   const Documents = sequelize.define('Documents', {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
+    type: DataTypes.STRING,
     RoleId: DataTypes.INTEGER
   }, {
     classMethods: {

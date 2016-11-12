@@ -7,10 +7,19 @@ const expect = require('chai').expect,
   jwt = require('jsonwebtoken'),
   secret =  process.env.secret;
 
-const token = jwt.sign({
+const adminToken = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
-  RoleId: 1,
+  RoleId: 3,
+  OwnerId: 4
+}, secret, {
+  expiresIn: 60*60*24
+});
+
+const nonAdminToken = jwt.sign({
+  emailaddress: '123@abc.com',
+  password:'12345',
+  RoleId: 4,
   OwnerId: 3
 }, secret, {
   expiresIn: 60*60*24
@@ -21,8 +30,7 @@ const testUser = {
   emailaddress: 'lade@gmail.com',
   password: '12345678',
   firstname: 'demilade',
-  lastname: 'bamgbose',
-  RoleId: 3
+  lastname: 'bamgbose'
 };
 
 describe('User', () => {
@@ -32,7 +40,7 @@ describe('User', () => {
       .set('Accept', 'application/json')
       .send(testUser)
       .end((err, res) => {
-        expect(res.status).to.be.equal(200);
+        expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.ok;
         expect(res.body).to.have.property('user');
         expect(res.body).to.have.property('token');
@@ -61,8 +69,7 @@ describe('User', () => {
         emailaddress: 'lade22@gmail.com',
         password: '',
         firstname: 'demilade',
-        lastname: '',
-        RoleId: 3
+        lastname: ''
       })
       .end((err, res) => {
         expect(res.status).to.be.equal(400);
@@ -73,22 +80,41 @@ describe('User', () => {
       });
   });
 
-  it('should not create a user assigned to a non existent role', (done) => {
+  it('should not create a user with invalid names', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
       .send({
         username: 'lade',
         emailaddress: 'lade22@gmail.com',
         password: '12345678',
-        firstname: 'demilade',
-        lastname: 'bamgbs',
-        RoleId: 7
+        firstname: 'd.!emiladf753e',
+        lastname: 'b355@$#amgbs'
       })
       .end((err, res) => {
         expect(res.status).to.be.equal(400);
         expect(res.body.success).to.be.equal(false);
         expect(res.body).to.have.property('message');
-        expect(res.body.message).to.be.equal('Invalid Role for user');
+        expect(res.body.message).to.be.equal('Invalid First name or Last name');
+        done();
+      });
+  });
+
+  it('should not create user with invalid emailaddress', (done) => {
+    api.post('/api/users')
+      .set('Accept', 'application/json')
+      .send({
+        username: 'lade',
+        emailaddress: 'lade22gmailcom',
+        password: '12345678',
+        firstname: 'Femisola',
+        lastname: 'bamgbs'
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        expect(res.body.success).to.be.equal(false);
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.be
+        .equal('Invalid Email Address or Password');
         done();
       });
   });
@@ -125,7 +151,7 @@ describe('User', () => {
       });
   });
 
-  it('should not login a user with wrong password', (done) => {
+  it('should not login a non existent user', (done) => {
     api.post('/api/users/login')
       .set('Accept', 'application/json')
       .send({
@@ -141,10 +167,23 @@ describe('User', () => {
       });
   });
 
+  it('non admin user should not delete a user from the database', (done) => {
+    api.delete('/api/users/1')
+     .set('Accept', 'application/json')
+     .set('x-access-token', nonAdminToken)
+     .end((err, res) => {
+       expect(res.body.success).to.not.be.ok;
+       expect(res.body).to.have.property('message');
+       expect(res.body.message).to.be
+       .equal('You do not have access to delete user');
+       done();
+     });
+  });
+
   it('should delete a user from the database', (done) => {
     api.delete('/api/users/1')
      .set('Accept', 'application/json')
-     .set('x-access-token', token)
+     .set('x-access-token', adminToken)
      .end((err, res) => {
        expect(res.body).to.be.equal(1);
        done();
@@ -154,12 +193,12 @@ describe('User', () => {
   it('should update your user details', (done) => {
     api.put('/api/users/3')
       .set('Accept', 'application/json')
-      .set('x-access-token', token)
+      .set('x-access-token', nonAdminToken)
       .send({
         emailaddress: 'somethingnew@gmail.com'
       })
       .end((err, res) => {
-        expect(res.status).to.be.equal(200);
+        expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.ok;
         expect(res.body).to.have.property('user');
         expect(res.body.user.emailaddress).to.be.equal('somethingnew@gmail.com');
@@ -170,7 +209,7 @@ describe('User', () => {
   it('should not update any other user details', (done) => {
     api.put('/api/users/4')
       .set('Accept', 'application/json')
-      .set('x-access-token', token)
+      .set('x-access-token', nonAdminToken)
       .send({
         emailaddress: 'somethingnew@gmail.com'
       })
@@ -186,7 +225,7 @@ describe('User', () => {
   it('should not update details for a non existent user', (done) => {
     api.put('/api/users/8')
       .set('Accept', 'application/json')
-      .set('x-access-token', token)
+      .set('x-access-token', nonAdminToken)
       .send({
         emailaddress: 'somethingnew@gmail.com'
       })
@@ -195,24 +234,6 @@ describe('User', () => {
         expect(res.body.success).to.not.be.ok;
         expect(res.body).to.have.property('message');
         expect(res.body.message).to.be.equal('Oops! user details are not yours to edit');
-        done();
-      });
-  });
-
-  it('each user should be unique', (done) => {
-    const uniqueUser = (userArray) => {
-      let emailaddress = [];
-      userArray.forEach((user) => {
-        expect(emailaddress.indexOf(user.emailaddress)).to.equal(-1);
-        emailaddress.push(user.emailaddress);
-      });
-    };
-
-    api.get('/api/users')
-      .set('x-access-token', token)
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        uniqueUser(res.body);
         done();
       });
   });
@@ -226,7 +247,7 @@ describe('User', () => {
 
   it('should have a defined role for all users', (done) => {
     api.get('/api/users')
-      .set('x-access-token', token)
+      .set('x-access-token', adminToken)
       .set('Accept', 'application/json')
       .end((err, res) => {
         checkProperty(res.body, 'RoleId');
@@ -236,7 +257,7 @@ describe('User', () => {
 
   it('should have both first name and last name for all users', (done) => {
     api.get('/api/users')
-      .set('x-access-token', token)
+      .set('x-access-token', adminToken)
       .set('Accept', 'application/json')
       .end((err, res) => {
         checkProperty(res.body, 'firstname');
@@ -245,9 +266,22 @@ describe('User', () => {
       });
   });
 
-  it('should return all users', (done) => {
+  it('should not return all users for non admin', (done) => {
     api.get('/api/users')
-      .set('x-access-token', token)
+      .set('x-access-token', nonAdminToken)
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        expect(res.body.success).to.not.be.ok;
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.be
+        .equal('Admin role needed to access resource');
+        done();
+      });
+  });
+
+  it('should return all users for admin', (done) => {
+    api.get('/api/users')
+      .set('x-access-token', adminToken)
       .set('Accept', 'application/json')
       .end((err, res) => {
         expect(Array.isArray(res.body)).to.be.equal(true);
@@ -257,8 +291,8 @@ describe('User', () => {
   });
 
   it('should get a single user by params.id', (done) => {
-    api.get('/api/users/4')
-      .set('x-access-token', token)
+    api.get('/api/users/3')
+      .set('x-access-token', nonAdminToken)
       .set('Accept', 'application/json')
       .end((err, res) => {
         expect(typeof(res.body)).to.equal('object');
@@ -266,7 +300,7 @@ describe('User', () => {
         expect(res.body).to.have.property('firstname');
         expect(res.body).to.have.property('lastname');
         expect(res.body).to.have.property('RoleId');
-        expect(res.body.emailaddress).to.be.equal('winner@gmail.com');
+        expect(res.body.emailaddress).to.be.equal('somethingnew@gmail.com');
         done();
       });
   });

@@ -17,18 +17,12 @@ const UserService = {
   * @return {Void}
   */
   validateDetails: (req, res) => {
-    helper.checkRole(req.body.RoleId).then((role) => {
-      if (!role) {
-        return helper.sendMessage(res, 400, 'Invalid Role for user');
-      }
+    if (!helper.validateRequestBody(req.body)) {
+      return helper.sendMessage(res, 400,
+       'Missing fields. Fields cannot be empty');
+    }
 
-      if (!helper.validateRequestBody(req.body)) {
-        return helper.sendMessage(res, 400,
-         'Missing fields. Fields cannot be empty');
-      }
-
-      UserService.validateInput(req, res);
-    });
+    UserService.validateInput(req, res);
   },
 
   /**
@@ -41,17 +35,25 @@ const UserService = {
   * @return {Void}
   */
   validateInput: (req, res) => {
-    if (!(helper.isvalidName(req.body.lastname)) &&
-     (helper.isvalidName(req.body.lastname))) {
+    if ((!helper.isvalidName(req.body.lastname)) ||
+     (!helper.isvalidName(req.body.lastname))) {
       return helper.sendMessage(res, 400, 'Invalid First name or Last name');
     }
 
     if ( (helper.validateEmail(req.body.emailaddress)) &&
     (helper.validatePassWord(req.body.password))) {
-      UserService.createUser(req, res);
+      UserService.getGuestRoleId(req, res);
     } else {
       return helper.sendMessage(res, 400, 'Invalid Email Address or Password');
     }
+  },
+
+  getGuestRoleId: (req, res) => {
+    models.Roles.findOne({
+      where: {title: 'Guest'}
+    }).then((role) => {
+      UserService.createUser(req, res, role.id);
+    });
   },
 
   /**
@@ -62,14 +64,14 @@ const UserService = {
   * @param {Object} req An instance of request
   * @return {Void}
   */
-  createUser: (req, res) => {
+  createUser: (req, res, roleId) => {
     models.Users.create({
       emailaddress: req.body.emailaddress,
       password: helper.hashPassword(req.body.password),
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       username: req.body.username,
-      RoleId: req.body.RoleId
+      RoleId: roleId
     }).then ((user) => {
       const token = auth.generateToken({
         emailaddress: user.emailaddress,
@@ -77,7 +79,7 @@ const UserService = {
         RoleId: user.RoleId,
         OwnerId: user.id
       });
-      helper.sendUser(res, token, user);
+      helper.sendUser(res, 201, token, user);
     }).catch ((error) => {
       helper.sendResponse(res, 500, error);
     });
@@ -102,7 +104,7 @@ const UserService = {
         RoleId: user.RoleId,
         OwnerId: user.id
       });
-      helper.sendUser(res, token, user);
+      helper.sendUser(res, 200, token, user);
     } else{
       helper.sendMessage(res, 401, 'authentication failed. Wrong password');
     }
@@ -116,12 +118,18 @@ const UserService = {
   * @param {Object} req An instance of request
   * @return {Void}
   */
-  checkAccess: (req) => {
-
-    if (req.decoded.OwnerId === parseInt(req.params.id)) {
-      return true;
-    }
-    return false;
+  checkAccess: (req, res) => {
+    return models.Roles.findOne({
+      where: {id: req.decoded.RoleId}
+    }).then((role) => {
+      if ((role.title === 'Admin') ||
+       (req.decoded.OwnerId === parseInt(req.params.id))) {
+        return true;
+      }
+      return false;
+    }).catch((error) => {
+      return helper.sendResponse(res, 500, error);
+    });
   },
 
   /**
@@ -141,7 +149,6 @@ const UserService = {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       username: req.body.username,
-      RoleId: req.body.RoleId
     }, { fields: Object.keys(req.body) }).then((user) => {
       const token = auth.generateToken({
         emailaddress: user.emailaddress,
@@ -149,9 +156,9 @@ const UserService = {
         RoleId: user.RoleId,
         OwnerId: user.id
       });
-      helper.sendUser(res, token, user);
+      helper.sendUser(res, 201, token, user);
     }). catch((error) => {
-      res.sendResponse(res, 500, error);
+      helper.sendResponse(res, 500, error);
     });
   }
 };
