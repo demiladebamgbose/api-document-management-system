@@ -62,7 +62,7 @@ describe('Role', () => {
     });
   });
 
-  it('should not create another role with the same', () => {
+  it('should not create another role with the same title', () => {
     api.post('/api/roles')
     .set('Accept', 'application/json')
     .set('x-access-token', adminToken)

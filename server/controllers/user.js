@@ -83,7 +83,6 @@ const User = {
   deleteUser: (req, res) => {
     userServ.checkAccess(req, res)
     .then((response) => {
-      console.log(response)
       if (response) {
         models.Users.destroy({
           where: { id: req.params.id }
