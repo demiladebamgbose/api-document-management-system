@@ -1,4 +1,3 @@
-
 'use strict';
 
 const helper = require('./helpers');
@@ -111,13 +110,48 @@ const DocService = {
       queryObj = { RoleId: req.query.RoleId };
     } else {
       // Gets a limited number documents created on  the same date
-      queryObj = { createdAt: req.query.date };
+      queryObj = { createdAt: {$gt: req.query.date }};
     }
+    models.Roles.findOne({
+      where: {id: req.decoded.RoleId}
+    }).then((role) => {
+      if (role.title === 'Admin') {
+        DocService.queryAsAdmin(req, res , size, offset, queryObj);
+      } else {
+        DocService.queryAsUser(req, res , size, offset, queryObj);
+      }
+    });
+  },
+
+  queryAsAdmin: (req, res, size, offset, queryObj) => {
     models.Documents.findAll({
       order: '"createdAt" DESC',
       limit: size,
       offset: offset,
       where: queryObj
+    }).then((documents) => {
+      helper.sendResponse(res, 200, documents);
+    }).catch((error) => {
+      helper.sendResponse(res, 500, error);
+    });
+  },
+
+  queryAsUser: (req, res, size, offset, queryObj) => {
+    models.Documents.findAll({
+      order: '"createdAt" DESC',
+      limit: size,
+      offset: offset,
+      where: {
+        $or: [
+          {
+            $and: [queryObj, {type: 'public'}]
+          },
+          {
+            $and: [queryObj, {type: 'private'}, {OwnerId: req.decoded.OwnerId}]
+          },
+        ]
+
+      }
     }).then((documents) => {
       helper.sendResponse(res, 200, documents);
     }).catch((error) => {
@@ -142,6 +176,40 @@ const DocService = {
       type: req.body.type
     }, {fields: Object.keys(req.body)}).then((document) => {
       helper.sendResponse(res, 201, document);
+    }).catch((error) => {
+      helper.sendResponse(res, 500, error);
+    });
+  },
+
+  getUserDocument: (req, res, size, offset) => {
+    models.Documents.findAll({
+      order: '"createdAt" DESC',
+      limit: size,
+      offset: offset,
+      where: {
+        $or: [
+          {OwnerId: req.params.id},
+          {type: 'public'}
+        ]
+      }
+    }).then((documents) => {
+      if (documents) {
+        helper.sendResponse(res, 200, documents);
+      } else {
+        helper.sendMessage(res, 404, 'User has no documents');
+      }
+    }).catch((error) => {
+      helper.sendResponse(res, 500, error);
+    });
+  },
+
+  getAdminDocument: (req, res, size, offset) => {
+    models.Documents.findAll({
+      order: '"createdAt" DESC',
+      limit: size,
+      offset: offset
+    }).then((documents) => {
+      helper.sendResponse(res, 200, documents);
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });

@@ -137,24 +137,14 @@ const Document = {
     let offset = docServ.paginate(res, size, req.query.page);
 
     // Find all documents created by the user or belongs to same role as user
-    models.Documents.findAll({
-      order: '"createdAt" DESC',
-      limit: size,
-      offset: offset,
-      where: {
-        $or: [
-          {OwnerId: req.params.id},
-          {type: 'public'}
-        ]
-      }
-    }).then((documents) => {
-      if (documents) {
-        helper.sendResponse(res, 200, documents);
+    models.Roles.findOne({
+      where: {id: req.decoded.RoleId}
+    }).then((role) => {
+      if (role.title === 'Admin') {
+        docServ.getAdminDocument(req, res, size, offset);
       } else {
-        helper.sendMessage(res, 404, 'User has no documents');
+        docServ.getUserDocument(req, res, size, offset);
       }
-    }).catch((error) => {
-      helper.sendResponse(res, 500, error);
     });
   }
 };

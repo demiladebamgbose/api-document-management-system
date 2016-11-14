@@ -7,7 +7,7 @@ const expect = require('chai').expect,
   jwt = require('jsonwebtoken'),
   secret =  process.env.secret;
 
-const token = jwt.sign({
+const adminToken = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
   RoleId: 3,
@@ -16,11 +16,19 @@ const token = jwt.sign({
   expiresIn: 60*60*24
 });
 
+const nonAdminToken = jwt.sign({
+  emailaddress: '123@abc.com',
+  password:'12345',
+  RoleId: 4,
+  OwnerId: 4
+}, secret, {
+  expiresIn: 60*60*24
+});
+
 describe('Search', () => {
 
-  let yesterday;
-
-  it('should return all documents with a specified role', (done) => {
+  it('should return all documents with a specified role for an admin user',
+  (done) => {
 
     const checkRoles = (array) => {
       array.forEach((item) => {
@@ -29,7 +37,7 @@ describe('Search', () => {
     };
 
     api.get('/api/documents?limit=5&page=1&RoleId=4')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(Array.isArray(res.body)).to.be.equal(true);
@@ -39,30 +47,42 @@ describe('Search', () => {
     });
   });
 
-  it('should get a single document by id', (done) => {
-    api.get('/api/documents/13')
-    .set('x-access-token', token)
+  it('should return all documents with a specified role for non-Admin users',
+  (done) => {
+
+    api.get('/api/documents?limit=20&page=1&RoleId=4')
+    .set('x-access-token', nonAdminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
-      expect(res.body.title).to.be.equal('Serious document');
-      yesterday = res.body.createdAt;
+      expect(Array.isArray(res.body)).to.be.equal(true);
+      expect(res.body.length).to.be.equal(5);
       done();
     });
   });
 
   it('should return all documets created on a particular date', (done) => {
-    api.get('/api/documents?limit=5&page=1&date=' + yesterday)
-    .set('x-access-token', token)
+    api.get('/api/documents?limit=20&page=1&date=2016-11-14')
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
-      expect(res.body.length).to.be.equal(2);
+      expect(res.body.length).to.be.equal(10);
       done();
     });
   });
 
-  it('should return all documets accessible to a user ', (done) => {
+  it('should return all documets accessible to an admin user ', (done) => {
     api.get('/api/users/4/documents?limit=20&page=1')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
+    .set('Accept', 'application/json')
+    .end((err, res) => {
+      expect(res.body.length).to.be.equal(12);
+      done();
+    });
+  });
+
+  it('should return all documets accessible to a non-admin user ', (done) => {
+    api.get('/api/users/4/documents?limit=20&page=1')
+    .set('x-access-token', nonAdminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.body.length).to.be.equal(7);
