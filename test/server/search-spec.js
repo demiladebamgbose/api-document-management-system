@@ -60,8 +60,11 @@ describe('Search', () => {
     });
   });
 
+  const todayDate = new Date().toISOString().slice(0,10);
+  console.log(todayDate);
+
   it('should return all documets created on a particular date', (done) => {
-    api.get('/api/documents?limit=20&page=1&date=2016-11-14')
+    api.get('/api/documents?limit=20&page=1&date=' + todayDate)
     .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {

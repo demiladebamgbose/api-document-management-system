@@ -72,39 +72,36 @@ API endpoints currently supported.
 
 ##### Users
 
-|Request type	|Endpoint	|Action|
-|---------------|:-----------:|------|
-|POST	|/api/users	|Create a new user
-|GET	|/api/users	|Get all users
-|GET	|/api/users:id	|Get a user
-|PUT	|/api/users/:id	|Update user information
-|DELETE	|/api/users/:id	|Remove a user from database
+|Request type	|Endpoint	|Action| Access |
+|---------------|:-----------:|------|-------|
+|POST	|/api/users	|Create a new user| All
+|GET	|/api/users	|Get all users| Admin
+|GET	|/api/users:id	|Get a user| Restricted
+|PUT	|/api/users/:id	|Update user information| Restriced
+|DELETE	|/api/users/:id	|Remove a user from database| Restricted
 
 
 ##### Documents
 
-| Request type|	Endpoint |	Action|
-|--------------|:--------|-------
-|POST	|/api/documents		|Create a new document
-|GET	|/api/documents		|Retrieve all documents
-|GET	|/api/documents/:id		|Retrieve a specific document
-|GET	|/api/users/:id/documents	|Retrieve all documents accesible  by a user
-|GET	|/api/documents/?role=Admin	|Retrieve all documents that have role set as Admin
-|GET	|/api/documents/limit=10	|Retrieve documents 10 at a time
-|GET	|/api/documents/?limit=10&page=2 	|Retrieve all documents with an offset of two
-|PUT	|/api/documents/:id	|Update a specific document
-|DELETE	|/api/documents/:id	|Remove a specific document from storage
+| Request type|	Endpoint |	Action| Accesible|
+|--------------|:--------:|:---------:|---------|
+|POST	|/api/documents		|Create a new document| All
+|GET	|/api/documents		|Retrieve all documents| Restricted
+|GET	|/api/documents/:id		|Retrieve a specific document | Restricted
+|GET	|/api/users/:id/documents	|Retrieve all documents accesible  by a user | All
+|GET	|/api/documents/?limit=10&RoleId=1	|Retrieve all documents that have roleId set as 1| Resticted
+|GET	|/api/documents/limit=10	|Retrieve documents 10 at a time| Restricted
+|GET	|/api/documents/?limit=10&page=2 	|Retrieve all documents with an offset of ten| Restricted
+|PUT	|/api/documents/:id	|Update a specific document| Restricted
+|DELETE	|/api/documents/:id	|Remove a specific document from the database| Restricted
 
 
 ##### Roles
 
-|Request type	|Endpoint	|Action|
-|---------------|:-----------:|------|
-|POST	|/api/roles		|Create a new role|
-|GET	|/api/roles		|Retrieve all roles|
-|PUT	|/api/roles/:id		|Edit a role|
-|GET	|/api/roles/:id		|Retrieve a role
-|DELETE	|/api/roles/:id		|Delete a role
-
-
-
+|Request type	|Endpoint	|Action| Access
+|---------------|:-----------:|------|-----|
+|POST	|/api/roles		|Create a new role| Admin
+|GET	|/api/roles		|Retrieve all roles| Admin
+|PUT	|/api/roles/:id		|Edit a role| Admin
+|GET	|/api/roles/:id		|Retrieve a role| Admin
+|DELETE	|/api/roles/:id		|Delete a role| Admin
