@@ -10,7 +10,7 @@ const expect = require('chai').expect,
 const token = jwt.sign({
   emailaddress: '123@abc.com',
   password:'12345',
-  RoleId: 4,
+  RoleId: 3,
   OwnerId: 3
 }, secret, {
   expiresIn: 60*60*24
@@ -109,6 +109,17 @@ describe('Document', () => {
       expect(res.status).to.be.equal(200);
       expect(typeof(res.body)).to.be.equal('object');
       expect(res.body.title).to.be.equal('Yellow document');
+      done();
+    });
+  });
+
+  it('should return 5 documents without a set query limit', (done) => {
+    api.get('/api/documents?')
+    .set('x-access-token', token)
+    .set('Accept', 'application/json')
+    .end((err, res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body.length).to.be.at.most(5);
       done();
     });
   });
