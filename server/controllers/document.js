@@ -44,17 +44,21 @@ const Document = {
       return;
     }
     // Pagination logic
-    let size = req.query.limit;
-    let offset = docServ.paginate(res, size, req.query.page);
+    const paginate = docServ.paginate(res, req.query.limit, req.query.page);
 
-    // Get a limited number of documents in decending order by createdAt
-    models.Documents.findAll({ order: '"createdAt" DESC',
-     limit: size, offset: offset })
-     .then((documents) => {
-       helper.sendResponse(res, 200, documents);
-     }).catch((error) => {
-       helper.sendResponse(res, 500, error);
-     });
+    let size = paginate[0];
+    let offset = paginate[1];
+
+    // Find all documents created by the user or belongs to same role as user
+    models.Roles.findOne({
+      where: {id: req.decoded.RoleId}
+    }).then((role) => {
+      if (role.title === 'Admin') {
+        docServ.getAdminDocument(req, res, size, offset);
+      } else {
+        docServ.getUserDocument(req, res, size, offset);
+      }
+    });
   },
 
   /**
@@ -133,8 +137,10 @@ const Document = {
   */
   getUserDocument: (req, res) => {
     // Pagination logic
-    let size = req.query.limit;
-    let offset = docServ.paginate(res, size, req.query.page);
+    const paginate = docServ.paginate(res, req.query.limit, req.query.page);
+
+    let size = paginate[0];
+    let offset = paginate[1];
 
     // Find all documents created by the user or belongs to same role as user
     models.Roles.findOne({

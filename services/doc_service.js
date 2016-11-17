@@ -19,10 +19,12 @@ const DocService = {
     if (!page){
       page = 1;
     }
-    if (size) {
-      return size * (page - 1);
+    if (!size) {
+      let offset = 5 * (page - 1);
+      return [5, offset];
     }
-    helper.sendMessage(res, 400, 'Invalid query limit');
+    let offset = size * (page - 1);
+    return [size, offset];
   },
 
   /**
@@ -102,8 +104,9 @@ const DocService = {
   */
   queryDocuments: (req, res) => {
     let queryObj;
-    let size = req.query.limit;
-    let offset = DocService.paginate(res, size, req.query.page);
+    const paginate = DocService.paginate(res, req.query.limit, req.query.page);
+    let size = paginate[0];
+    let offset = paginate[1];
 
     if (req.query.RoleId) {
       // Gets a limited number documents belonging to the same role and

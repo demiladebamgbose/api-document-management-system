@@ -55,15 +55,14 @@ describe('Search', () => {
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(Array.isArray(res.body)).to.be.equal(true);
-      expect(res.body.length).to.be.equal(5);
+      expect(res.body.length).to.be.equal(4);
       done();
     });
   });
 
-  const todayDate = new Date().toISOString().slice(0,10);
-  console.log(todayDate);
 
   it('should return all documets created on a particular date', (done) => {
+    const todayDate = new Date().toISOString().slice(0,10);
     api.get('/api/documents?limit=20&page=1&date=' + todayDate)
     .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
