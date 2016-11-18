@@ -1,18 +1,18 @@
 'use strict';
 
+const Auth = require('./../controllers/auth');
+const Document = require('./../controllers/document');
 const express = require('express');
+
 const router = express.Router();
 
 /**
 * Creates routes to access Documents resource.
 *
 * @param {Object} app An instance of express.
-* @return {Void}
+* @return {void}
 */
 module.exports = (app) => {
-  const Auth = require('./../controllers/auth');
-  const Document = require('./../controllers/document');
-
   // Documents Routes.
   router.route('/documents')
    .post(Auth.validateToken, Document.createDocument)

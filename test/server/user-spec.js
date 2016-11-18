@@ -5,24 +5,24 @@ const expect = require('chai').expect,
   supertest = require('supertest'),
   api = supertest(express),
   jwt = require('jsonwebtoken'),
-  secret =  process.env.secret;
+  secret = process.env.secret;
 
 const adminToken = jwt.sign({
   emailaddress: '123@abc.com',
-  password:'12345',
+  password: '12345',
   RoleId: 3,
   OwnerId: 4
 }, secret, {
-  expiresIn: 60*60*24
+  expiresIn: 60 * 60 * 24
 });
 
 const nonAdminToken = jwt.sign({
   emailaddress: '123@abc.com',
-  password:'12345',
+  password: '12345',
   RoleId: 4,
   OwnerId: 3
 }, secret, {
-  expiresIn: 60*60*24
+  expiresIn: 60 * 60 * 24
 });
 
 const testUser = {
@@ -34,7 +34,6 @@ const testUser = {
 };
 
 describe('User', () => {
-
   it('should create a new user', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
@@ -295,7 +294,7 @@ describe('User', () => {
       .set('x-access-token', nonAdminToken)
       .set('Accept', 'application/json')
       .end((err, res) => {
-        expect(typeof(res.body)).to.equal('object');
+        expect(typeof (res.body)).to.equal('object');
         expect(res.body).to.have.property('emailaddress');
         expect(res.body).to.have.property('firstname');
         expect(res.body).to.have.property('lastname');

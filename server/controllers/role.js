@@ -1,4 +1,3 @@
-
 'use strict';
 
 const models = require('./../models/index');
@@ -10,13 +9,11 @@ const roleServ = require('./../../services/role_service');
 const Role = {
 
   /**
-  * @method createRole
-  *
   * Creates a new role ans saves it to the database.
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   createRole: (req, res) => {
     if (helper.validateRequestBody(req.body)) {
@@ -28,31 +25,27 @@ const Role = {
   },
 
   /**
-  * @method all
-  *
   * Retrieves all roles from the database
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   all: (req, res) => {
     models.Roles.findAll({})
-    .then ((roles) => {
+    .then((roles) => {
       helper.sendResponse(res, 200, roles);
-    }).catch ((error) => {
+    }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
   },
 
   /**
-  * @method updateRole
-  *
   * Updates all or some of the attributes of a Role
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   updateRole: (req, res) => {
     // Finds one role based on the params.id
@@ -60,7 +53,7 @@ const Role = {
       where: { id: req.params.id }
     }).then((role) => {
       if (role) {
-        //Updates all or some of the attributes of the Role
+        // Updates all or some of the attributes of the Role
         roleServ.updateRole(req, res, role);
       } else {
         helper.sendMessage(res, 400,
@@ -72,13 +65,11 @@ const Role = {
   },
 
   /**
-  * @method findRole
-  *
   * Finds a unique role in the database based on params.id
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   findRole: (req, res) => {
     models.Roles.findOne({
@@ -95,13 +86,11 @@ const Role = {
   },
 
   /**
-  * @method deleteRole
-  *
   * Deletes a  Role from the database based on params.id
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   deleteRole: (req, res) => {
     models.Roles.destroy({

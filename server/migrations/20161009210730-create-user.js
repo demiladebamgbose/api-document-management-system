@@ -1,11 +1,8 @@
-
 'use strict';
 
 module.exports = {
 
   /**
-  * @method up
-  *
   * Creates table Users in the database
   *
   * @param {Object} queryInterface
@@ -56,8 +53,6 @@ module.exports = {
   },
 
   /**
-  * @method down
-  *
   * Deletees table Users from the database
   *
   * @param {Object} queryInterface

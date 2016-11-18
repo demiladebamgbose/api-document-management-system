@@ -1,4 +1,3 @@
-
 'use strict';
 
 // Models definition for Users
@@ -14,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {
       associate: (models) => {
         // associations can be defined here
-        Users.belongsTo(models.Roles,{
+        Users.belongsTo(models.Roles, {
           foreignKey: {
             allowNull: false
           }
         });
 
-        Users.hasMany(models.Documents,{ foreignKey: 'OwnerId'});
+        Users.hasMany(models.Documents, { foreignKey: 'OwnerId' });
       }
     }
   });

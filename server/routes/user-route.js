@@ -1,20 +1,19 @@
-
 'use strict';
 
 const express = require('express');
+const User = require('./../controllers/user');
+const Auth = require('./../controllers/auth');
+const Helper = require('./../../services/helpers');
+
 const router = express.Router();
 
 /**
 * Creates routes to access Users resource.
 *
 * @param {Object} app An instance of express.
-* @return {Void}
+* @return {void}
 */
 module.exports = (app) => {
-  const User = require('./../controllers/user');
-  const Auth = require('./../controllers/auth');
-  const Helper = require('./../../services/helpers');
-
   // Users Routes.
   router.route('/users')
     .post(User.signup)

@@ -1,4 +1,3 @@
-
 'use strict';
 
 const helper = require('./helpers');
@@ -8,13 +7,11 @@ const RoleService = {
 
 
   /**
-  * @method addRole
-  *
   * Saves a new role to the database
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   addRole: (req, res) => {
     models.Roles.findOne({
@@ -23,8 +20,8 @@ const RoleService = {
       if (!role) {
         models.Roles.create({
           title: req.body.title,
-        }).then ((role) => {
-          helper.sendResponse(res, 201, role);
+        }).then((roles) => {
+          helper.sendResponse(res, 201, roles);
         }).catch((error) => {
           helper.sendResponse(res, 500, error);
         });
@@ -37,20 +34,18 @@ const RoleService = {
   },
 
   /**
-  * @method updateRole
-  *
   * Updates attributes of a Role
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
   * @param {Object} role Role to be updated
-  * @return {Void}
+  * @return {void}
   */
   updateRole: (req, res, role) => {
     role.updateAttributes({
       title: req.body.title,
-    }).then((role) => {
-      helper.sendResponse(res, 201, role);
+    }).then((roles) => {
+      helper.sendResponse(res, 201, roles);
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });

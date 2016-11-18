@@ -1,4 +1,3 @@
-
 'use strict';
 
 const models = require('./../models/index');
@@ -9,13 +8,11 @@ const docServ = require('./../../services/doc_service');
 const Document = {
 
   /**
-  * @method createDocument
-  *
   * Creates a document and saves it in the database
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   createDocument: (req, res) => {
     // Ensures user belongs to an existing Role
@@ -29,13 +26,11 @@ const Document = {
   },
 
   /**
-  * @method all
-  *
   * Retrieves all documents from the database
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   all: (req, res) => {
     if ((req.query.date) || (req.query.RoleId)) {
@@ -46,12 +41,12 @@ const Document = {
     // Pagination logic
     const paginate = docServ.paginate(res, req.query.limit, req.query.page);
 
-    let size = paginate[0];
-    let offset = paginate[1];
+    const size = paginate[0];
+    const offset = paginate[1];
 
     // Find all documents created by the user or belongs to same role as user
     models.Roles.findOne({
-      where: {id: req.decoded.RoleId}
+      where: { id: req.decoded.RoleId }
     }).then((role) => {
       if (role.title === 'Admin') {
         docServ.getAdminDocument(req, res, size, offset);
@@ -62,18 +57,16 @@ const Document = {
   },
 
   /**
-  * @method findDocument
-  *
   * Retrieves a document from the database
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   findDocument: (req, res) => {
     // Finds a unique document in the database by params.id
     models.Documents.findOne({
-      where: { id: req.params.id}
+      where: { id: req.params.id }
     }).then((document) => {
       helper.sendResponse(res, 200, document);
     }).catch((error) => {
@@ -82,13 +75,11 @@ const Document = {
   },
 
   /**
-  * @method deleteDocument
-  *
   * Deletes a document from the database based on params.Id
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   deleteDocument: (req, res) => {
     models.Documents.destroy({
@@ -101,13 +92,11 @@ const Document = {
   },
 
   /**
-  * @method updateDocument
-  *
   * Updates all or some of the attributes of the document
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   updateDocument: (req, res) => {
     // Finds a unique document in the database by params.id
@@ -127,24 +116,22 @@ const Document = {
   },
 
   /**
-  * @method getUserDocument
-  *
   * Retrieves all document from the database accessible to a specific user
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
   getUserDocument: (req, res) => {
     // Pagination logic
     const paginate = docServ.paginate(res, req.query.limit, req.query.page);
 
-    let size = paginate[0];
-    let offset = paginate[1];
+    const size = paginate[0];
+    const offset = paginate[1];
 
     // Find all documents created by the user or belongs to same role as user
     models.Roles.findOne({
-      where: {id: req.decoded.RoleId}
+      where: { id: req.decoded.RoleId }
     }).then((role) => {
       if (role.title === 'Admin') {
         docServ.getAdminDocument(req, res, size, offset);

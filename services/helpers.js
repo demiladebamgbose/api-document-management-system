@@ -7,17 +7,16 @@ const models = require('./../server/models/index');
 const Helper = {
 
   /**
-  * @method checkAdminAccess
-  *
   * Ensures only admin can create roles
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @param {Object} next
+  * @return {void}
   */
   checkAdminAccess: (req, res, next) => {
     models.Roles.findOne({
-      where:{id: req.decoded.RoleId}
+      where: { id: req.decoded.RoleId }
     }).then((role) => {
       if (role.title === 'Admin') {
         next();
@@ -28,8 +27,6 @@ const Helper = {
   },
 
   /**
-  * @method validateInput
-  *
   * Ensures a string input is not empty
   *
   * @param {String} input
@@ -40,12 +37,9 @@ const Helper = {
       return true;
     }
     return false;
-
   },
 
   /**
-  * @method validateRequestBody
-  *
   * Ensures the request body does not contain any null field
   *
   * @param {Object} body
@@ -53,7 +47,7 @@ const Helper = {
   */
   validateRequestBody: (body) => {
     const keys = Object.keys(body);
-    for (let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < keys.length; i += 1) {
       if (!Helper.validateInput(body[keys[i]])) {
         return false;
       }
@@ -62,8 +56,6 @@ const Helper = {
   },
 
   /**
-  * @method validatePassWord
-  *
   * Ensures password is at least  8 characters
   *
   * @param {String} password
@@ -74,8 +66,6 @@ const Helper = {
   },
 
   /**
-  * @method validateEmail
-  *
   * Ensures string is a valid email address
   *
   * @param {String} email
@@ -86,19 +76,17 @@ const Helper = {
   },
 
   /**
-  * @method checkRole
-  *
   * Ensures roleId is a reference to an existing role
   *
   * @param {Integer} roleId
-  * @return {Promise}
+  * @return {Promise} checkRole
   * @return {Boolean} true or false
   */
   checkRole: (roleId) => {
     return models.Roles.findOne({
       where:
-      {id: roleId}
-    }).then((role) =>{
+      { id: roleId }
+    }).then((role) => {
       if (role) {
         return true;
       }
@@ -107,8 +95,6 @@ const Helper = {
   },
 
   /**
-  * @method isvalidName
-  *
   * Ensures name contains only characters a-z
   *
   * @param {String} name
@@ -119,8 +105,6 @@ const Helper = {
   },
 
   /**
-  * @method comparePasswords
-  *
   * Uses bcrypt to compare passwords
   *
   * @param {String} string
@@ -133,8 +117,6 @@ const Helper = {
   },
 
   /**
-  * @method hashPassword
-  *
   * Uses bcrypt to hash password
   *
   * @param {String} password
@@ -145,47 +127,42 @@ const Helper = {
   },
 
   /**
-  * @method sendResponse
-  *
   * Sends response to requests
   *
   * @param {Object} res An instance of response
   * @param {Integer} status Http status code
-  * @param {error} error Possible error
+  * @param {error} messages
   * @param {Boolean} success true or false
-  * @param {Object} status Http status code
-
+  * @returns {void}
   */
-  sendMessage: (res, status, message) => {
+  sendMessage: (res, status, messages) => {
     res.status(status).json({
       success: false,
-      message: message
+      message: messages
     });
   },
 
 
   /**
-  * @method sendResponse
-  *
   * Sends response to requests
   *
   * @param {Object} res An instance of response
   * @param {Integer} status Http status code of response
   * @param {Object} obj object response
-
+  * @return {void}
   */
   sendResponse: (res, status, obj) => {
     res.status(status).json(obj);
   },
 
   /**
-  * @method sendUser
-  *
   * Sends user and token as response to requests
   *
   * @param {Object} res An instance of response
+  * @param {String} status Status code
   * @param {String} token Jwt token generated
   * @param {Object} user user object as response
+  * @return {void}
   */
   sendUser: (res, status, token, user) => {
     res.status(status).json({

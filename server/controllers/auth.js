@@ -1,44 +1,40 @@
-
 'use strict';
 
 const jwt = require('jsonwebtoken');
+
 const helper = require('./../../services/helpers');
-const secret = process.env.secret ;
+
+const secret = process.env.secret;
 
 const Auth = {
 
   /**
-  * @method generateToken
-  *
   * Generates a JWT token encoding the payload
   *
   * @param {Object} payload
-  * @return {String}
+  * @return {String} Token
   */
   generateToken: (payload) => {
     return jwt.sign(payload, secret, {
-      expiresIn: 60*60*24
+      expiresIn: 60 * 60 * 24
     });
   },
 
   /**
-  * @method verifyToken
-  *
   * Decodes JWT token and attches the decoded payload to the req object
   *
   * @param {Object} req An instance of request object
   * @param {Object} res An instance of response object
   * @param {Object} next
   * @param {String} token
-  * @return {Void}
+  * @return {void}
   */
   verifyToken: (req, res, next, token) => {
     jwt.verify(token, secret, (err, decoded) => {
-      if(err) {
+      if (err) {
         // Send this response if token is not found or invalid
         helper.sendMessage(res, 401, 'Failed to authenticate');
-      }
-      else {
+      } else {
         // Attach decoded payload to request
         req.decoded = decoded;
         next();
@@ -47,20 +43,19 @@ const Auth = {
   },
 
   /**
-  * @method verifyToken
-  *
   * Checks for the existence of token and decodes it.
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @param {Object} next Calls next function
+  * @return {void}
   */
   validateToken: (req, res, next) => {
-    let token = req.body.token || req.query.token || req.headers['x-access-token'];
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (!token) {
       helper.sendMessage(res, 401, 'No token found. Token needed for authentication');
-    } else{
-      Auth.verifyToken(req,res, next, token);
+    } else {
+      Auth.verifyToken(req, res, next, token);
     }
   }
 };
