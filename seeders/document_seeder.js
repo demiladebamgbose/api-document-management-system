@@ -20,7 +20,7 @@
        content: 'This right here is a serious document. owned by ralph admin role',
        type: 'public',
        RoleId: 4,
-       OwnerId:4,
+       OwnerId: 4,
        createdAt: moment().add(-1, 'days').utc().format(),
        updatedAt: moment().utc().format()
      }, {
@@ -92,7 +92,7 @@
        content: 'Magenta magent.Owned by winner with role guest',
        type: 'private',
        RoleId: 3,
-       OwnerId:3,
+       OwnerId: 3,
        createdAt: moment().utc().format(),
        updatedAt: moment().utc().format()
      },{
