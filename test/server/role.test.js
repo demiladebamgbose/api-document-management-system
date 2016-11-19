@@ -107,6 +107,23 @@ describe('Role', () => {
      });
   });
 
+  it('should not allow non admin users to update roles', (done) => {
+    api.put('/api/roles/4')
+    .set('Accept', 'application/json')
+    .set('x-access-token', nonAdminToken)
+    .send({
+      title: 'ANewRole'
+    })
+    .end((err, res) => {
+      expect(res.status).to.be.equal(403);
+      expect(res.body.success).to.be.equal(false);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be
+      .equal('Admin role needed to access resource');
+      done();
+    });
+  });
+
   it('should delete a role from the database', (done) => {
     api.delete('/api/roles/1')
      .set('Accept', 'application/json')
@@ -115,6 +132,20 @@ describe('Role', () => {
        expect(res.body).to.be.equal(1);
        done();
      });
+  });
+
+  it('should not allow non admin users to delete roles', (done) => {
+    api.delete('/api/roles/4')
+    .set('Accept', 'application/json')
+    .set('x-access-token', nonAdminToken)
+    .end((err, res) => {
+      expect(res.status).to.be.equal(403);
+      expect(res.body.success).to.be.equal(false);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be
+      .equal('Admin role needed to access resource');
+      done();
+    });
   });
 
   it('get all roles from the database', (done) => {
@@ -128,6 +159,19 @@ describe('Role', () => {
     });
   });
 
+  it('should not allow non admin users to get all roles', (done) => {
+    api.get('/api/roles')
+    .set('Accept', 'application/json')
+    .set('x-access-token', nonAdminToken)
+    .end((err, res) => {
+      expect(res.status).to.be.equal(403);
+      expect(res.body.success).to.be.equal(false);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be
+      .equal('Admin role needed to access resource');
+      done();
+    });
+  });
 
   it('should retrieve a role based on params.id', (done) => {
     api.get('/api/roles/3')
@@ -137,6 +181,20 @@ describe('Role', () => {
       expect(typeof (res.body)).to.equal('object');
       expect(res.body).to.have.property('title');
       expect(res.body.title).to.be.equal('Admin');
+      done();
+    });
+  });
+
+  it('should not allow non admin users to get a role', (done) => {
+    api.get('/api/roles/4')
+    .set('Accept', 'application/json')
+    .set('x-access-token', nonAdminToken)
+    .end((err, res) => {
+      expect(res.status).to.be.equal(403);
+      expect(res.body.success).to.be.equal(false);
+      expect(res.body).to.have.property('message');
+      expect(res.body.message).to.be
+      .equal('Admin role needed to access resource');
       done();
     });
   });
