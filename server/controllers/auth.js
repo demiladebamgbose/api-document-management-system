@@ -1,70 +1,52 @@
-(() => {
-  'use strict';
+import jwt from 'jsonwebtoken';
+import helper from './../../services/helpers';
 
-  const jwt = require('jsonwebtoken');
-  const helper = require('./../../services/helpers');
-  const secret = process.env.secret ;
+const secret = process.env.secret || 'secret';
 
-  const Auth = {
+/**
+* Provies methods to handle authentication
+*
+* @return {void}
+*/
+class Auth {
 
-    /**
-    * @method generateToken
-    *
-    * Generates a JWT token encoding the payload
-    *
-    * @param {Object} payload
-    * @return {String}
-    */
-    generateToken: (payload) => {
-      return jwt.sign(payload, secret, {
-        expiresIn: 60*60*24
-      });
-    },
+  /**
+  * Generates a JWT token encoding the payload
+  *
+  * @param {Object} payload
+  * @return {String} Token
+  */
+  generateToken(payload) {
+    return jwt.sign(payload, secret, {
+      expiresIn: 60 * 60 * 24
+    });
+  }
 
-    /**
-    * @method verifyToken
-    *
-    * Decodes JWT token and attches the decoded payload to the req object
-    *
-    * @param {Object} req An instance of request object
-    * @param {Object} res An instance of response object
-    * @param {Object} next
-    * @param {String} token
-    * @return {Void}
-    */
-    verifyToken: (req, res, next, token) => {
+  /**
+  * Checks for the existence of token and decodes it.
+  *
+  * @param {Object} req An instance of request
+  * @param {Object} res An instance of response
+  * @param {Object} next Calls next function
+  * @return {void}
+  */
+  validateToken(req, res, next) {
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if (!token) {
+      helper.sendMessage(res, 401, 'No token found. Token needed for authentication');
+    } else {
       jwt.verify(token, secret, (err, decoded) => {
-        if(err) {
+        if (err) {
           // Send this response if token is not found or invalid
           helper.sendMessage(res, 401, 'Failed to authenticate');
-        }
-        else {
+        } else {
           // Attach decoded payload to request
           req.decoded = decoded;
           next();
         }
       });
-    },
-
-    /**
-    * @method verifyToken
-    *
-    * Checks for the existence of token and decodes it.
-    *
-    * @param {Object} req An instance of request
-    * @param {Object} res An instance of response
-    * @return {Void}
-    */
-    validateToken: (req, res, next) => {
-      let token = req.body.token || req.query.token || req.headers['x-access-token'];
-      if (!token) {
-        helper.sendMessage(res, 403, 'No token found. Token needed for authentication');
-      } else{
-        Auth.verifyToken(req,res, next, token);
-      }
     }
-  };
+  }
+}
 
-  module.exports = Auth;
-
-})();
+export default new Auth();
