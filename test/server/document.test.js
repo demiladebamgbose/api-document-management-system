@@ -7,11 +7,20 @@ import express from '../../main';
 const api = supertest(express);
 const secret = process.env.secret;
 
-const token = jwt.sign({
+const adminToken = jwt.sign({
   emailAddress: '123@abc.com',
   password: '12345',
   RoleId: 3,
   OwnerId: 3
+}, secret, {
+  expiresIn: 60 * 60 * 24
+});
+
+const nonAdminToken = jwt.sign({
+  emailAddress: '123@abc.com',
+  password: '12345',
+  RoleId: 4,
+  OwnerId: 4
 }, secret, {
   expiresIn: 60 * 60 * 24
 });
@@ -24,7 +33,7 @@ const testDocument = {
 describe('Document', () => {
   it('should create a new document with a defined published date', (done) => {
     api.post('/api/documents')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .send(testDocument)
     .end((err, res) => {
@@ -37,7 +46,7 @@ describe('Document', () => {
 
   it('should assign default type of public to documents', (done) => {
     api.post('/api/documents')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .send({
       title: 'Public Document',
@@ -55,7 +64,7 @@ describe('Document', () => {
 
   it('should not create a document with incomplete details', (done) => {
     api.post('/api/documents')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .send({
       title: 'Test Document',
@@ -71,7 +80,7 @@ describe('Document', () => {
 
   it('should only create a document with a unique title', (done) => {
     api.post('/api/documents')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .send(testDocument)
     .end((err, res) => {
@@ -84,7 +93,7 @@ describe('Document', () => {
 
   it('should create a document with type private', (done) => {
     api.post('/api/documents')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .send({
       title: 'New Document',
@@ -99,10 +108,20 @@ describe('Document', () => {
     });
   });
 
+  it('should get all documents for a non admin user', (done) => {
+    api.get('/api/documents?limit=20')
+    .set('x-access-token', nonAdminToken)
+    .set('Accept', 'application/json')
+    .end((err, res) => {
+      expect(Array.isArray(res.body)).to.be.equal(true);
+      expect(res.body.length).to.be.equal(8);
+      done();
+    });
+  });
 
   it('should retrieve a document from the database', (done) => {
     api.get('/api/documents/4')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.status).to.be.equal(200);
@@ -113,8 +132,8 @@ describe('Document', () => {
   });
 
   it('should return 5 documents without a set query limit', (done) => {
-    api.get('/api/documents?')
-    .set('x-access-token', token)
+    api.get('/api/documents')
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.status).to.be.equal(200);
@@ -125,7 +144,7 @@ describe('Document', () => {
 
   it('should return limited documents with a set query limit', (done) => {
     api.get('/api/documents?limit=4')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.status).to.be.equal(200);
@@ -137,7 +156,7 @@ describe('Document', () => {
   it('should return limited documents with a set query limit and offset',
   (done) => {
     api.get('/api/documents?limit=4&page=2')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.status).to.be.equal(200);
@@ -149,7 +168,7 @@ describe('Document', () => {
   it('should return documents starting with the most recently created',
   (done) => {
     api.get('/api/documents?limit=4&page=1')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.status).to.be.equal(200);
@@ -161,7 +180,7 @@ describe('Document', () => {
 
   it('should update attributes of a document', (done) => {
     api.put('/api/documents/1')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .send({
       title: 'A new title'
@@ -176,7 +195,7 @@ describe('Document', () => {
 
   it('should not update attributes of a non-existent document', (done) => {
     api.put('/api/documents/23')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .send({
       title: 'A new title'
@@ -192,7 +211,7 @@ describe('Document', () => {
 
   it('should delete a document from the database', (done) => {
     api.delete('/api/documents/1')
-    .set('x-access-token', token)
+    .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.status).to.be.equal(200);

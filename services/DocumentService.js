@@ -177,7 +177,7 @@ class DocService {
       offset: offsets,
       where: {
         $or: [
-          { OwnerId: req.params.id },
+          { OwnerId: req.params.id || req.decoded.OwnerId },
           { type: 'public' }
         ]
       }

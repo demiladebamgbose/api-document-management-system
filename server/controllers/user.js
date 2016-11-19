@@ -42,7 +42,7 @@ class User {
       where: { emailAddress: req.body.emailAddress }
     }).then((user) => {
       if (!user) {
-        helper.sendMessage(res, 401, 'authentication failed. User not found');
+        helper.sendMessage(res, 404, 'Login failed. User not found');
       } else {
         userService.authenticate(req, res, user);
       }

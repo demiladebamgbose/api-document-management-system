@@ -1,4 +1,4 @@
-import 'babel-polyfill'
+import 'babel-polyfill';
 import { expect } from 'chai';
 import supertest from 'supertest';
 import jwt from 'jsonwebtoken';
@@ -34,7 +34,7 @@ const testUser = {
 };
 
 describe('User', () => {
-  it('should create a new user', (done) => {
+  it('should create a new user with default role', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
       .send(testUser)
@@ -43,6 +43,8 @@ describe('User', () => {
         expect(res.body.success).to.be.ok;
         expect(res.body).to.have.property('user');
         expect(res.body).to.have.property('token');
+        expect(res.body.user).to.have.property('RoleId');
+        expect(res.body.user.RoleId).to.equal(4);
         done();
       });
   });
@@ -158,10 +160,10 @@ describe('User', () => {
         password: 'abcdefgh'
       })
       .end((err, res) => {
-        expect(res.status).to.be.equal(401);
+        expect(res.status).to.be.equal(404);
         expect(res.body.success).to.not.be.ok;
         expect(res.body).to.have.property('message');
-        expect(res.body.message).to.be.equal('authentication failed. User not found');
+        expect(res.body.message).to.be.equal('Login failed. User not found');
         done();
       });
   });
