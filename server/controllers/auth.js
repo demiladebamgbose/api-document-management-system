@@ -1,68 +1,52 @@
+import jwt from 'jsonwebtoken';
+import helper from './../../services/helpers';
 
-'use strict';
+const secret = process.env.secret || 'secret';
 
-const jwt = require('jsonwebtoken');
-const helper = require('./../../services/helpers');
-const secret = process.env.secret ;
-
-const Auth = {
+/**
+* Provies methods to handle authentication
+*
+* @return {void}
+*/
+class Auth {
 
   /**
-  * @method generateToken
-  *
   * Generates a JWT token encoding the payload
   *
   * @param {Object} payload
-  * @return {String}
+  * @return {String} Token
   */
-  generateToken: (payload) => {
+  generateToken(payload) {
     return jwt.sign(payload, secret, {
-      expiresIn: 60*60*24
+      expiresIn: 60 * 60 * 24
     });
-  },
+  }
 
   /**
-  * @method verifyToken
-  *
-  * Decodes JWT token and attches the decoded payload to the req object
-  *
-  * @param {Object} req An instance of request object
-  * @param {Object} res An instance of response object
-  * @param {Object} next
-  * @param {String} token
-  * @return {Void}
-  */
-  verifyToken: (req, res, next, token) => {
-    jwt.verify(token, secret, (err, decoded) => {
-      if(err) {
-        // Send this response if token is not found or invalid
-        helper.sendMessage(res, 401, 'Failed to authenticate');
-      }
-      else {
-        // Attach decoded payload to request
-        req.decoded = decoded;
-        next();
-      }
-    });
-  },
-
-  /**
-  * @method verifyToken
-  *
   * Checks for the existence of token and decodes it.
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @param {Object} next Calls next function
+  * @return {void}
   */
-  validateToken: (req, res, next) => {
-    let token = req.body.token || req.query.token || req.headers['x-access-token'];
+  validateToken(req, res, next) {
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (!token) {
       helper.sendMessage(res, 401, 'No token found. Token needed for authentication');
-    } else{
-      Auth.verifyToken(req,res, next, token);
+    } else {
+      jwt.verify(token, secret, (err, decoded) => {
+        if (err) {
+          // Send this response if token is not found or invalid
+          helper.sendMessage(res, 401, 'Failed to authenticate');
+        } else {
+          // Attach decoded payload to request
+          req.decoded = decoded;
+          next();
+        }
+      });
     }
   }
-};
+}
 
-module.exports = Auth;
+export default new Auth();

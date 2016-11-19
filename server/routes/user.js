@@ -1,20 +1,17 @@
+// import express from 'express';
+import User from './../controllers/user';
+import Auth from './../controllers/auth';
+import Helper from './../../services/helpers';
 
-'use strict';
-
-const express = require('express');
-const router = express.Router();
+// const router = express.Router();
 
 /**
 * Creates routes to access Users resource.
 *
-* @param {Object} app An instance of express.
-* @return {Void}
+* @param {Object} router An instance of express router.
+* @return {void}
 */
-module.exports = (app) => {
-  const User = require('./../controllers/user');
-  const Auth = require('./../controllers/auth');
-  const Helper = require('./../../services/helpers');
-
+const userRoutes = (router) => {
   // Users Routes.
   router.route('/users')
     .post(User.signup)
@@ -28,5 +25,7 @@ module.exports = (app) => {
   router.route('/users/logout')
     .post(User.logout);
 
-  app.use('/api/', router);
+  // app.use('/api/', router);
 };
+
+export default userRoutes;

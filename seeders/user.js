@@ -5,19 +5,17 @@ const moment = require('moment');
 module.exports = {
 
   /**
-  * @method up
-  *
   * Seeds the Users table before running tests.
   *
   * @param {Object} queryInterface
-  * @return {Void}
+  * @return {void}
   */
   up: (queryInterface) => {
     return queryInterface.bulkInsert('Users', [{
       id: 3,
-      emailaddress: 'demilade@gmail.com',
-      firstname: 'demi',
-      lastname: 'bamgbose',
+      emailAddress: 'demilade@gmail.com',
+      firstName: 'demi',
+      lastName: 'bamgbose',
       username: 'demi',
       password: '$2a$10$cKQgAO5t5b9n31Hp4k8F7OFR7rivwGUs1JpxE9zEpNd7PBYLLZ.tS',
       RoleId: 3,
@@ -25,9 +23,9 @@ module.exports = {
       updatedAt: moment().add(-1, 'days').utc().format()
     }, {
       id: 4,
-      emailaddress: 'winner@gmail.com',
-      firstname: 'winner',
-      lastname: 'bolorunduro',
+      emailAddress: 'winner@gmail.com',
+      firstName: 'winner',
+      lastName: 'bolorunduro',
       username: 'winner',
       password: '$2a$10$cKQgAO5t5b9n31Hp4k8F7OFR7rivwGUs1JpxE9zEpNd7PBYLLZ.tS',
       RoleId: 4,
@@ -35,9 +33,9 @@ module.exports = {
       updatedAt: moment().utc().format()
     }, {
       id: 5,
-      emailaddress: 'ralph@gmail.com',
-      firstname: 'ralph',
-      lastname: 'olutola',
+      emailAddress: 'ralph@gmail.com',
+      firstName: 'ralph',
+      lastName: 'olutola',
       username: 'ralph',
       password: '$2a$10$cKQgAO5t5b9n31Hp4k8F7OFR7rivwGUs1JpxE9zEpNd7PBYLLZ.tS',
       RoleId: 4,
@@ -47,15 +45,13 @@ module.exports = {
   },
 
   /**
-  * @method down
-  *
   * Unseed the Users table after running tests.
   *
   * @param {Object} queryInterface
-  * @return {Void}
+  * @return {void}
   */
   down: (queryInterface) => {
-    return queryInterface.bulkDelete('Users', {emailaddress:
-      ['demilade@gmail.com', 'winner@gmail.com', 'ralph@gmail.com', 'lade@gmail.com']});
+    return queryInterface.bulkDelete('Users', { emailAddress:
+      ['demilade@gmail.com', 'winner@gmail.com', 'ralph@gmail.com', 'lade@gmail.com'] });
   }
 };

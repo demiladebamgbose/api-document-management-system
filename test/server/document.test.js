@@ -1,19 +1,19 @@
-'use strict';
+import 'babel-polyfill';
+import { expect } from 'chai';
+import supertest from 'supertest';
+import jwt from 'jsonwebtoken';
+import express from '../../main';
 
-const expect = require('chai').expect,
-  express = require('../../main'),
-  supertest = require('supertest'),
-  api = supertest(express),
-  jwt = require('jsonwebtoken'),
-  secret =  process.env.secret;
+const api = supertest(express);
+const secret = process.env.secret;
 
 const token = jwt.sign({
-  emailaddress: '123@abc.com',
-  password:'12345',
+  emailAddress: '123@abc.com',
+  password: '12345',
   RoleId: 3,
   OwnerId: 3
 }, secret, {
-  expiresIn: 60*60*24
+  expiresIn: 60 * 60 * 24
 });
 
 const testDocument = {
@@ -22,7 +22,6 @@ const testDocument = {
 };
 
 describe('Document', () => {
-
   it('should create a new document with a defined published date', (done) => {
     api.post('/api/documents')
     .set('x-access-token', token)
@@ -107,7 +106,7 @@ describe('Document', () => {
     .set('Accept', 'application/json')
     .end((err, res) => {
       expect(res.status).to.be.equal(200);
-      expect(typeof(res.body)).to.be.equal('object');
+      expect(typeof (res.body)).to.be.equal('object');
       expect(res.body.title).to.be.equal('Yellow document');
       done();
     });
@@ -169,7 +168,7 @@ describe('Document', () => {
     })
     .end((err, res) => {
       expect(res.status).to.be.equal(201);
-      expect(typeof(res.body)).to.be.equal('object');
+      expect(typeof (res.body)).to.be.equal('object');
       expect(res.body.title).to.be.equal('A new title');
       done();
     });

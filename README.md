@@ -28,9 +28,9 @@ POST - /api/users
 Post data
 {
   username: 'username',
-  emailaddress: 'example@host.com'
-  lastname: 'lastname',
-  firstname: 'firstname',
+  emailAddress: 'example@host.com'
+  lastName: 'lastName',
+  firstName: 'firstName',
   password: 'password',
   RoleId: 'Administrator' // Role has to be created before assignment.
 }
@@ -44,7 +44,7 @@ POST - /api/v1/users
 
 Post data
 {
-  emailaddress: 'example@host.com',
+  emailAddress: 'example@host.com',
   password: 'password'
 }
 ```

@@ -33,10 +33,12 @@ module.exports = {
   },
 
   /**
+  * @method down
+  *
   * Unseeds the Roles table after running tests.
   *
   * @param {Object} queryInterface
-  * @return {void}
+  * @return {Void}
   */
   down: (queryInterface) => {
     return queryInterface.bulkDelete('Roles',

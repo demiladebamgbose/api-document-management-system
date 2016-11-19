@@ -1,30 +1,29 @@
+import helper from './helpers';
+import models from './../server/models/index';
 
-'use strict';
-
-const helper = require('./helpers');
-const models = require('./../server/models/index');
-
-const RoleService = {
-
+/**
+* Provides service methods for Roles
+*
+* @return {void}
+*/
+class RoleService {
 
   /**
-  * @method addRole
-  *
   * Saves a new role to the database
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
-  * @return {Void}
+  * @return {void}
   */
-  addRole: (req, res) => {
+  addRole(req, res) {
     models.Roles.findOne({
       where: { title: req.body.title }
     }).then((role) => {
       if (!role) {
         models.Roles.create({
           title: req.body.title,
-        }).then ((role) => {
-          helper.sendResponse(res, 201, role);
+        }).then((roles) => {
+          helper.sendResponse(res, 201, roles);
         }).catch((error) => {
           helper.sendResponse(res, 500, error);
         });
@@ -34,27 +33,25 @@ const RoleService = {
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
-  },
+  }
 
   /**
-  * @method updateRole
-  *
   * Updates attributes of a Role
   *
   * @param {Object} req An instance of request
   * @param {Object} res An instance of response
   * @param {Object} role Role to be updated
-  * @return {Void}
+  * @return {void}
   */
-  updateRole: (req, res, role) => {
+  updateRole(req, res, role) {
     role.updateAttributes({
       title: req.body.title,
-    }).then((role) => {
-      helper.sendResponse(res, 201, role);
+    }).then((roles) => {
+      helper.sendResponse(res, 201, roles);
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
   }
-};
+}
 
-module.exports = RoleService;
+export default new RoleService();

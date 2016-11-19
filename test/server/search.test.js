@@ -1,35 +1,33 @@
-'use strict';
+import 'babel-polyfill';
+import { expect } from 'chai';
+import supertest from 'supertest';
+import jwt from 'jsonwebtoken';
+import express from '../../main';
 
-const expect = require('chai').expect,
-  express = require('../../main'),
-  supertest = require('supertest'),
-  api = supertest(express),
-  jwt = require('jsonwebtoken'),
-  secret =  process.env.secret;
+const api = supertest(express);
+const secret = process.env.secret;
 
 const adminToken = jwt.sign({
-  emailaddress: '123@abc.com',
-  password:'12345',
+  emailAddress: '123@abc.com',
+  password: '12345',
   RoleId: 3,
   OwnerId: 3
 }, secret, {
-  expiresIn: 60*60*24
+  expiresIn: 60 * 60 * 24
 });
 
 const nonAdminToken = jwt.sign({
-  emailaddress: '123@abc.com',
-  password:'12345',
+  emailAddress: '123@abc.com',
+  password: '12345',
   RoleId: 4,
   OwnerId: 4
 }, secret, {
-  expiresIn: 60*60*24
+  expiresIn: 60 * 60 * 24
 });
 
 describe('Search', () => {
-
   it('should return all documents with a specified role for an admin user',
   (done) => {
-
     const checkRoles = (array) => {
       array.forEach((item) => {
         expect(item.RoleId).to.equal(4);
@@ -49,7 +47,6 @@ describe('Search', () => {
 
   it('should return all documents with a specified role for non-Admin users',
   (done) => {
-
     api.get('/api/documents?limit=20&page=1&RoleId=4')
     .set('x-access-token', nonAdminToken)
     .set('Accept', 'application/json')
@@ -62,8 +59,8 @@ describe('Search', () => {
 
 
   it('should return all documets created on a particular date', (done) => {
-    const todayDate = new Date().toISOString().slice(0,10);
-    api.get('/api/documents?limit=20&page=1&date=' + todayDate)
+    const todayDate = new Date().toISOString().slice(0, 10);
+    api.get(`/api/documents?limit=20&page=1&date=${todayDate}`)
     .set('x-access-token', adminToken)
     .set('Accept', 'application/json')
     .end((err, res) => {

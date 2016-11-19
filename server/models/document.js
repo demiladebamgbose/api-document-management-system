@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {
       associate: (models) => {
         // associations can be defined here
-        Documents.belongsTo(models.Roles,{
+        Documents.belongsTo(models.Roles, {
           foreignKey: {
             allowNull: false
           }
         });
-        Documents.belongsTo(models.Users,{
+        Documents.belongsTo(models.Users, {
           as: 'Owner',
           foreignKey: {
             allowNull: false

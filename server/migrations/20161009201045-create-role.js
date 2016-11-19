@@ -3,8 +3,6 @@
 module.exports = {
 
   /**
-  * @method up
-  *
   * Creates table Roles in the database
   *
   * @param {Object} queryInterface
@@ -35,8 +33,6 @@ module.exports = {
   },
 
   /**
-  * @method dowm
-  *
   * Deletes table Roles from the database
   *
   * @param {Object} queryInterface

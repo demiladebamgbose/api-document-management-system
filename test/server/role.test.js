@@ -1,32 +1,31 @@
-'use strict';
+import 'babel-polyfill';
+import { expect } from 'chai';
+import supertest from 'supertest';
+import jwt from 'jsonwebtoken';
+import express from '../../main';
 
-const expect = require('chai').expect,
-  express = require('../../main'),
-  supertest = require('supertest'),
-  api = supertest(express),
-  jwt = require('jsonwebtoken'),
-  secret =  process.env.secret;
+const api = supertest(express);
+const secret = process.env.secret;
 
 const adminToken = jwt.sign({
-  emailaddress: '123@abc.com',
-  password:'12345',
+  emailAddress: '123@abc.com',
+  password: '12345',
   RoleId: 3,
   OwnerId: 3
 }, secret, {
-  expiresIn: 60*60*24
+  expiresIn: 60 * 60 * 24
 });
 
 const nonAdminToken = jwt.sign({
-  emailaddress: 'notandmin@abc.com',
-  password:'123456',
+  emailAddress: 'notandmin@abc.com',
+  password: '123456',
   RoleId: 5,
   OwnerId: 4
 }, secret, {
-  expiresIn: 60*60*24
+  expiresIn: 60 * 60 * 24
 });
 
 describe('Role', () => {
-
   it('creates a new role', (done) => {
     api.post('/api/roles')
     .set('Accept', 'application/json')
@@ -135,7 +134,7 @@ describe('Role', () => {
     .set('Accept', 'application/json')
     .set('x-access-token', adminToken)
     .end((err, res) => {
-      expect(typeof(res.body)).to.equal('object');
+      expect(typeof (res.body)).to.equal('object');
       expect(res.body).to.have.property('title');
       expect(res.body.title).to.be.equal('Admin');
       done();

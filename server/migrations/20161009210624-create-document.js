@@ -3,8 +3,6 @@
 module.exports = {
 
   /**
-  * @method up
-  *
   * Creates table Documents in the database
   *
   * @param {Object} queryInterface
@@ -51,8 +49,6 @@ module.exports = {
   },
 
   /**
-  * @method down
-  *
   * Deletes table Documents from the database
   *
   * @param {Object} queryInterface

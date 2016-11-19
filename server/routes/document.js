@@ -1,18 +1,13 @@
-'use strict';
-
-const express = require('express');
-const router = express.Router();
+import Auth from './../controllers/auth';
+import Document from './../controllers/document';
 
 /**
 * Creates routes to access Documents resource.
 *
-* @param {Object} app An instance of express.
-* @return {Void}
+* @param {Object} router An instance of express router.
+* @return {void}
 */
-module.exports = (app) => {
-  const Auth = require('./../controllers/auth');
-  const Document = require('./../controllers/document');
-
+const documentRoutes = (router) => {
   // Documents Routes.
   router.route('/documents')
    .post(Auth.validateToken, Document.createDocument)
@@ -23,7 +18,6 @@ module.exports = (app) => {
    .get(Auth.validateToken, Document.findDocument);
   router.route('/users/:id/documents')
     .get(Auth.validateToken, Document.getUserDocument);
-
-
-  app.use('/api/', router);
 };
+
+export default documentRoutes;

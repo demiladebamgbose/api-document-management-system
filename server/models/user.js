@@ -1,26 +1,25 @@
-
 'use strict';
 
 // Models definition for Users
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define('Users', {
     username: DataTypes.STRING,
-    emailaddress: DataTypes.STRING,
+    emailAddress: DataTypes.STRING,
     password: DataTypes.STRING,
-    firstname: DataTypes.STRING,
-    lastname: DataTypes.STRING,
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
     RoleId: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: (models) => {
         // associations can be defined here
-        Users.belongsTo(models.Roles,{
+        Users.belongsTo(models.Roles, {
           foreignKey: {
             allowNull: false
           }
         });
 
-        Users.hasMany(models.Documents,{ foreignKey: 'OwnerId'});
+        Users.hasMany(models.Documents, { foreignKey: 'OwnerId' });
       }
     }
   });
