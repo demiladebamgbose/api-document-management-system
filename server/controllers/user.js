@@ -1,11 +1,13 @@
-'use strict';
+import models from './../models/index';
+import helper from './../../services/helpers';
+import userService from './../../services/UserService';
 
-const models = require('./../models/index');
-const helper = require('./../../services/helpers');
-const userServ = require('./../../services/user_service');
-
-// User controller methods
-const User = {
+/**
+* User controller methods
+*
+* @return {void}
+*/
+class User {
 
   /**
   * Creates a new user and saves into the database
@@ -14,19 +16,19 @@ const User = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  signup: (req, res) => {
+  signup(req, res) {
     models.Users.findOne({
-      where: { emailaddress: req.body.emailaddress }
+      where: { emailAddress: req.body.emailAddress }
     }).then((user) => {
       if (!user) {
-        userServ.validateDetails(req, res);
+        userService.validateDetails(req, res);
       } else {
         helper.sendMessage(res, 409, 'user already exists');
       }
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
-  },
+  }
 
   /**
   * Logs a user in and generates token
@@ -35,19 +37,19 @@ const User = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  login: (req, res) => {
+  login(req, res) {
     models.Users.findOne({
-      where: { emailaddress: req.body.emailaddress }
+      where: { emailAddress: req.body.emailAddress }
     }).then((user) => {
       if (!user) {
         helper.sendMessage(res, 401, 'authentication failed. User not found');
       } else {
-        userServ.authenticate(req, res, user);
+        userService.authenticate(req, res, user);
       }
     }).catch((error) => {
-      helper.sendResponse(req, 500, error);
+      helper.sendResponse(res, 500, error);
     });
-  },
+  }
 
   /**
   * Retrieves all the users from the database
@@ -56,14 +58,14 @@ const User = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  allUsers: (req, res) => {
+  allUsers(req, res) {
     models.Users.findAll({})
     .then((users) => {
       helper.sendResponse(res, 200, users);
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
-  },
+  }
 
   /**
   * Deletes a user from the database based on params.id
@@ -72,8 +74,8 @@ const User = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  deleteUser: (req, res) => {
-    userServ.checkAccess(req, res)
+  deleteUser(req, res) {
+    userService.checkAccess(req, res)
     .then((response) => {
       if (response) {
         models.Users.destroy({
@@ -88,7 +90,7 @@ const User = {
          'You do not have access to delete user');
       }
     });
-  },
+  }
 
   /**
   * Finds one user based on params.id from the database
@@ -97,8 +99,8 @@ const User = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  findUser: (req, res) => {
-    userServ.checkAccess(req, res)
+  findUser(req, res) {
+    userService.checkAccess(req, res)
     .then((response) => {
       if (response) {
         models.Users.findOne({
@@ -117,7 +119,7 @@ const User = {
          'User details are not yours to view');
       }
     });
-  },
+  }
 
   /**
   * Updates all or some of the attributes of the user
@@ -126,14 +128,14 @@ const User = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  updateUser: (req, res) => {
-    userServ.checkAccess(req, res)
+  updateUser(req, res) {
+    userService.checkAccess(req, res)
     .then((response) => {
       if (response) {
         models.Users.findOne({
           where: { id: req.params.id }
         }).then((user) => {
-          userServ.theUpdater(req, res, user);
+          userService.theUpdater(req, res, user);
         }).catch((error) => {
           helper.sendResponse(res, 500, error);
         });
@@ -142,7 +144,7 @@ const User = {
          'Oops! user details are not yours to edit');
       }
     });
-  },
+  }
 
   /**
   * Logs a user out.
@@ -151,9 +153,9 @@ const User = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  logout: (req, res) => {
+  logout(req, res) {
     helper.sendMessage(res, 200, 'User logged out successfully');
   }
-};
+}
 
-module.exports = User;
+export default new User();

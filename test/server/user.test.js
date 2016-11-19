@@ -1,14 +1,14 @@
-'use strict';
+import 'babel-polyfill'
+import { expect } from 'chai';
+import supertest from 'supertest';
+import jwt from 'jsonwebtoken';
+import express from '../../main';
 
-const expect = require('chai').expect,
-  express = require('../../main'),
-  supertest = require('supertest'),
-  api = supertest(express),
-  jwt = require('jsonwebtoken'),
-  secret = process.env.secret;
+const api = supertest(express);
+const secret = process.env.secret;
 
 const adminToken = jwt.sign({
-  emailaddress: '123@abc.com',
+  emailAddress: '123@abc.com',
   password: '12345',
   RoleId: 3,
   OwnerId: 4
@@ -17,7 +17,7 @@ const adminToken = jwt.sign({
 });
 
 const nonAdminToken = jwt.sign({
-  emailaddress: '123@abc.com',
+  emailAddress: '123@abc.com',
   password: '12345',
   RoleId: 4,
   OwnerId: 3
@@ -27,10 +27,10 @@ const nonAdminToken = jwt.sign({
 
 const testUser = {
   username: 'lade',
-  emailaddress: 'lade@gmail.com',
+  emailAddress: 'lade@gmail.com',
   password: '12345678',
-  firstname: 'demilade',
-  lastname: 'bamgbose'
+  firstName: 'demilade',
+  lastName: 'bamgbose'
 };
 
 describe('User', () => {
@@ -65,10 +65,10 @@ describe('User', () => {
       .set('Accept', 'application/json')
       .send({
         username: 'lade',
-        emailaddress: 'lade22@gmail.com',
+        emailAddress: 'lade22@gmail.com',
         password: '',
-        firstname: 'demilade',
-        lastname: ''
+        firstName: 'demilade',
+        lastName: ''
       })
       .end((err, res) => {
         expect(res.status).to.be.equal(400);
@@ -84,10 +84,10 @@ describe('User', () => {
       .set('Accept', 'application/json')
       .send({
         username: 'lade',
-        emailaddress: 'lade22@gmail.com',
+        emailAddress: 'lade22@gmail.com',
         password: '12345678',
-        firstname: 'd.!emiladf753e',
-        lastname: 'b355@$#amgbs'
+        firstName: 'd.!emiladf753e',
+        lastName: 'b355@$#amgbs'
       })
       .end((err, res) => {
         expect(res.status).to.be.equal(400);
@@ -98,15 +98,15 @@ describe('User', () => {
       });
   });
 
-  it('should not create user with invalid emailaddress', (done) => {
+  it('should not create user with invalid emailAddress', (done) => {
     api.post('/api/users')
       .set('Accept', 'application/json')
       .send({
         username: 'lade',
-        emailaddress: 'lade22gmailcom',
+        emailAddress: 'lade22gmailcom',
         password: '12345678',
-        firstname: 'Femisola',
-        lastname: 'bamgbs'
+        firstName: 'Femisola',
+        lastName: 'bamgbs'
       })
       .end((err, res) => {
         expect(res.status).to.be.equal(400);
@@ -122,7 +122,7 @@ describe('User', () => {
     api.post('/api/users/login')
       .set('Accept', 'application/json')
       .send({
-        emailaddress: 'lade@gmail.com',
+        emailAddress: 'lade@gmail.com',
         password: '12345678'
       })
       .end((err, res) => {
@@ -138,7 +138,7 @@ describe('User', () => {
     api.post('/api/users/login')
       .set('Accept', 'application/json')
       .send({
-        emailaddress: 'lade@gmail.com',
+        emailAddress: 'lade@gmail.com',
         password: 'abcdefgh'
       })
       .end((err, res) => {
@@ -154,7 +154,7 @@ describe('User', () => {
     api.post('/api/users/login')
       .set('Accept', 'application/json')
       .send({
-        emailaddress: 'lade22@gmail.com',
+        emailAddress: 'lade22@gmail.com',
         password: 'abcdefgh'
       })
       .end((err, res) => {
@@ -194,13 +194,13 @@ describe('User', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', nonAdminToken)
       .send({
-        emailaddress: 'somethingnew@gmail.com'
+        emailAddress: 'somethingnew@gmail.com'
       })
       .end((err, res) => {
         expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.ok;
         expect(res.body).to.have.property('user');
-        expect(res.body.user.emailaddress).to.be.equal('somethingnew@gmail.com');
+        expect(res.body.user.emailAddress).to.be.equal('somethingnew@gmail.com');
         done();
       });
   });
@@ -210,7 +210,7 @@ describe('User', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', nonAdminToken)
       .send({
-        emailaddress: 'somethingnew@gmail.com'
+        emailAddress: 'somethingnew@gmail.com'
       })
       .end((err, res) => {
         expect(res.status).to.be.equal(401);
@@ -226,7 +226,7 @@ describe('User', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', nonAdminToken)
       .send({
-        emailaddress: 'somethingnew@gmail.com'
+        emailAddress: 'somethingnew@gmail.com'
       })
       .end((err, res) => {
         expect(res.status).to.be.equal(401);
@@ -259,8 +259,8 @@ describe('User', () => {
       .set('x-access-token', adminToken)
       .set('Accept', 'application/json')
       .end((err, res) => {
-        checkProperty(res.body, 'firstname');
-        checkProperty(res.body, 'lastname');
+        checkProperty(res.body, 'firstName');
+        checkProperty(res.body, 'lastName');
         done();
       });
   });
@@ -295,11 +295,11 @@ describe('User', () => {
       .set('Accept', 'application/json')
       .end((err, res) => {
         expect(typeof (res.body)).to.equal('object');
-        expect(res.body).to.have.property('emailaddress');
-        expect(res.body).to.have.property('firstname');
-        expect(res.body).to.have.property('lastname');
+        expect(res.body).to.have.property('emailAddress');
+        expect(res.body).to.have.property('firstName');
+        expect(res.body).to.have.property('lastName');
         expect(res.body).to.have.property('RoleId');
-        expect(res.body.emailaddress).to.be.equal('somethingnew@gmail.com');
+        expect(res.body.emailAddress).to.be.equal('somethingnew@gmail.com');
         done();
       });
   });

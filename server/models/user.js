@@ -4,10 +4,10 @@
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define('Users', {
     username: DataTypes.STRING,
-    emailaddress: DataTypes.STRING,
+    emailAddress: DataTypes.STRING,
     password: DataTypes.STRING,
-    firstname: DataTypes.STRING,
-    lastname: DataTypes.STRING,
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
     RoleId: DataTypes.INTEGER
   }, {
     classMethods: {

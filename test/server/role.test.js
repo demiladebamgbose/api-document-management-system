@@ -1,14 +1,14 @@
-'use strict';
+import 'babel-polyfill';
+import { expect } from 'chai';
+import supertest from 'supertest';
+import jwt from 'jsonwebtoken';
+import express from '../../main';
 
-const expect = require('chai').expect,
-  express = require('../../main'),
-  supertest = require('supertest'),
-  api = supertest(express),
-  jwt = require('jsonwebtoken'),
-  secret = process.env.secret;
+const api = supertest(express);
+const secret = process.env.secret;
 
 const adminToken = jwt.sign({
-  emailaddress: '123@abc.com',
+  emailAddress: '123@abc.com',
   password: '12345',
   RoleId: 3,
   OwnerId: 3
@@ -17,7 +17,7 @@ const adminToken = jwt.sign({
 });
 
 const nonAdminToken = jwt.sign({
-  emailaddress: 'notandmin@abc.com',
+  emailAddress: 'notandmin@abc.com',
   password: '123456',
   RoleId: 5,
   OwnerId: 4

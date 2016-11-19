@@ -1,23 +1,23 @@
-'use stict';
+import express from 'express';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
+import routes from './server/routes/index';
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
+
+if (!process.env.NODE_ENV) {
+  dotenv.config();
+}
 
 const app = express();
+const router = express.Router();
 const port = process.env.PORT || 8080;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-if (!process.env.NODE_ENV) {
-  require('dotenv').config();
-}
-
-require('./server/routes/user-route')(app);
-require('./server/routes/role-route')(app);
-require('./server/routes/document-route')(app);
+routes(router);
 
 app.get('/', (req, res) => {
   res.json({
@@ -25,8 +25,11 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use('/api/', router);
+
+
 app.listen(port, () => {
-  console.log ('app started on port' + port);
+  console.log (`app started on port${port}`);
 });
 
-module.exports = app;
+export default app;

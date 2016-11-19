@@ -1,9 +1,7 @@
-'use strict';
+import helper from './helpers';
+import models from './../server/models/index';
 
-const helper = require('./helpers');
-const models = require('./../server/models/index');
-
-const DocService = {
+class DocService {
 
   /**
   * Implements pagination logic
@@ -13,7 +11,7 @@ const DocService = {
   * @param {Integer} page  Calculates the offset
   * @return {Boolean} true or false
   */
-  paginate: (res, size, page) => {
+  paginate(res, size, page) {
     if (!page) {
       page = 1;
     }
@@ -23,7 +21,7 @@ const DocService = {
     }
     const offset = size * (page - 1);
     return [size, offset];
-  },
+  }
 
   /**
   * Validates that attributes of document to be created are
@@ -33,13 +31,13 @@ const DocService = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  validateDocument: (req, res) => {
+  validateDocument(req, res) {
     if (helper.validateRequestBody(req.body)) {
-      DocService.addDocument(req, res);
+      this.addDocument(req, res);
     } else {
       helper.sendMessage(res, 400, 'Fields cannot be empty');
     }
-  },
+  }
 
   /**
   * Inserts a document with unique title to the database
@@ -48,7 +46,7 @@ const DocService = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  addDocument: (req, res) => {
+  addDocument(req, res) {
     // Checks if document alredy exist
     models.Documents.findOne({
       where: { title: req.body.title }
@@ -58,7 +56,7 @@ const DocService = {
         models.Documents.create({
           title: req.body.title,
           content: req.body.content,
-          type: DocService.getType(req),
+          type: this.getType(req),
           RoleId: req.decoded.RoleId,
           OwnerId: req.decoded.OwnerId
         }).then((documents) => {
@@ -70,7 +68,7 @@ const DocService = {
         helper.sendMessage(res, 409, 'Title already exists');
       }
     });
-  },
+  }
 
   /**
   * Determines if the type is public or private
@@ -78,12 +76,12 @@ const DocService = {
   * @param {Object} req An instance of request
   * @return {String} public or private
   */
-  getType: (req) => {
+  getType(req) {
     if (req.body.type !== 'private') {
       return 'public';
     }
     return 'private';
-  },
+  }
 
   /**
   * Gets all document with a certain role or created on a certain date
@@ -92,9 +90,9 @@ const DocService = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  queryDocuments: (req, res) => {
+  queryDocuments(req, res) {
     let queryObj;
-    const paginate = DocService.paginate(res, req.query.limit, req.query.page);
+    const paginate = this.paginate(res, req.query.limit, req.query.page);
     const size = paginate[0];
     const offset = paginate[1];
 
@@ -109,14 +107,14 @@ const DocService = {
       where: { id: req.decoded.RoleId }
     }).then((role) => {
       if (role.title === 'Admin') {
-        DocService.queryAsAdmin(req, res, size, offset, queryObj);
+        this.queryAsAdmin(req, res, size, offset, queryObj);
       } else {
-        DocService.queryAsUser(req, res, size, offset, queryObj);
+        this.queryAsUser(req, res, size, offset, queryObj);
       }
     });
-  },
+  }
 
-  queryAsAdmin: (req, res, size, offsets, queryObj) => {
+  queryAsAdmin(req, res, size, offsets, queryObj) {
     models.Documents.findAll({
       order: '"createdAt" DESC',
       limit: size,
@@ -127,9 +125,9 @@ const DocService = {
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
-  },
+  }
 
-  queryAsUser: (req, res, size, offsets, queryObj) => {
+  queryAsUser(req, res, size, offsets, queryObj) {
     models.Documents.findAll({
       order: '"createdAt" DESC',
       limit: size,
@@ -150,7 +148,7 @@ const DocService = {
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
-  },
+  }
 
   /**
   * Updates attributes of the document
@@ -160,7 +158,7 @@ const DocService = {
   * @param {Object} document document to be updated
   * @return {void}
   */
-  updateDocument: (req, res, document) => {
+  updateDocument(req, res, document) {
     document.updateAttributes({
       title: req.body.title,
       content: req.body.content,
@@ -170,9 +168,9 @@ const DocService = {
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
-  },
+  }
 
-  getUserDocument: (req, res, size, offsets) => {
+  getUserDocument(req, res, size, offsets) {
     models.Documents.findAll({
       order: '"createdAt" DESC',
       limit: size,
@@ -192,9 +190,9 @@ const DocService = {
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
-  },
+  }
 
-  getAdminDocument: (req, res, size, offsets) => {
+  getAdminDocument(req, res, size, offsets) {
     models.Documents.findAll({
       order: '"createdAt" DESC',
       limit: size,
@@ -205,6 +203,6 @@ const DocService = {
       helper.sendResponse(res, 500, error);
     });
   }
-};
+}
 
-module.exports = DocService;
+export default new DocService();

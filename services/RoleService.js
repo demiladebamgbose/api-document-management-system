@@ -1,10 +1,12 @@
-'use strict';
+import helper from './helpers';
+import models from './../server/models/index';
 
-const helper = require('./helpers');
-const models = require('./../server/models/index');
-
-const RoleService = {
-
+/**
+* Provides service methods for Roles
+*
+* @return {void}
+*/
+class RoleService {
 
   /**
   * Saves a new role to the database
@@ -13,7 +15,7 @@ const RoleService = {
   * @param {Object} res An instance of response
   * @return {void}
   */
-  addRole: (req, res) => {
+  addRole(req, res) {
     models.Roles.findOne({
       where: { title: req.body.title }
     }).then((role) => {
@@ -31,7 +33,7 @@ const RoleService = {
     }).catch((error) => {
       helper.sendResponse(res, 500, error);
     });
-  },
+  }
 
   /**
   * Updates attributes of a Role
@@ -41,7 +43,7 @@ const RoleService = {
   * @param {Object} role Role to be updated
   * @return {void}
   */
-  updateRole: (req, res, role) => {
+  updateRole(req, res, role) {
     role.updateAttributes({
       title: req.body.title,
     }).then((roles) => {
@@ -50,6 +52,6 @@ const RoleService = {
       helper.sendResponse(res, 500, error);
     });
   }
-};
+}
 
-module.exports = RoleService;
+export default new RoleService();
