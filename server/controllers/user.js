@@ -1,12 +1,8 @@
-import models from './../models/index';
+import models from './../models';
 import helper from './../../services/helpers';
 import userService from './../../services/UserService';
 
-/**
-* User controller methods
-*
-* @return {void}
-*/
+/** User controller methods */
 class User {
 
   /**

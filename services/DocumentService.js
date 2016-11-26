@@ -1,7 +1,8 @@
 import helper from './helpers';
-import models from './../server/models/index';
+import models from './../server/models';
 
-class DocService {
+/** Provides service methods for Documents */
+class DocumentService {
 
   /**
   * Implements pagination logic
@@ -205,4 +206,4 @@ class DocService {
   }
 }
 
-export default new DocService();
+export default new DocumentService();

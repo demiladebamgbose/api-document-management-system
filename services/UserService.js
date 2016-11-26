@@ -1,15 +1,10 @@
 import helper from './helpers';
-import models from './../server/models/index';
+import models from './../server/models';
 import auth from './../server/controllers/auth';
 
-/**
-* Provides User Service methods
-*
-* @param {Object} req An instance of request
-* @param {Object} res An instance of response
-* @return {void}
-*/
+/** Provides User Service methods */
 class UserService {
+
   /**
   * Ensures input fields are not empty before creating a user
   *
