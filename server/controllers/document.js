@@ -2,11 +2,7 @@ import models from './../models/index';
 import helper from './../../services/helpers';
 import documentService from './../../services/DocumentService';
 
-/**
-* Controller methods to be called on document resource
-*
-* @return {void}
-*/
+/** Controller methods to be called on document resource */
 class Document {
 
   /**

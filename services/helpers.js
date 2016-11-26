@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt-nodejs';
 import models from './../server/models/index';
 
+/** Provides helper methods */
 class Helper {
 
   /**
