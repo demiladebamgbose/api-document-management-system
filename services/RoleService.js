@@ -1,11 +1,7 @@
 import helper from './helpers';
 import models from './../server/models/index';
 
-/**
-* Provides service methods for Roles
-*
-* @return {void}
-*/
+/** Provides service methods for Roles*/
 class RoleService {
 
   /**

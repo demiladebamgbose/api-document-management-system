@@ -3,11 +3,7 @@ import helper from './../../services/helpers';
 
 const secret = process.env.secret || 'secret';
 
-/**
-* Provies methods to handle authentication
-*
-* @return {void}
-*/
+/** Provies methods to handle authentication */
 class Auth {
 
   /**

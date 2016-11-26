@@ -2,11 +2,7 @@ import models from './../models/index';
 import helper from './../../services/helpers';
 import roleService from './../../services/RoleService';
 
-/**
-* Controller methods for Roles Resource.
-*
-* @return {void}
-*/
+/** Controller methods for Roles Resource. */
 class Role {
 
   /**

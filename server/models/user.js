@@ -1,5 +1,3 @@
-'use strict';
-
 // Models definition for Users
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define('Users', {
