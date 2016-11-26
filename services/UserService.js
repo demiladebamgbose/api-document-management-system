@@ -1,5 +1,5 @@
 import helper from './helpers';
-import models from './../server/models/index';
+import models from './../server/models';
 import auth from './../server/controllers/auth';
 
 /** Provides User Service methods */
