@@ -1,13 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import dotenv from 'dotenv';
-import routes from './server/routes/index';
+import { load } from './dotenv';
+import routes from './server/routes';
 
-
-if (!process.env.NODE_ENV) {
-  dotenv.config();
-}
 
 const app = express();
 const router = express.Router();

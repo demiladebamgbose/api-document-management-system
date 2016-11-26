@@ -1,4 +1,4 @@
-import models from './../models/index';
+import models from './../models';
 import helper from './../../services/helpers';
 import documentService from './../../services/DocumentService';
 
