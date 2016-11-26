@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
 import helper from './../../services/helpers';
-import devSecret from './../../secret';
 
-const secret = process.env.secret || devSecret;
+const secret = process.env.secret;
 
 /** Provies methods to handle authentication */
 class Auth {

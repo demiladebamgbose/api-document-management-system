@@ -3,4 +3,3 @@ config
 coverage
 .env
 /npm-debug.log
-/secret.js
