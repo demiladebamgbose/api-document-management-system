@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt-nodejs';
 import models from './../server/models';
 
 /** Provides helper methods */
-class Helper {
+class Helpers {
 
   /**
   * Ensures only admin can create roles
@@ -174,4 +174,4 @@ class Helper {
   }
 }
 
-export default new Helper();
+export default new Helpers();
