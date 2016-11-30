@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import helper from './../../services/helpers';
+import helper from './../../services/Helpers';
 
 const secret = process.env.secret;
 
