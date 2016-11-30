@@ -1,5 +1,5 @@
-import Auth from './../controllers/auth';
-import Document from './../controllers/document';
+import Auth from './../controllers/Auth';
+import Document from './../controllers/Document';
 
 /**
 * Creates routes to access Documents resource.

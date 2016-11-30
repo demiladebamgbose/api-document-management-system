@@ -1,6 +1,6 @@
-import Role from './../controllers/role';
-import Auth from './../controllers/auth';
-import Helper from './../../services/helpers';
+import Role from './../controllers/Role';
+import Auth from './../controllers/Auth';
+import Helper from './../../services/Helpers';
 
 /**
 * Creates routes to access Roles resource.

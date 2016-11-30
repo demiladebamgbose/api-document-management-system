@@ -1,7 +1,7 @@
 // import express from 'express';
-import User from './../controllers/user';
-import Auth from './../controllers/auth';
-import Helper from './../../services/helpers';
+import User from './../controllers/User';
+import Auth from './../controllers/Auth';
+import Helper from './../../services/Helpers';
 
 // const router = express.Router();
 

@@ -1,4 +1,4 @@
-import helper from './helpers';
+import helper from './Helpers';
 import models from './../server/models';
 
 /** Provides service methods for Documents */
