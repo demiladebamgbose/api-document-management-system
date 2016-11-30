@@ -1,6 +1,6 @@
-import helper from './helpers';
+import helper from './Helpers';
 import models from './../server/models';
-import auth from './../server/controllers/auth';
+import auth from './../server/controllers/Auth';
 
 /** Provides User Service methods */
 class UserService {

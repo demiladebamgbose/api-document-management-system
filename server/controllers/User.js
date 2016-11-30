@@ -1,5 +1,5 @@
 import models from './../models';
-import helper from './../../services/helpers';
+import helper from './../../services/Helpers';
 import userService from './../../services/UserService';
 
 /** User controller methods */

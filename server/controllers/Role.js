@@ -1,5 +1,5 @@
 import models from './../models';
-import helper from './../../services/helpers';
+import helper from './../../services/Helpers';
 import roleService from './../../services/RoleService';
 
 /** Controller methods for Roles Resource. */

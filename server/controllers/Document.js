@@ -1,5 +1,5 @@
 import models from './../models';
-import helper from './../../services/helpers';
+import helper from './../../services/Helpers';
 import documentService from './../../services/DocumentService';
 
 /** Controller methods to be called on document resource */
